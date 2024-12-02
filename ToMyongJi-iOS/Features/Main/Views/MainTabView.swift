@@ -40,7 +40,7 @@ struct MainTabView: View {
                 }
                 .tag(3)
         }
-        .tint(.primary)
+        .tint(Color.softBlue)
     }
 }
 
