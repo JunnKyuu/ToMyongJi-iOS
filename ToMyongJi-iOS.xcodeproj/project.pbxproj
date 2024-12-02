@@ -58,6 +58,11 @@
 			path = Fonts;
 			sourceTree = "<group>";
 		};
+		F5EEE1A52CFC8084009B2270 /* SplashScreen */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = SplashScreen;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +114,7 @@
 		F59C39ED2CFB1F8E002AD9DA /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				F5EEE1A52CFC8084009B2270 /* SplashScreen */,
 				F59C39EC2CFB1F8E002AD9DA /* Main */,
 				F59C39F92CFB218E002AD9DA /* Home */,
 				F59C39FF2CFB22B7002AD9DA /* Receipts */,
@@ -171,6 +177,7 @@
 				F59C3A082CFB2414002AD9DA /* CoreServices */,
 				F59C3A0B2CFB24F9002AD9DA /* Profile */,
 				F59C3A172CFB2D11002AD9DA /* Fonts */,
+				F5EEE1A52CFC8084009B2270 /* SplashScreen */,
 			);
 			name = "ToMyongJi-iOS";
 			packageProductDependencies = (
@@ -382,6 +389,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -412,6 +420,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
