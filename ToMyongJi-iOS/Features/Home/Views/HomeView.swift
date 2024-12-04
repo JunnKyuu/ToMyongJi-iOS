@@ -11,11 +11,22 @@ struct HomeView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Image("logo")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(height: 100)
-                    .padding(.top, 5)
+                HStack {
+                    Image("logo")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: 40)
+                    Spacer()
+                    Button {
+                        print("로그인 버튼")
+                    } label: {
+                        Image(systemName: "person.circle.fill")
+                            .font(.system(size: 30))
+                            .foregroundColor(.softBlue)
+                    }
+                }
+                .background(Color.white)
+                .padding(.bottom, 30)
                 Text("우리 학과 학생회비가 궁금하면 투명지")
                     .font(.custom("GmarketSansMedium", size: 18))
                     .foregroundStyle(Color.softBlue)
