@@ -11,36 +11,38 @@ struct CollegesAndClubsView: View {
     @Bindable private var viewModel = CollegesAndClubsViewModel()
     
     var body: some View {
-        ScrollView {
-            VStack {
-                Text("단과대와 학생회를 확인해보세요")
-                    .font(.custom("GmarketSansMedium", size: 18))
-                    .foregroundStyle(Color.softBlue)
-                    .multilineTextAlignment(.center)
-                    .padding(.bottom, 30)
-                
-                LazyVStack(spacing: 20) {
-                    ForEach(viewModel.colleges) { college in
-                        CollegeCard(college: college)
+        NavigationStack {
+            ScrollView {
+                VStack {
+                    Text("단과대와 학생회를 확인해보세요")
+                        .font(.custom("GmarketSansMedium", size: 18))
+                        .foregroundStyle(Color.softBlue)
+                        .multilineTextAlignment(.center)
+                        .padding(.bottom, 30)
+                    
+                    LazyVStack(spacing: 20) {
+                        ForEach(viewModel.colleges) { college in
+                            CollegeCard(college: college)
+                        }
                     }
                 }
+                .padding()
             }
-            .padding()
-        }
-        .overlay(Group {
-            if viewModel.isLoading {
-                ProgressView()
+            .overlay(Group {
+                if viewModel.isLoading {
+                    ProgressView()
+                }
+            })
+            .alert("Error", isPresented: .constant(viewModel.errorMessage != nil), presenting: viewModel.errorMessage) { _ in
+                Button("OK") {
+                    viewModel.errorMessage = nil
+                }
+            } message: { errorMessage in
+                Text(errorMessage)
             }
-        })
-        .alert("Error", isPresented: .constant(viewModel.errorMessage != nil), presenting: viewModel.errorMessage) { _ in
-            Button("OK") {
-                viewModel.errorMessage = nil
+            .onAppear {
+                viewModel.getCollegeAndClubs()
             }
-        } message: { errorMessage in
-            Text(errorMessage)
-        }
-        .onAppear {
-            viewModel.getCollegeAndClubs()
         }
     }
 }
@@ -87,21 +89,19 @@ struct ClubRow: View {
     let club: Club
     
     var body: some View {
-        HStack {
-            Text(club.studentClubName)
-                .font(.custom("GmarketSansLight", size: 15))
-                .foregroundStyle(Color.darkNavy)
-            Spacer()
-            Image(systemName: "chevron.right")
-                .foregroundColor(.gray)
+        NavigationLink {
+            ReceiptListView(club: club)
+        } label: {
+            HStack {
+                Text(club.studentClubName)
+                    .font(.custom("GmarketSansLight", size: 15))
+                    .foregroundStyle(Color.darkNavy)
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .foregroundColor(.gray)
+            }
+            .padding(.vertical, 5)
         }
-        .padding(.vertical, 5)
-    }
-}
-
-struct CollegeAndClubsView_Previews: PreviewProvider {
-    static var previews: some View {
-        CollegesAndClubsView()
     }
 }
 
