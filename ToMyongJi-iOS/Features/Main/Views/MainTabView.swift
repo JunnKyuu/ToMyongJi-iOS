@@ -18,6 +18,7 @@ struct MainTabView: View {
                     Text("홈")
                 }
                 .tag(0)
+            
             CollegesAndClubsView()
                 .tabItem {
                     Image(systemName: "magnifyingglass")

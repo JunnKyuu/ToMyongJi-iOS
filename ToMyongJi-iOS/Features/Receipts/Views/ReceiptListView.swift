@@ -15,7 +15,7 @@ struct ReceiptListView: View {
         VStack {
             Text("\(club.studentClubName)")
                 .font(.custom("GmarketSansMedium", size: 20))
-                .foregroundStyle(Color.softBlue)
+                .foregroundStyle(Color.darkNavy)
         }
         .navigationBarBackButtonHidden()
         .toolbar {
