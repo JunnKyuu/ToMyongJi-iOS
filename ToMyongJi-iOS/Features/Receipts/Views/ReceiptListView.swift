@@ -9,8 +9,9 @@ import SwiftUI
 
 struct ReceiptListView: View {
     var body: some View {
-        Text("ReceiptList View")
+        Text("ReceiptView")
             .font(.custom("GmarketSansMedium", size: 20))
+            .navigationTitle("Receipt")
     }
 }
 
