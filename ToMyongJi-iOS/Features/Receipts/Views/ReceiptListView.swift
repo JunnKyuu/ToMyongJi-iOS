@@ -8,13 +8,29 @@
 import SwiftUI
 
 struct ReceiptListView: View {
+    @Environment(\.dismiss) var dismiss
+    let club: Club
+    
     var body: some View {
-        Text("ReceiptView")
-            .font(.custom("GmarketSansMedium", size: 20))
-            .navigationTitle("Receipt")
+        VStack {
+            Text("\(club.studentClubName)")
+                .font(.custom("GmarketSansMedium", size: 20))
+                .foregroundStyle(Color.darkNavy)
+        }
+        .navigationBarBackButtonHidden()
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button {
+                    dismiss()
+                } label: {
+                    Image(systemName: "chevron.left")
+                        .tint(Color.darkNavy)
+                }
+            }
+        }
     }
 }
-
-#Preview {
-    ReceiptListView()
-}
+//
+//#Preview {
+//    ReceiptListView()
+//}
