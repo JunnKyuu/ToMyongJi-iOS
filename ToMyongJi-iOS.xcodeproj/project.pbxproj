@@ -58,6 +58,11 @@
 			path = Fonts;
 			sourceTree = "<group>";
 		};
+		F5DA2A082D01D0C600A51E62 /* CollegeAndClubs */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CollegeAndClubs;
+			sourceTree = "<group>";
+		};
 		F5EEE1A52CFC8084009B2270 /* SplashScreen */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = SplashScreen;
@@ -117,6 +122,7 @@
 				F5EEE1A52CFC8084009B2270 /* SplashScreen */,
 				F59C39EC2CFB1F8E002AD9DA /* Main */,
 				F59C39F92CFB218E002AD9DA /* Home */,
+				F5DA2A082D01D0C600A51E62 /* CollegeAndClubs */,
 				F59C39FF2CFB22B7002AD9DA /* Receipts */,
 				F59C3A0B2CFB24F9002AD9DA /* Profile */,
 			);
@@ -177,6 +183,7 @@
 				F59C3A082CFB2414002AD9DA /* CoreServices */,
 				F59C3A0B2CFB24F9002AD9DA /* Profile */,
 				F59C3A172CFB2D11002AD9DA /* Fonts */,
+				F5DA2A082D01D0C600A51E62 /* CollegeAndClubs */,
 				F5EEE1A52CFC8084009B2270 /* SplashScreen */,
 			);
 			name = "ToMyongJi-iOS";
