@@ -8,16 +8,16 @@
 import SwiftUI
 
 struct MainTabView: View {
-    @State private var selectedTab: Int = 0
+    @State private var selectedTab: Int = 1
     
     var body: some View {
         TabView(selection: $selectedTab) {
-            HomeView()
-                .tabItem {
-                    Image(systemName: "house")
-                    Text("홈")
-                }
-                .tag(0)
+//            HomeView()
+//                .tabItem {
+//                    Image(systemName: "house")
+//                    Text("홈")
+//                }
+//                .tag(0)
             
             ReceiptListView()
                 .tabItem {
@@ -41,6 +41,7 @@ struct MainTabView: View {
                 .tag(3)
         }
         .tint(Color.softBlue)
+        .navigationBarBackButtonHidden()
     }
 }
 
