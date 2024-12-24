@@ -14,20 +14,24 @@ struct CollegesAndClubsView: View {
         NavigationStack {
             ScrollView {
                 VStack {
-                    Text("단과대와 학생회를 확인해보세요")
-                        .font(.custom("GmarketSansMedium", size: 18))
-                        .foregroundStyle(Color.softBlue)
-                        .multilineTextAlignment(.center)
-                        .padding(.bottom, 30)
+                    Text("학생회를 선택해주세요.")
+                        .font(.custom("GmarketSansBold", size: 28))
+                        .foregroundStyle(.darkNavy)
+                        .frame(height: 45)
+                        .multilineTextAlignment(.leading)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 15)
+                        .padding(.bottom, 15)
                     
                     LazyVStack(spacing: 20) {
                         ForEach(viewModel.colleges) { college in
                             CollegeCard(college: college)
                         }
                     }
+                    .padding(.horizontal, 15)
                 }
-                .padding()
             }
+            .scrollIndicators(.hidden)
             .overlay(Group {
                 if viewModel.isLoading {
                     ProgressView()
@@ -56,19 +60,20 @@ struct CollegeCard: View {
             HStack {
                 VStack(alignment: .leading, spacing: 5) {
                     Text(college.collegeName)
-                        .font(.custom("GmarketSansMedium", size: 18))
-                        .foregroundStyle(Color.darkNavy)
+                        .font(.custom("GmarketSansBold", size: 18))
+                        .foregroundStyle(.darkNavy)
                     Text("\(college.clubs.count)개의 학생회")
-                        .font(.custom("GmarketSansLight", size: 14))
-                        .foregroundColor(Color.gray)
+                        .font(.custom("GmarketSansMedium", size: 14))
+                        .foregroundStyle(.gray)
                 }
                 Spacer()
                 Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
                     .foregroundColor(.darkNavy)
+                    .font(.title3.bold())
             }
             .contentShape(Rectangle())
             .onTapGesture {
-                withAnimation {
+                withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
                     isExpanded.toggle()
                 }
             }
@@ -80,8 +85,21 @@ struct CollegeCard: View {
             }
         }
         .padding()
-        .background(Color.softBlue)
-        .cornerRadius(15)
+        .background {
+            RoundedRectangle(cornerRadius: 25, style: .continuous)
+                .fill(Color.softBlue)
+                .overlay(alignment: .leading) {
+                    Circle()
+                        .fill(Color.softBlue)
+                        .overlay {
+                            Circle()
+                                .fill(.white.opacity(0.2))
+                        }
+                        .scaleEffect(2, anchor: .topLeading)
+                        .offset(x: -50, y: -40)
+                }
+        }
+        .clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
     }
 }
 
