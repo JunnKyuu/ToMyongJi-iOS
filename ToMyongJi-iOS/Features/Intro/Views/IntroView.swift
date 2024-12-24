@@ -21,7 +21,7 @@ struct IntroView: View {
                 } label: {
                     Image(systemName: "chevron.left")
                         .font(.title3.bold())
-                        .foregroundStyle(Color.softBlue)
+                        .foregroundStyle(Color.darkNavy)
                         .contentShape(.rect)
                 }
                 .padding(15)
