@@ -87,7 +87,7 @@ struct ReceiptListView: View {
                     } label: {
                         Image(systemName: "chevron.left")
                             .font(.title3.bold())
-                            .foregroundStyle(Color.darkNavy)
+                            .foregroundStyle(Color.gray)
                             .contentShape(.rect)
                     }
                 }
