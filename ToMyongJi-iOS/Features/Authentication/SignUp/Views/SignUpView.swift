@@ -22,7 +22,7 @@ struct SignUpView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 15) {
             Button(action: {
-                showSignup.toggle()
+                showSignup = false
             }, label: {
                 Image(systemName: "chevron.left")
                     .font(.title3.bold())
@@ -41,7 +41,7 @@ struct SignUpView: View {
                 .padding(.top, -5)
             
             VStack(spacing: 25) {
-                /// 아이디, 비밀번호 텍스트 필드
+                /// 아이디, 비밀번호
                 VStack(spacing: 25) {
                     CustomTF(sfIcon: "person.crop.circle", hint: "아이디", value: $userId)
                     CustomTF(sfIcon: "lock", hint: "비밀번호", isPassword: true, value: $password)
@@ -49,14 +49,19 @@ struct SignUpView: View {
                 }
                 .padding(.bottom, 20)
                 
-                Divider()
-                    .foregroundStyle(Color.softBlue)
-                    .padding(.bottom, 20)
-                
-                /// 이름, 이메일 텍스트 필드
+                /// 이름, 이메일
                 VStack(spacing: 25) {
                     CustomTF(sfIcon: "person", hint: "이름", value: $name)
                     CustomTF(sfIcon: "at", hint: "이메일", value: $email)
+                        .padding(.top, 5)
+                }
+                
+                /// 학번, 대학, 자격, 소속이름
+                VStack(spacing: 25) {
+                    CustomTF(sfIcon: "number", hint: "학번", value: $name)
+                    CustomTF(sfIcon: "building.columns.fill", hint: "대학", value: $name)
+                    CustomTF(sfIcon: "person.badge.key.fill", hint: "자격", value: $name)
+                    CustomTF(sfIcon: "building.2.fill", hint: "소속이름", value: $email)
                         .padding(.top, 5)
                 }
                 
@@ -84,7 +89,7 @@ struct SignUpView: View {
                     .foregroundStyle(.gray)
                 
                 Button("로그인") {
-                    showSignup.toggle()
+                    showSignup = false
                 }
                 .font(.custom("GmarketSansBold", size: 13))
                 .tint(Color.darkNavy)
@@ -98,5 +103,5 @@ struct SignUpView: View {
 }
 
 #Preview {
-    ProfileView()
+    SignUpView(showSignup: .constant(true))
 }
