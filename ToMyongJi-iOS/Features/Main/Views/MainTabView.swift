@@ -26,7 +26,8 @@ struct MainTabView: View {
                 }
                 .tag(2)
             
-            ProfileView()
+//            ProfileView()
+            AuthenticationView()
                 .tabItem {
                     Image(systemName: "person.circle")
                     Text("프로필")

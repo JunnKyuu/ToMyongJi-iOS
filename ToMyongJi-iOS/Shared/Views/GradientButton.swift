@@ -32,5 +32,7 @@ struct GradientButton: View {
 }
 
 #Preview {
-    ProfileView()
+    GradientButton(title: "Button", icon: "arrow.right") {
+            print("Button tapped")
+        }
 }

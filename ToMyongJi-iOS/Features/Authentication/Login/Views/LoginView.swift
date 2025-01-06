@@ -12,7 +12,6 @@ struct LoginView: View {
     @State private var emailID: String = ""
     @State private var password: String = ""
     @State private var showForgotIdView: Bool = false
-    @State private var showResetView: Bool = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 15) {
@@ -67,18 +66,13 @@ struct LoginView: View {
         .padding(.horizontal, 25)
         .toolbar(.hidden, for: .navigationBar)
         .sheet(isPresented: $showForgotIdView, content: {
-            if #available(iOS 16.4, *) {
-                ForgotIdView(showResetView: $showResetView)
-                    .presentationDetents([.height(300)])
-                    .presentationCornerRadius(30)
-            } else {
-                ForgotIdView(showResetView: $showResetView)
-                    .presentationDetents([.height(300)])
-            }
+            ForgotIDView()
+                .presentationDetents([.height(300)])
+                .presentationCornerRadius(30)
         })
     }
 }
 
 #Preview {
-    ProfileView()
+    LoginView(showSignup: .constant(false))
 }

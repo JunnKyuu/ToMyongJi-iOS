@@ -1,5 +1,5 @@
 //
-//  ForgotIdView.swift
+//  ForgotIDView.swift
 //  ToMyongJi-iOS
 //
 //  Created by JunKyu Lee on 30/12/24.
@@ -7,9 +7,8 @@
 
 import SwiftUI
 
-struct ForgotIdView: View {
+struct ForgotIDView: View {
     @Environment(\.dismiss) private var dismiss
-    @Binding var showResetView: Bool
     @State private var emailID: String = ""
     
     var body: some View {
@@ -42,7 +41,6 @@ struct ForgotIdView: View {
                     Task {
                         dismiss()
                         try? await Task.sleep(for: .seconds(0))
-                        showResetView = true
                     }
                 }
                 .hSpacing(.trailing)
@@ -57,5 +55,5 @@ struct ForgotIdView: View {
 }
 
 #Preview {
-    ProfileView()
+    ForgotIDView()
 }
