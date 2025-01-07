@@ -124,12 +124,12 @@
 		F59C39ED2CFB1F8E002AD9DA /* Features */ = {
 			isa = PBXGroup;
 			children = (
-				F5DA158C2D2BC75400210DB8 /* Authentication */,
 				F56DE3CB2D1819F300319613 /* Intro */,
 				F5EEE1A52CFC8084009B2270 /* SplashScreen */,
 				F59C39EC2CFB1F8E002AD9DA /* Main */,
 				F5DA2A082D01D0C600A51E62 /* CollegeAndClubs */,
 				F59C39FF2CFB22B7002AD9DA /* Receipts */,
+				F5DA158C2D2BC75400210DB8 /* Authentication */,
 				F59C3A0B2CFB24F9002AD9DA /* Profile */,
 			);
 			path = Features;
