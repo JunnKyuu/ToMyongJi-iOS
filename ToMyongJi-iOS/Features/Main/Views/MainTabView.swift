@@ -26,13 +26,19 @@ struct MainTabView: View {
                 }
                 .tag(2)
             
-//            ProfileView()
-            AuthenticationView()
+            ProfileView()
                 .tabItem {
                     Image(systemName: "person.circle")
                     Text("프로필")
                 }
                 .tag(3)
+            
+            AuthenticationView()
+                .tabItem {
+                    Image(systemName: "person.badge.key.fill")
+                    Text("로그인")
+                }
+                .tag(4)
         }
         .tint(Color.softBlue)
         .navigationBarBackButtonHidden()

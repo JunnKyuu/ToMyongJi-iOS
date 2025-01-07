@@ -34,17 +34,17 @@ struct CustomTF: View {
                     Group {
                         if showPassword {
                             TextField(hint, text: $value)
-                                .font(.custom("GmarketSansLight", size: 15))
+                                .font(.custom("GmarketSansLight", size: 14))
                                 .focused($passwordState, equals: .reveal)
                         } else {
                             SecureField(hint, text: $value)
-                                .font(.custom("GmarketSansLight", size: 15))
+                                .font(.custom("GmarketSansLight", size: 14))
                                 .focused($passwordState, equals: .hide)
                         }
                     }
                 } else {
                     TextField(hint, text: $value)
-                        .font(.custom("GmarketSansLight", size: 15))
+                        .font(.custom("GmarketSansLight", size: 14))
                 }
                 Divider()
             }
