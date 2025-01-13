@@ -28,6 +28,16 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		F52D5B392D350133006AB838 /* Login */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Login;
+			sourceTree = "<group>";
+		};
+		F52D5B412D350137006AB838 /* SignUp */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = SignUp;
+			sourceTree = "<group>";
+		};
 		F56DE3CB2D1819F300319613 /* Intro */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Intro;
@@ -130,6 +140,8 @@
 				F5DA2A082D01D0C600A51E62 /* CollegeAndClubs */,
 				F59C39FF2CFB22B7002AD9DA /* Receipts */,
 				F5DA158C2D2BC75400210DB8 /* Authentication */,
+				F52D5B392D350133006AB838 /* Login */,
+				F52D5B412D350137006AB838 /* SignUp */,
 				F59C3A0B2CFB24F9002AD9DA /* Profile */,
 			);
 			path = Features;
@@ -183,6 +195,8 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				F52D5B392D350133006AB838 /* Login */,
+				F52D5B412D350137006AB838 /* SignUp */,
 				F56DE3CB2D1819F300319613 /* Intro */,
 				F59C39FF2CFB22B7002AD9DA /* Receipts */,
 				F59C3A072CFB240A002AD9DA /* Shared */,

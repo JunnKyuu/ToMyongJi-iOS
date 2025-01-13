@@ -1,26 +1,26 @@
 //
-//  ReceiptEndpoint.swift
+//  LoginEndpoint.swift
 //  ToMyongJi-iOS
 //
-//  Created by JunKyu Lee on 12/24/24.
+//  Created by JunKyu Lee on 1/13/25.
 //
 
 import Foundation
 import Alamofire
 
-enum ReceiptEndpoint {
-    case receipt(studentClubId: Int)
+enum LoginEndpoint {
+    case login(LoginRequest)
 }
 
-extension ReceiptEndpoint: Endpoint {
+extension LoginEndpoint: Endpoint {
     var baseURL: String {
         return "api.tomyongji.com"
     }
     
     var path: String {
         switch self {
-        case .receipt(let studentClubId):
-            return "/api/receipt/club/\(studentClubId)"
+        case .login:
+            return "/api/users/login"
         }
     }
     
@@ -29,7 +29,13 @@ extension ReceiptEndpoint: Endpoint {
     }
     
     var parameters: [String : Any] {
-        [:]
+        switch self {
+        case .login(let request):
+            return [
+                "userId": request.userId,
+                "password": request.password
+            ]
+        }
     }
     
     var query: [String : String] {
@@ -37,12 +43,10 @@ extension ReceiptEndpoint: Endpoint {
     }
     
     var method: HTTPMethod {
-        .get
+        .post
     }
     
     var encoding: ParameterEncoding {
-        URLEncoding.default
+        JSONEncoding.default
     }
 }
-
-

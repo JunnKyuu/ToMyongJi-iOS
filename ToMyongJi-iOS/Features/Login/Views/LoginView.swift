@@ -9,9 +9,8 @@ import SwiftUI
 
 struct LoginView: View {
     @Binding var showSignup: Bool
-    @State private var emailID: String = ""
-    @State private var password: String = ""
     @State private var showForgotIdView: Bool = false
+    @State private var viewModel = LoginViewModel()
     
     var body: some View {
         VStack(alignment: .leading, spacing: 15) {
@@ -26,9 +25,9 @@ struct LoginView: View {
                 .padding(.top, -5)
             
             VStack(spacing: 25) {
-                CustomTF(sfIcon: "person.crop.circle", hint: "아이디", value: $emailID)
+                CustomTF(sfIcon: "person.crop.circle", hint: "아이디", value: $viewModel.userId)
                 
-                CustomTF(sfIcon: "lock", hint: "비밀번호", isPassword: true, value: $password)
+                CustomTF(sfIcon: "lock", hint: "비밀번호", isPassword: true, value: $viewModel.password)
                     .padding(.top, 5)
                 
                 Button("아이디 찾기") {
@@ -40,10 +39,12 @@ struct LoginView: View {
                 
                 // 로그인 버튼
                 GradientButton(title: "로그인", icon: "chevron.right") {
-                    print("로그인 버튼 클릭")
+                    print(viewModel.userId)
+                    print(viewModel.password)
+                    viewModel.login()
                 }
                 .hSpacing(.trailing)
-                .disableWithOpacity(emailID.isEmpty || password.isEmpty)
+                .disableWithOpacity(viewModel.userId.isEmpty || viewModel.password.isEmpty)
             }
             .padding(.top, 20)
             
@@ -70,6 +71,20 @@ struct LoginView: View {
                 .presentationDetents([.height(300)])
                 .presentationCornerRadius(30)
         })
+        .overlay {
+            if viewModel.isLoading {
+                ProgressView()
+                    .tint(.darkNavy)
+                    .scaleEffect(1.5)
+            }
+        }
+        .alert(viewModel.isSuccess ? "로그인 성공" : "로그인 실패", isPresented: $viewModel.showAlert) {
+            Button("확인") {
+                viewModel.showAlert = false
+            }
+        } message: {
+            Text(viewModel.alertMessage)
+        }
     }
 }
 
