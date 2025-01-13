@@ -37,10 +37,10 @@ extension CollegesAndClubsEndpoint: Endpoint {
     }
     
     var method: HTTPMethod {
-        HTTPMethod.get
+        .get
     }
     
-    var encoding: URLEncoding {
+    var encoding: ParameterEncoding {
         URLEncoding.default
     }
 }

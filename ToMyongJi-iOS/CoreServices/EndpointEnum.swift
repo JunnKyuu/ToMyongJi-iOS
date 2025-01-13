@@ -16,7 +16,8 @@ protocol Endpoint {
     var query: [String: String] { get }
     var parameters: [String: Any] { get }
     var method: HTTPMethod { get }
-    var encoding: URLEncoding { get }
+    var encoding: ParameterEncoding { get }
+    
 }
 
 extension Endpoint {
