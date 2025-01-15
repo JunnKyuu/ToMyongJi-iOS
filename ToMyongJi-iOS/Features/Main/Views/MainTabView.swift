@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MainTabView: View {
     @State private var selectedTab: Int = 1
+    @Bindable private var authManager = AuthenticationManager.shared
     
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -26,19 +27,23 @@ struct MainTabView: View {
                 }
                 .tag(2)
             
-            ProfileView()
-                .tabItem {
-                    Image(systemName: "person.circle")
-                    Text("프로필")
+            Group {
+                if authManager.isAuthenticated {
+                    ProfileView()
+                        .onChange(of: authManager.authenticationState) { _, isAuthenticated in
+                            if !isAuthenticated {
+                                selectedTab = 3  // 로그아웃 시 로그인 탭으로 강제 이동
+                            }
+                        }
+                } else {
+                    AuthenticationView()
                 }
-                .tag(3)
-            
-            AuthenticationView()
-                .tabItem {
-                    Image(systemName: "person.badge.key.fill")
-                    Text("로그인")
-                }
-                .tag(4)
+            }
+            .tabItem {
+                Image(systemName: "person.circle")
+                Text(authManager.isAuthenticated ? "프로필" : "로그인")
+            }
+            .tag(3)
         }
         .tint(Color.softBlue)
         .navigationBarBackButtonHidden()

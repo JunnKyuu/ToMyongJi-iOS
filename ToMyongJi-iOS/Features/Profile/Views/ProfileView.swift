@@ -8,23 +8,35 @@
 import SwiftUI
 
 struct ProfileView: View {
-    
-    // 나의 정보 상태 변수
-    @State private var name: String = "이준규"
-    @State private var studentNum: String = "60222126"
-    @State private var collegeName: String = "인공지능소프트웨어융합대학"
-    @State private var studentClub: String = "응용소프트웨어학과 학생회"
-    @State private var role: String = "회장"
+    @Environment(\.dismiss) private var dismiss
+    @State private var viewModel = ProfileViewModel()
+    @Bindable private var authManager = AuthenticationManager.shared
+    @State private var showLogoutAlert = false
     
     // 소속 관리 상태 변수
     @State private var newMemberStudentNum: String = ""
     @State private var newMemberName: String = ""
-    @State private var clubMembers: [ClubMember] = [
-    ]
+    @State private var clubMembers: [ClubMember] = []
     
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
+                // 로그아웃 버튼
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        showLogoutAlert = true
+                    }) {
+                        HStack(spacing: 8) {
+                            Image(systemName: "rectangle.portrait.and.arrow.right")
+                            Text("로그아웃")
+                        }
+                        .font(.custom("GmarketSansMedium", size: 14))
+                        .foregroundColor(.gray)
+                    }
+                }
+                .padding(.top, 10)
+                
                 // 나의 정보
                 VStack(alignment: .leading, spacing: 30) {
                     VStack(alignment: .leading, spacing: 15) {
@@ -38,76 +50,76 @@ struct ProfileView: View {
                     }
                     
                     VStack(spacing: 10) {
-                        ProfileMyInfoRow(icon: "person", title: "이름", value: name)
-                        ProfileMyInfoRow(icon: "number", title: "학번", value: studentNum)
-                        ProfileMyInfoRow(icon: "building.columns.fill", title: "대학", value: collegeName)
-                        ProfileMyInfoRow(icon: "building.2.fill", title: "소속", value: studentClub)
-                        ProfileMyInfoRow(icon: "person.badge.key.fill", title: "자격", value: role)
-                    }
-                    .padding(.vertical, 10)
-                    .background {
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(Color.softBlue.opacity(0.3))
+                        ProfileMyInfoRow(icon: "person", title: "이름", value: viewModel.name)
+                        ProfileMyInfoRow(icon: "number", title: "학번", value: viewModel.studentNum)
+                        ProfileMyInfoRow(icon: "building.columns", title: "단과대학", value: viewModel.collegeName)
+                        ProfileMyInfoRow(icon: "person.3", title: "소속", value: viewModel.studentClub)
+                        ProfileMyInfoRow(icon: "person.badge.key", title: "권한", value: viewModel.displayRole)
                     }
                 }
-                .padding(.bottom, 20)
                 
-                // 소속 관리
-                VStack(alignment: .leading, spacing: 30) {
-                    VStack(alignment: .leading, spacing: 15) {
-                        Text("소속 관리")
-                            .font(.custom("GmarketSansBold", size: 25))
-                            .padding(.top, 10)
-                        Text("소속원들을 추가 또는 삭제할 수 있습니다.")
-                            .font(.custom("GmarketSansLight", size: 13))
-                            .foregroundStyle(.gray)
-                            .padding(.top, -5)
-                    }
-                    
-                    VStack(spacing: 10) {
-                        // 소속원 추가 폼
-                        AddClubMemberRow(studentNum: $newMemberStudentNum,
-                                         name: $newMemberName,
-                                         onAdd: addMember)
-                        // 소속원 목록
+                // 소속 관리 (PRESIDENT 권한일 때만 표시)
+                if viewModel.role == "PRESIDENT" {
+                    VStack(alignment: .leading, spacing: 30) {
+                        VStack(alignment: .leading, spacing: 15) {
+                            Text("소속 관리")
+                                .font(.custom("GmarketSansBold", size: 25))
+                                .padding(.top, 10)
+                            Text("소속 학생회의 구성원을 관리할 수 있습니다.")
+                                .font(.custom("GmarketSansLight", size: 13))
+                                .foregroundStyle(.gray)
+                                .padding(.top, -5)
+                        }
+                        
+                        // 구성원 추가
+                        AddClubMemberRow(
+                            studentNum: $newMemberStudentNum,
+                            name: $newMemberName
+                        ) {
+                            let newMember = ClubMember(studentNum: newMemberStudentNum, name: newMemberName)
+                            clubMembers.append(newMember)
+                            newMemberStudentNum = ""
+                            newMemberName = ""
+                        }
+                        
+                        // 구성원 목록
                         VStack(spacing: 10) {
                             ForEach(clubMembers) { member in
-                                ClubMemberInfoRow(studentNum: member.studentNum,
-                                                  name: member.name,
-                                                  onDelete: { deleteMember(member) })
+                                ClubMemberInfoRow(
+                                    studentNum: member.studentNum,
+                                    name: member.name
+                                ) {
+                                    if let index = clubMembers.firstIndex(where: { $0.id == member.id }) {
+                                        clubMembers.remove(at: index)
+                                    }
+                                }
                             }
                         }
-                        .padding(.top)
-                    }
-                    .padding(.vertical, 10)
-                    .background {
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(Color.softBlue.opacity(0.3))
                     }
                 }
-                
-                Spacer(minLength: 0)
             }
-            .padding(.vertical, 15)
-            .padding(.horizontal, 20)
-            .toolbar(.hidden, for: .navigationBar)
+            .padding(.horizontal, 15)
         }
-    }
-    
-    // 소속원 추가, 삭제
-    private func addMember() {
-        guard !newMemberStudentNum.isEmpty && !newMemberName.isEmpty else { return }
-        
-        let newMember = ClubMember(studentNum: newMemberStudentNum, name: newMemberName)
-        clubMembers.append(newMember)
-        
-        newMemberStudentNum = ""
-        newMemberName = ""
-    }
-    
-    private func deleteMember(_ member: ClubMember) {
-        if let index = clubMembers.firstIndex(where: { $0.id == member.id }) {
-            clubMembers.remove(at: index)
+        .onAppear {
+            viewModel.fetchUserProfile()
+        }
+        .alert("로그아웃", isPresented: $showLogoutAlert) {
+            Button("취소", role: .cancel) { }
+            Button("로그아웃", role: .destructive) {
+                // 로그아웃 처리
+                withAnimation {
+                    authManager.clearAuthentication()
+                    // 뷰모델 초기화
+//                    viewModel.name = ""
+//                    viewModel.studentNum = ""
+//                    viewModel.collegeName = ""
+//                    viewModel.studentClub = ""
+//                    viewModel.role = ""
+//                    viewModel.displayRole = ""
+                }
+            }
+        } message: {
+            Text("정말 로그아웃 하시겠습니까?")
         }
     }
 }
