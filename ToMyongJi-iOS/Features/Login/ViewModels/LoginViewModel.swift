@@ -52,9 +52,13 @@ class LoginViewModel {
                         accessToken: loginResponse.data.accessToken,
                         decodedToken: decodedToken
                     )
-                    self.alertMessage = "\(decodedToken.sub)님 로그인에 성공했습니다.\nid: \(decodedToken.id), role: \(decodedToken.auth)"
+                    self.alertMessage = "\(decodedToken.sub)님 로그인에 성공했습니다."
                     self.showAlert = true
                     self.isSuccess = true
+                    
+                    // 로그인 성공 후 입력 필드 초기화
+                    self.userId = ""
+                    self.password = ""
                 }
             }
             .store(in: &cancellables)

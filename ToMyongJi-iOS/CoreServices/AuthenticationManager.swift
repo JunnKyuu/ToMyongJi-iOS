@@ -7,20 +7,44 @@
 
 import Foundation
 
+@Observable
 class AuthenticationManager {
     static let shared = AuthenticationManager()
-    private init() {}
     
     // UserDefaults keys
     private let accessTokenKey = "accessToken"
     private let userIdKey = "userId"
     private let userRoleKey = "userRole"
     
+    // 상태 변화를 감지하기 위한 프로퍼티
+    var authenticationState: Bool
+    
+    private init() {
+        // 초기화 시 현재 인증 상태 설정
+        self.authenticationState = UserDefaults.standard.string(forKey: accessTokenKey) != nil
+    }
+    
     // 토큰 및 사용자 정보 저장
     func saveAuthentication(accessToken: String, decodedToken: DecodedToken) {
         UserDefaults.standard.set(accessToken, forKey: accessTokenKey)
-        UserDefaults.standard.set(decodedToken.id, forKey: userIdKey)
+        UserDefaults.standard.set(decodedToken.id as Int, forKey: userIdKey)
         UserDefaults.standard.set(decodedToken.auth, forKey: userRoleKey)
+        authenticationState = true
+    }
+    
+    // 로그아웃 시 저장된 정보 삭제
+    func clearAuthentication() {
+        UserDefaults.standard.removeObject(forKey: accessTokenKey)
+        UserDefaults.standard.removeObject(forKey: userIdKey)
+        UserDefaults.standard.removeObject(forKey: userRoleKey)
+        authenticationState = false
+    }
+    
+    // 로그인 상태 확인
+    var isAuthenticated: Bool {
+        let hasToken = UserDefaults.standard.string(forKey: accessTokenKey) != nil
+        authenticationState = hasToken
+        return hasToken
     }
     
     // 저장된 토큰 가져오기
@@ -30,23 +54,14 @@ class AuthenticationManager {
     
     // 저장된 사용자 ID 가져오기
     var userId: Int? {
-        return UserDefaults.standard.integer(forKey: userIdKey)
+        if let id = UserDefaults.standard.object(forKey: userIdKey) as? Int {
+            return id
+        }
+        return nil
     }
     
     // 저장된 사용자 권한 가져오기
     var userRole: String? {
         return UserDefaults.standard.string(forKey: userRoleKey)
-    }
-    
-    // 로그아웃 시 저장된 정보 삭제
-    func clearAuthentication() {
-        UserDefaults.standard.removeObject(forKey: accessTokenKey)
-        UserDefaults.standard.removeObject(forKey: userIdKey)
-        UserDefaults.standard.removeObject(forKey: userRoleKey)
-    }
-    
-    // 로그인 상태 확인
-    var isAuthenticated: Bool {
-        return accessToken != nil
     }
 }
