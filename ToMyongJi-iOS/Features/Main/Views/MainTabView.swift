@@ -27,21 +27,10 @@ struct MainTabView: View {
                 }
                 .tag(2)
             
-            Group {
-                if authManager.isAuthenticated {
-                    ProfileView()
-                        .onChange(of: authManager.authenticationState) { _, isAuthenticated in
-                            if !isAuthenticated {
-                                selectedTab = 3  // 로그아웃 시 로그인 탭으로 강제 이동
-                            }
-                        }
-                } else {
-                    AuthenticationView()
-                }
-            }
+            AuthenticationView()
             .tabItem {
                 Image(systemName: "person.circle")
-                Text(authManager.isAuthenticated ? "프로필" : "로그인")
+                Text("프로필")
             }
             .tag(3)
         }

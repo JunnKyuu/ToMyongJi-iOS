@@ -17,11 +17,11 @@ class AuthenticationManager {
     private let userRoleKey = "userRole"
     
     // 상태 변화를 감지하기 위한 프로퍼티
-    var authenticationState: Bool
+    var isAuthenticated: Bool
     
     private init() {
         // 초기화 시 현재 인증 상태 설정
-        self.authenticationState = UserDefaults.standard.string(forKey: accessTokenKey) != nil
+        self.isAuthenticated = UserDefaults.standard.string(forKey: accessTokenKey) != nil
     }
     
     // 토큰 및 사용자 정보 저장
@@ -29,7 +29,7 @@ class AuthenticationManager {
         UserDefaults.standard.set(accessToken, forKey: accessTokenKey)
         UserDefaults.standard.set(decodedToken.id as Int, forKey: userIdKey)
         UserDefaults.standard.set(decodedToken.auth, forKey: userRoleKey)
-        authenticationState = true
+        isAuthenticated = true
     }
     
     // 로그아웃 시 저장된 정보 삭제
@@ -37,14 +37,7 @@ class AuthenticationManager {
         UserDefaults.standard.removeObject(forKey: accessTokenKey)
         UserDefaults.standard.removeObject(forKey: userIdKey)
         UserDefaults.standard.removeObject(forKey: userRoleKey)
-        authenticationState = false
-    }
-    
-    // 로그인 상태 확인
-    var isAuthenticated: Bool {
-        let hasToken = UserDefaults.standard.string(forKey: accessTokenKey) != nil
-        authenticationState = hasToken
-        return hasToken
+        isAuthenticated = false
     }
     
     // 저장된 토큰 가져오기
