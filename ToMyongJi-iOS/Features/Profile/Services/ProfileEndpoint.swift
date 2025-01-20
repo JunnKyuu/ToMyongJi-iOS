@@ -11,6 +11,9 @@ import Alamofire
 enum ProfileEndpoint {
     case myProfile(id: Int)
     case clubs
+    case addMember(studentNum: String, name: String)
+    case getMembers(id: Int)
+    case deleteMember(studentNum: String)
 }
 
 extension ProfileEndpoint: Endpoint {
@@ -24,6 +27,12 @@ extension ProfileEndpoint: Endpoint {
             return "/api/my/\(id)"
         case .clubs:
             return "/api/club"
+        case .addMember:
+            return "/api/my/members"
+        case .getMembers(let id):
+            return "/api/my/members/\(id)"
+        case .deleteMember(let studentNum):
+            return "/api/my/members/\(studentNum)"
         }
     }
     
@@ -37,8 +46,21 @@ extension ProfileEndpoint: Endpoint {
         ]
     }
     
-    var parameters: [String : Any] {
-        [:]
+    var parameters: [String: Any] {
+        switch self {
+        case .addMember(let studentNum, let name):
+            guard let userId = AuthenticationManager.shared.userId else { return [:] }
+            let request = AddClubMemberRequest(
+                id: userId,
+                studentNum: studentNum,
+                name: name
+            )
+            return try! JSONSerialization.jsonObject(
+                with: JSONEncoder().encode(request)
+            ) as! [String: Any]
+        default:
+            return [:]
+        }
     }
     
     var query: [String : String] {
@@ -46,10 +68,24 @@ extension ProfileEndpoint: Endpoint {
     }
     
     var method: HTTPMethod {
-        .get
+        switch self {
+        case .addMember:
+            return .post
+        case .deleteMember:
+            return .delete
+        default:
+            return .get
+        }
     }
     
     var encoding: ParameterEncoding {
-        URLEncoding.default
+        switch method {
+        case .post:
+            return JSONEncoding.default
+        case .delete:
+            return URLEncoding.default
+        default:
+            return URLEncoding.default
+        }
     }
 } 

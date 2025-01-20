@@ -10,20 +10,27 @@ import SwiftUI
 struct AuthenticationView: View {
     @State private var showSignup: Bool = false
     @State private var isKeyboardShowing: Bool = false
+    @Bindable private var authManager = AuthenticationManager.shared
     
     var body: some View {
-        LoginView(showSignup: $showSignup)
-            .fullScreenCover(isPresented: $showSignup) {
-                SignUpView(showSignup: $showSignup)
+        Group {
+            if authManager.isAuthenticated {
+                ProfileView()
+            } else {
+                LoginView(showSignup: $showSignup)
+                    .fullScreenCover(isPresented: $showSignup) {
+                        SignUpView(showSignup: $showSignup)
+                    }
             }
-            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification), perform: { _ in
-                if !showSignup {
-                    isKeyboardShowing = true
-                }
-            })
-            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification), perform: { _ in
-                isKeyboardShowing = false
-            })
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in
+            if !showSignup {
+                isKeyboardShowing = true
+            }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
+            isKeyboardShowing = false
+        }
     }
 }
 
