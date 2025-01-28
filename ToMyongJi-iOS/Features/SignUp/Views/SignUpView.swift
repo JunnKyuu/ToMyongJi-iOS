@@ -7,102 +7,116 @@
 
 import SwiftUI
 
+enum SignUpPage {
+    case credentials
+    case personal
+    case school
+}
+
+// SignUpField 구조체 추가
+struct SignUpField: Identifiable {
+    let id = UUID()
+    let show: Bool
+    let title: String
+    let hint: String
+    let binding: Binding<String>
+}
+
 struct SignUpView: View {
     @Binding var showSignup: Bool
+    @State private var currentPage: SignUpPage = .credentials
     @State private var userId: String = ""
+    @State private var password: String = ""
     @State private var name: String = ""
+    @State private var email: String = ""
+    @State private var verificationCode: String = ""
     @State private var studentNum: String = ""
     @State private var college: String = ""
-    @State private var studentClubId: Int = 0
-    @State private var email: String = ""
-    @State private var password: String = ""
+    @State private var clubName: String = ""
     @State private var role: String = ""
     
+    // 상태 관리
+    @State private var isUserIdChecked: Bool = false
+    @State private var isVerificationSent: Bool = false
+    @State private var isVerified: Bool = false
+    @State private var isClubVerified: Bool = false
     
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                Button(action: {
-                    showSignup = false
-                }, label: {
-                    Image(systemName: "chevron.left")
-                        .font(.title3.bold())
-                        .foregroundStyle(Color.gray)
-                        .contentShape(.rect)
-                })
-                .padding(.top, 10)
+        NavigationStack {
+            VStack {
+                signUpHeaderView
                 
-                Text("회원가입")
-                    .font(.custom("GmarketSansBold", size: 25))
-                    .padding(.top, 10)
-                
-                Text("회원가입을 위해서 모든 정보를 입력해주세요.")
-                    .font(.custom("GmarketSansLight", size: 13))
-                    .foregroundStyle(.gray)
-                    .padding(.top, -5)
-                
-                VStack(spacing: 25) {
-                    /// 아이디, 비밀번호
-                    VStack(spacing: 25) {
-                        CustomTF(sfIcon: "person.crop.circle", hint: "아이디", value: $userId)
-                        CustomTF(sfIcon: "lock", hint: "비밀번호", isPassword: true, value: $password)
-                            .padding(.top, 5)
+                // 현재 페이지에 따른 View 표시
+                Group {
+                    switch currentPage {
+                    case .credentials:
+                        CredentialsView(
+                            userId: $userId,
+                            password: $password,
+                            isUserIdChecked: $isUserIdChecked,
+                            onNext: { moveToNextPage(.personal) }
+                        )
+                    case .personal:
+                        PersonalView(
+                            name: $name,
+                            email: $email,
+                            verificationCode: $verificationCode,
+                            isVerificationSent: $isVerificationSent,
+                            isVerified: $isVerified,
+                            onNext: { moveToNextPage(.school) }
+                        )
+                    case .school:
+                        CollegeClubView(
+                            studentNum: $studentNum,
+                            college: $college,
+                            clubName: $clubName,
+                            role: $role,
+                            isClubVerified: $isClubVerified,
+                            onComplete: handleSignUp
+                        )
                     }
-                    .padding(.bottom, 35)
-                    
-                    /// 이름, 이메일
-                    VStack(spacing: 25) {
-                        CustomTF(sfIcon: "person", hint: "이름", value: $name)
-                        CustomTF(sfIcon: "at", hint: "이메일", value: $email)
-                            .padding(.top, 5)
-                    }
-                    .padding(.bottom, 35)
-                    
-                    /// 학번, 대학, 자격, 소속이름
-                    VStack(spacing: 25) {
-                        CustomTF(sfIcon: "number", hint: "학번", value: $name)
-                        CustomTF(sfIcon: "building.columns.fill", hint: "대학", value: $name)
-                        CustomTF(sfIcon: "person.badge.key.fill", hint: "자격", value: $name)
-                        CustomTF(sfIcon: "building.2.fill", hint: "소속이름", value: $email)
-                            .padding(.top, 5)
-                    }
-                    
-                    
-                    Text("가입하시면 [이용약관과 개인정보 처리방침](https://www.tomyongji.com/privacy-policy)에 동의하시게 됩니다")
-                        .font(.custom("GmarketSansLight", size: 11))
-                        .tint(.darkNavy)
-                        .foregroundStyle(.gray)
-                        .frame(height: 50)
-                    
-                    /// 회원가입 버튼
-                    GradientButton(title: "회원가입", icon: "chevron.right") {
-                        // 회원가입 로직 구현
-                    }
-                    .hSpacing(.trailing)
-                    .disableWithOpacity(userId.isEmpty || name.isEmpty || password.isEmpty)
                 }
-                .padding(.top, 25)
+                .transition(.slide)
                 
-                Spacer(minLength: 0)
-                
-                HStack(spacing: 6) {
-                    Text("이미 계정이 있으신가요?")
-                        .font(.custom("GmarketSansLight", size: 13))
-                        .foregroundStyle(.gray)
-                    
-                    Button("로그인") {
-                        showSignup = false
-                    }
-                    .font(.custom("GmarketSansBold", size: 13))
-                    .tint(Color.darkNavy)
-                }
-                .hSpacing()
-                .padding(.top, 30)
+                Spacer()
             }
-            .padding(.vertical, 15)
-            .padding(.horizontal, 25)
-            .toolbar(.hidden, for: .navigationBar)
+            .navigationBarHidden(true)
+            .animation(.easeInOut, value: currentPage)
         }
+    }
+    
+    private var signUpHeaderView: some View {
+        HStack {
+            Button(action: {
+                if currentPage == .credentials {
+                    showSignup = false
+                } else {
+                    withAnimation {
+                        switch currentPage {
+                        case .credentials: break
+                        case .personal: currentPage = .credentials
+                        case .school: currentPage = .personal
+                        }
+                    }
+                }
+            }) {
+                Image(systemName: "chevron.left")
+                    .font(.title3.bold())
+                    .foregroundStyle(Color.darkNavy)
+            }
+            Spacer()
+        }
+        .padding()
+    }
+    
+    private func moveToNextPage(_ page: SignUpPage) {
+        withAnimation {
+            currentPage = page
+        }
+    }
+    
+    private func handleSignUp() {
+        // 회원가입 로직 구현
     }
 }
 
