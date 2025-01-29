@@ -8,9 +8,6 @@
 import SwiftUI
 
 struct SignUpTextField: View {
-//    var sfIcon: String
-//    var iconTint: Color = .softBlue
-    var title: String
     var hint: String
     var isPassword: Bool = false
     
@@ -26,17 +23,8 @@ struct SignUpTextField: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            // 타이틀
-            Text(title)
-                .font(.custom("GmarketSansMedium", size: 14))
-                .foregroundStyle(Color.darkNavy)
-            
             // 텍스트필드
             HStack(spacing: 12) {
-    //            Image(systemName: sfIcon)
-    //                .foregroundStyle(iconTint)
-    //                .frame(width: 30)
-                
                 if isPassword {
                     Group {
                         if showPassword {
@@ -69,7 +57,7 @@ struct SignUpTextField: View {
                 }
             }
             .padding(.horizontal, 15)
-            .padding(.vertical, 12)
+            .padding(.vertical, 15)
             .background(
                 RoundedRectangle(cornerRadius: 12)
                     .fill(.white)
@@ -85,5 +73,5 @@ struct SignUpTextField: View {
 }
 
 #Preview {
-    SignUpTextField(title: "테스트", hint: "테스트", isPassword: true, value: .constant("테스트"))
+    SignUpTextField(hint: "테스트", isPassword: true, value: .constant("테스트"))
 }
