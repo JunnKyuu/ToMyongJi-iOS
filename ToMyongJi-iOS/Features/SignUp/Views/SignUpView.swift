@@ -10,8 +10,8 @@ import SwiftUI
 enum SignUpPage {
     case id
     case password
-    case personal
-    case school
+    case email
+    case clubAuth
 }
 
 // SignUpField 구조체 추가
@@ -29,29 +29,60 @@ struct SignUpView: View {
     @State private var currentPage: SignUpPage = .id
     @State private var userId: String = ""
     @State private var password: String = ""
+    @State private var email: String = ""
     
     var body: some View {
         NavigationStack {
-            Group {
-                switch currentPage {
-                case .id:
-                    InputIDView(userId: $userId) {
+            switch currentPage {
+            case .id:
+                InputIDView(userId: $userId, 
+                    onBack: {
+                        dismiss()
+                    },
+                    onNext: {
                         withAnimation {
                             currentPage = .password
                         }
                     }
-                case .password:
-                    InputPasswordView(password: $password) {
+                )
+            case .password:
+                InputPasswordView(password: $password,
+                    onBack: {
                         withAnimation {
-                            currentPage = .personal
+                            currentPage = .id
+                        }
+                    },
+                    onNext: {
+                        withAnimation {
+                            currentPage = .email
                         }
                     }
-                default:
-                    Text("다음 단계")
-                }
+                )
+            case .email:
+                InputEmailView(email: $email,
+                    onBack: {
+                        withAnimation {
+                            currentPage = .password
+                        }
+                    },
+                    onNext: {
+                        withAnimation {
+                            currentPage = .clubAuth
+                        }
+                    }
+                )
+            case .clubAuth:
+                InputClubAuthenticationView(
+                    onBack: {
+                        withAnimation {
+                            currentPage = .email
+                        }
+                    },
+                    onSignUp: handleSignUp
+                )
             }
-            .navigationBarHidden(true)
         }
+        .navigationBarHidden(true)
     }
     
     private func handleSignUp() {
