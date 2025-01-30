@@ -8,14 +8,19 @@
 import SwiftUI
 
 struct InputPasswordView: View {
-    @Environment(\.dismiss) var dismiss
     @Binding var password: String
+    var onBack: () -> Void
     var onNext: () -> Void
+    @State private var confirmPassword: String = ""
+    
+    private var isPasswordValid: Bool {
+        return password.count >= 8 && password == confirmPassword
+    }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             Button {
-                dismiss()
+                onBack()
             } label: {
                 Image(systemName: "chevron.left")
                     .font(.title3.bold())
@@ -33,14 +38,37 @@ struct InputPasswordView: View {
             .foregroundStyle(Color.darkNavy)
             .padding(.bottom, 40)
             
-            Text("비밀번호")
-                .font(.custom("GmarketSansLight", size: 15))
-                .foregroundStyle(Color.darkNavy)
-            SignUpTextField(
-                hint: "영문, 숫자, 특수문자 포함 8자 이상",
-                isPassword: true,
-                value: $password
-            )
+            Group {
+                Text("비밀번호")
+                    .font(.custom("GmarketSansLight", size: 15))
+                    .foregroundStyle(Color.darkNavy)
+                SignUpTextField(
+                    hint: "영문, 숫자, 특수문자 포함 8자 이상",
+                    isPassword: true,
+                    value: $password
+                )
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
+                
+                Text("비밀번호 확인")
+                    .font(.custom("GmarketSansLight", size: 15))
+                    .foregroundStyle(Color.darkNavy)
+                    .padding(.top, 15)
+                SignUpTextField(
+                    hint: "비밀번호를 한번 더 입력해주세요",
+                    isPassword: true,
+                    value: $confirmPassword
+                )
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
+                
+                if !confirmPassword.isEmpty && password != confirmPassword {
+                    Text("비밀번호가 일치하지 않습니다")
+                        .font(.custom("GmarketSansLight", size: 12))
+                        .foregroundStyle(.red)
+                        .padding(.top, 5)
+                }
+            }
             
             Spacer()
             
@@ -49,18 +77,18 @@ struct InputPasswordView: View {
             } label: {
                 Text("다음")
                     .font(.custom("GmarketSansMedium", size: 15))
-                    .foregroundStyle(password.count < 8 ? Color.white : Color.darkNavy)
+                    .foregroundStyle(.white)
             }
             .frame(maxWidth: .infinity, alignment: .center)
             .padding(.vertical, 15)
-            .background(password.count < 8 ? Color.gray.opacity(0.3) : Color.softBlue)
+            .background(!isPasswordValid ? Color.gray.opacity(0.3) : Color.softBlue)
             .clipShape(RoundedRectangle(cornerRadius: 10))
-            .disabled(password.count < 8)
+            .disabled(!isPasswordValid)
         }
         .padding()
     }
 }
 
 #Preview {
-    InputPasswordView(password: .constant(""), onNext: {})
+    InputPasswordView(password: .constant(""), onBack: {}, onNext: {})
 }

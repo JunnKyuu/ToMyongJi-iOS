@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct InputIDView: View {
-    @Environment(\.dismiss) var dismiss
     @Binding var userId: String
+    var onBack: () -> Void
     var onNext: () -> Void
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             Button {
-                dismiss()
+                onBack()
             } label: {
                 Image(systemName: "chevron.left")
                     .font(.title3.bold())
@@ -38,6 +38,8 @@ struct InputIDView: View {
                 .font(.custom("GmarketSansLight", size: 15))
                 .foregroundStyle(Color.darkNavy)
             SignUpTextField(hint: "sampleID", value: $userId)
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
             
             Spacer()
             
@@ -46,7 +48,7 @@ struct InputIDView: View {
             } label: {
                 Text("다음")
                     .font(.custom("GmarketSansMedium", size: 15))
-                    .foregroundStyle(userId.isEmpty ? Color.white : Color.darkNavy)
+                    .foregroundStyle(Color.white)
             }
             .frame(maxWidth: .infinity, alignment: .center)
             .padding(.vertical, 15)
@@ -60,6 +62,6 @@ struct InputIDView: View {
 
 #Preview {
     NavigationStack {
-        InputIDView(userId: .constant(""), onNext: {})
+        InputIDView(userId: .constant(""), onBack: {}, onNext: {})
     }
 }
