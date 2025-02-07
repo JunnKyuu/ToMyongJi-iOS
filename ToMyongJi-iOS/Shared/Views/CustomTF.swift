@@ -15,6 +15,7 @@ struct CustomTF: View {
     
     @Binding var value: String
     @State private var showPassword: Bool = false
+    @FocusState private var isFocused: Bool
     @FocusState private var passwordState: HideState?
     
     enum HideState {
@@ -35,18 +36,51 @@ struct CustomTF: View {
                             TextField(hint, text: $value)
                                 .font(.custom("GmarketSansLight", size: 14))
                                 .focused($passwordState, equals: .reveal)
+                                .focused($isFocused)
+                                .padding(10)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .fill(.white)
+                                        .shadow(color: .black.opacity(0.05), radius: 5, x: 0, y: 2)
+                                )
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .stroke(isFocused ? Color.softBlue : Color.gray.opacity(0.2), lineWidth: 1.5)
+                                )
                         } else {
                             SecureField(hint, text: $value)
                                 .font(.custom("GmarketSansLight", size: 14))
                                 .focused($passwordState, equals: .hide)
+                                .focused($isFocused)
+                                .padding(10)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .fill(.white)
+                                        .shadow(color: .black.opacity(0.05), radius: 5, x: 0, y: 2)
+                                )
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .stroke(isFocused ? Color.softBlue : Color.gray.opacity(0.2), lineWidth: 1.5)
+                                )
                         }
                     }
                 } else {
                     TextField(hint, text: $value)
                         .font(.custom("GmarketSansLight", size: 14))
+                        .focused($isFocused)
+                        .padding(10)
+                        .background(
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(.white)
+                                .shadow(color: .black.opacity(0.05), radius: 5, x: 0, y: 2)
+                        )
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(isFocused ? Color.softBlue : Color.gray.opacity(0.2), lineWidth: 1.5)
+                        )
                 }
-                Divider()
             }
+            .animation(.easeInOut(duration: 0.2), value: isFocused)
             .overlay(alignment: .trailing) {
                 if isPassword {
                     Button(action: {
