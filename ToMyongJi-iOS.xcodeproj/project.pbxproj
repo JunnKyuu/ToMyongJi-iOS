@@ -43,6 +43,11 @@
 			path = Intro;
 			sourceTree = "<group>";
 		};
+		F58D4AAD2D5728FD0046185B /* Admin */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Admin;
+			sourceTree = "<group>";
+		};
 		F59C39FF2CFB22B7002AD9DA /* Receipts */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Receipts;
@@ -134,6 +139,7 @@
 		F59C39ED2CFB1F8E002AD9DA /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				F58D4AAD2D5728FD0046185B /* Admin */,
 				F56DE3CB2D1819F300319613 /* Intro */,
 				F5EEE1A52CFC8084009B2270 /* SplashScreen */,
 				F59C39EC2CFB1F8E002AD9DA /* Main */,
@@ -198,6 +204,7 @@
 				F52D5B392D350133006AB838 /* Login */,
 				F52D5B412D350137006AB838 /* SignUp */,
 				F56DE3CB2D1819F300319613 /* Intro */,
+				F58D4AAD2D5728FD0046185B /* Admin */,
 				F59C39FF2CFB22B7002AD9DA /* Receipts */,
 				F59C3A072CFB240A002AD9DA /* Shared */,
 				F59C3A082CFB2414002AD9DA /* CoreServices */,
