@@ -25,7 +25,7 @@ struct ProfileView: View {
                 Text("마이페이지")
                     .font(.custom("GmarketSansBold", size: 25))
                     .foregroundStyle(Color.darkNavy)
-                    .frame(maxWidth: .infinity, alignment: .center)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.top, 10)
                     .padding(.bottom, 15)
                 

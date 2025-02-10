@@ -208,6 +208,6 @@ struct CustomScrollBehaviour: ScrollTargetBehavior {
 #Preview {
     ReceiptListView(club: Club(
         studentClubId: 1,
-        studentClubName: "융합소프트웨어학부학생회"
+        studentClubName: "융합소프트웨어학부 학생회"
     ))
 }
