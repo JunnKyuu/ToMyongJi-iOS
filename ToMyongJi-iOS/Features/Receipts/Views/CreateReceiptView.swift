@@ -23,7 +23,7 @@ struct CreateReceiptView: View {
     // Sample Club
     private let sampleClub = Club(
         studentClubId: 1,
-        studentClubName: "융합소프트웨어학부학생회"
+        studentClubName: "융합소프트웨어학부 학생회"
     )
     
     var body: some View {

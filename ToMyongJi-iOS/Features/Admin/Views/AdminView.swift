@@ -13,20 +13,25 @@ struct AdminView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
-                // 회장 관리
+                // admin 타이틀
                 VStack(alignment: .leading, spacing: 30) {
+                    Text("관리자 페이지")
+                        .font(.custom("GmarketSansBold", size: 28))
+                        .foregroundStyle(Color.darkNavy)
+                        .padding(.bottom, 20)
+                    
+                    // 회장 관리
                     VStack(alignment: .leading, spacing: 15) {
                         Text("회장 관리")
                             .font(.custom("GmarketSansMedium", size: 20))
                             .foregroundStyle(Color.darkNavy)
-                            .padding(.top, 10)
                         Text("현재 회장 정보를 확인하고 변경할 수 있습니다.")
                             .font(.custom("GmarketSansLight", size: 13))
                             .foregroundStyle(.gray)
                             .padding(.top, -5)
                     }
                     
-                    // 현재 회장 정보
+                    /// 현재 회장 정보
                     VStack(alignment: .leading, spacing: 10) {
                         Text("현재 회장")
                             .font(.custom("GmarketSansMedium", size: 16))
@@ -45,7 +50,7 @@ struct AdminView: View {
                         )
                     }
                     
-                    // 새 회장 정보 입력
+                    /// 새 회장 정보 입력
                     VStack(alignment: .leading, spacing: 10) {
                         Text("새 회장")
                             .font(.custom("GmarketSansMedium", size: 16))
@@ -70,6 +75,8 @@ struct AdminView: View {
                     }
                 }
                 .padding(.bottom, 30)
+
+                Divider()
                 
                 // 소속부원 관리
                 VStack(alignment: .leading, spacing: 30) {
@@ -84,7 +91,7 @@ struct AdminView: View {
                             .padding(.top, -5)
                     }
                     
-                    // 구성원 추가
+                    /// 구성원 추가
                     AddAdminMemberRow(
                         studentNum: $viewModel.newMemberStudentNum,
                         name: $viewModel.newMemberName
@@ -92,7 +99,7 @@ struct AdminView: View {
                         viewModel.addMember()
                     }
                     
-                    // 구성원 목록
+                    /// 구성원 목록
                     VStack {
                         ForEach(viewModel.members) { member in
                             AdminMemberRow(
@@ -108,9 +115,9 @@ struct AdminView: View {
                             .fill(Color.softBlue.opacity(0.3))
                     )
                 }
+                .padding(.top, 30)
             }
-            .padding(.horizontal, 15)
-            .padding(.vertical, 15)
+            .padding(20)
         }
         .alert(viewModel.alertTitle, isPresented: $viewModel.showAlert) {
             Button("확인", role: .cancel) { }
