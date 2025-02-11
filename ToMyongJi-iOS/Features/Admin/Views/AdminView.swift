@@ -9,6 +9,7 @@ import SwiftUI
 
 struct AdminView: View {
     @State private var viewModel = AdminViewModel()
+    @FocusState private var isFocused: Bool
     
     var body: some View {
         ScrollView {
@@ -57,8 +58,22 @@ struct AdminView: View {
                             .foregroundStyle(Color.darkNavy)
                         
                         HStack(spacing: 20) {
-                            CustomTF(sfIcon: "number", hint: "학번", value: $viewModel.newPresidentStudentNum)
-                            CustomTF(sfIcon: "person", hint: "이름", value: $viewModel.newPresidentName)
+                            TextField("학번", text: $viewModel.newPresidentStudentNum)
+                                .font(.custom("GmarketSansLight", size: 14))
+                                .padding(10)
+                                .focused($isFocused)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(isFocused ? Color.softBlue : Color.gray.opacity(0.2), lineWidth: 1.5)
+                                )
+                            TextField("이름", text: $viewModel.newPresidentName)
+                                .font(.custom("GmarketSansLight", size: 14))
+                                .padding(10)
+                                .focused($isFocused)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(isFocused ? Color.softBlue : Color.gray.opacity(0.2), lineWidth: 1.5)
+                                )
                             
                             Button {
                                 viewModel.changePresident()
@@ -79,7 +94,7 @@ struct AdminView: View {
                 Divider()
                 
                 // 소속부원 관리
-                VStack(alignment: .leading, spacing: 30) {
+                VStack(alignment: .leading, spacing: 20) {
                     VStack(alignment: .leading, spacing: 15) {
                         Text("소속부원 관리")
                             .font(.custom("GmarketSansMedium", size: 20))
@@ -98,6 +113,7 @@ struct AdminView: View {
                     ) {
                         viewModel.addMember()
                     }
+                    .padding(.bottom, 20)
                     
                     /// 구성원 목록
                     VStack {
