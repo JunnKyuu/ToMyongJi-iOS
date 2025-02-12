@@ -25,6 +25,7 @@ extension Endpoint {
         var components = URLComponents()
         components.scheme = "http"
         components.host = self.baseURL
+        components.port = 8080
         components.path = self.path
         if !self.query.isEmpty {
             components.queryItems = self.query.map { URLQueryItem(name: $0, value: $1) }
