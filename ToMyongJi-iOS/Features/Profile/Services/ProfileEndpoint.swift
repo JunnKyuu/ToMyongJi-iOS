@@ -18,7 +18,8 @@ enum ProfileEndpoint {
 
 extension ProfileEndpoint: Endpoint {
     var baseURL: String {
-        return "api.tomyongji.com"
+//        return "api.tomyongji.com"
+        return "http://13.125.66.151:8080"
     }
     
     var path: String {
