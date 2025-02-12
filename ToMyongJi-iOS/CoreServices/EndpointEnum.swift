@@ -23,7 +23,7 @@ protocol Endpoint {
 extension Endpoint {
     var url: URL {
         var components = URLComponents()
-        components.scheme = "https"
+        components.scheme = "http"
         components.host = self.baseURL
         components.path = self.path
         if !self.query.isEmpty {
