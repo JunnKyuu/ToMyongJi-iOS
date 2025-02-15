@@ -15,7 +15,7 @@ enum LoginEndpoint {
 extension LoginEndpoint: Endpoint {
     var baseURL: String {
 //        return "api.tomyongji.com"
-        return "http://13.125.66.151"
+        return "13.125.66.151"
 
     }
     
