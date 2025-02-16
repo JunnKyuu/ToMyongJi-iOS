@@ -11,6 +11,7 @@ struct InputIDView: View {
     @Binding var userId: String
     var onBack: () -> Void
     var onNext: () -> Void
+    @State private var isCheckingId: Bool = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
@@ -37,9 +38,25 @@ struct InputIDView: View {
             Text("아이디")
                 .font(.custom("GmarketSansLight", size: 15))
                 .foregroundStyle(Color.darkNavy)
-            SignUpTextField(hint: "sampleID", value: $userId)
-                .textInputAutocapitalization(.never)
-                .autocorrectionDisabled()
+            HStack(spacing: 10) {
+                SignUpTextField(hint: "sampleID", value: $userId)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
+                
+                Button {
+                    isCheckingId = true
+                    onNext()
+                } label: {
+                    Text("중복 확인")
+                        .font(.custom("GmarketSansMedium", size: 13))
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 15)
+                        .padding(.vertical, 15)
+                        .background(userId.isEmpty ? Color.gray.opacity(0.3) : Color.softBlue)
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                }
+                .disabled(userId.isEmpty)
+            }
             
             Spacer()
             
@@ -48,13 +65,13 @@ struct InputIDView: View {
             } label: {
                 Text("다음")
                     .font(.custom("GmarketSansMedium", size: 15))
-                    .foregroundStyle(Color.white)
+                    .foregroundStyle(.white)
             }
             .frame(maxWidth: .infinity, alignment: .center)
             .padding(.vertical, 15)
-            .background(userId.isEmpty ? Color.gray.opacity(0.3) : Color.softBlue)
+            .background((!isCheckingId || userId.isEmpty) ? Color.gray.opacity(0.3) : Color.softBlue)
             .clipShape(RoundedRectangle(cornerRadius: 10))
-            .disabled(userId.isEmpty)
+            .disabled(!isCheckingId || userId.isEmpty)
         }
         .padding()
     }

@@ -26,27 +26,28 @@ struct SignUpField: Identifiable {
 struct SignUpView: View {
     @Environment(\.dismiss) var dismiss
     @Binding var showSignup: Bool
+    @State private var viewModel = SignUpViewModel()
     @State private var currentPage: SignUpPage = .id
-    @State private var userId: String = ""
-    @State private var password: String = ""
-    @State private var email: String = ""
     
     var body: some View {
         NavigationStack {
             switch currentPage {
             case .id:
-                InputIDView(userId: $userId, 
-                    onBack: {
-                        dismiss()
-                    },
+                InputIDView(
+                    userId: $viewModel.userId,
+                    onBack: { dismiss() },
                     onNext: {
-                        withAnimation {
-                            currentPage = .password
+                        viewModel.checkUserId()
+                        if viewModel.isUserIdAvailable {
+                            withAnimation {
+                                currentPage = .password
+                            }
                         }
                     }
                 )
             case .password:
-                InputPasswordView(password: $password,
+                InputPasswordView(
+                    password: $viewModel.password,
                     onBack: {
                         withAnimation {
                             currentPage = .id
@@ -59,7 +60,9 @@ struct SignUpView: View {
                     }
                 )
             case .email:
-                InputEmailView(email: $email,
+                InputEmailView(
+                    email: $viewModel.email,
+                    verificationCode: $viewModel.verificationCode,
                     onBack: {
                         withAnimation {
                             currentPage = .password
@@ -69,24 +72,38 @@ struct SignUpView: View {
                         withAnimation {
                             currentPage = .clubAuth
                         }
+                    },
+                    onSendCode: {
+                        viewModel.sendVerificationEmail()
+                    },
+                    onVerifyCode: {
+                        viewModel.verifyEmailCode()
                     }
                 )
             case .clubAuth:
                 InputClubAuthenticationView(
+                    viewModel: viewModel,
                     onBack: {
                         withAnimation {
                             currentPage = .email
                         }
                     },
-                    onSignUp: handleSignUp
+                    onSignUp: {
+                        viewModel.signUp { success in
+                            if success {
+                                showSignup = false
+                            }
+                        }
+                    }
                 )
             }
         }
         .navigationBarHidden(true)
-    }
-    
-    private func handleSignUp() {
-        // 회원가입 로직 구현
+        .alert(viewModel.alertTitle, isPresented: $viewModel.showAlert) {
+            Button("확인", role: .cancel) { }
+        } message: {
+            Text(viewModel.alertMessage)
+        }
     }
 }
 
