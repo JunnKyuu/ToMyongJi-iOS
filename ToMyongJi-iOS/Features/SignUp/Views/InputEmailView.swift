@@ -9,9 +9,11 @@ import SwiftUI
 
 struct InputEmailView: View {
     @Binding var email: String
+    @Binding var verificationCode: String
     var onBack: () -> Void
     var onNext: () -> Void
-    @State private var verificationCode: String = ""
+    var onSendCode: () -> Void
+    var onVerifyCode: () -> Void
     @State private var isVerificationSent: Bool = false
     @State private var isVerified: Bool = false
     @State private var showAlert: Bool = false
@@ -58,7 +60,7 @@ struct InputEmailView: View {
                     
                     Button {
                         if isValidEmail(email) {
-                            // 인증코드 발송 로직 추가
+                            onSendCode()
                             isVerificationSent = true
                         } else {
                             alertMessage = "올바른 이메일 형식이 아닙니다."
@@ -73,7 +75,7 @@ struct InputEmailView: View {
                             .background(email.isEmpty ? Color.gray.opacity(0.3) : Color.softBlue)
                             .clipShape(RoundedRectangle(cornerRadius: 10))
                     }
-                    .disabled(email.isEmpty)
+                    .disabled(email.isEmpty || !isValidEmail(email))
                 }
             }
             
@@ -87,7 +89,7 @@ struct InputEmailView: View {
                         SignUpTextField(hint: "인증코드 8자리 입력", value: $verificationCode)
                         
                         Button {
-                            // 인증코드 확인 로직
+                            onVerifyCode()
                             isVerified = true
                         } label: {
                             Text("인증하기")
@@ -128,5 +130,5 @@ struct InputEmailView: View {
 }
 
 #Preview {
-    InputEmailView(email: .constant(""), onBack: {}, onNext: {})
+    InputEmailView(email: .constant(""), verificationCode: .constant(""), onBack: {}, onNext: {}, onSendCode: {}, onVerifyCode: {})
 }
