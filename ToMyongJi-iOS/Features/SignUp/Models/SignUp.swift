@@ -7,6 +7,7 @@
 
 import Foundation
 
+// 회원가입
 struct SignUpRequest: Codable {
     let userId: String
     let name: String
@@ -24,29 +25,7 @@ struct SignUpResponse: Codable {
     let data: Int
 }
 
-// 단과대학, 소속 관련 모델
-struct College: Codable, Identifiable {
-    let collegeId: Int
-    let collegeName: String
-    let clubs: [Club]
-    
-    var id: Int { collegeId }
-}
-
-struct Club: Codable, Identifiable {
-    let studentClubId: Int
-    let studentClubName: String
-    
-    var id: Int { studentClubId }
-}
-
-struct CollegesResponse: Codable {
-    let statusCode: Int
-    let statusMessage: String
-    let data: [College]
-}
-
-// 이메일 관련 모델
+// 이메일
 struct EmailRequest: Codable {
     let email: String
 }
@@ -62,7 +41,14 @@ struct VerifyCodeResponse: Codable {
     let data: Bool
 }
 
-// 소속 인증 관련 모델
+// 아이디 중복 체크
+struct UserIdCheckResponse: Codable {
+    let statusCode: Int
+    let statusMessage: String
+    let data: Bool
+}
+
+// 소속 인증
 struct ClubVerifyRequest: Codable {
     let clubId: Int
     let studentNum: String

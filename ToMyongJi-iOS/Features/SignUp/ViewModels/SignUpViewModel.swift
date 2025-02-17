@@ -90,7 +90,7 @@ class SignUpViewModel {
     
     // 단과대학 및 소속 정보 가져오기
     func fetchColleges() {
-        networkingManager.run(SignUpEndpoint.getColleges, type: CollegesResponse.self)
+        networkingManager.run(SignUpEndpoint.getColleges, type: CollegesAndClubsResponse.self)
             .sink { [weak self] completion in
                 if case .failure(let error) = completion {
                     self?.showAlert(title: "오류", message: error.localizedDescription)

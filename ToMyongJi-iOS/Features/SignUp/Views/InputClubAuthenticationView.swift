@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct InputClubAuthenticationView: View {
+    @Binding var name: String
+    @Binding var studentNum: String
     var viewModel: SignUpViewModel
     var onBack: () -> Void
     var onSignUp: () -> Void
@@ -37,12 +39,12 @@ struct InputClubAuthenticationView: View {
                 Text("이름")
                     .font(.custom("GmarketSansLight", size: 15))
                     .foregroundStyle(Color.darkNavy)
-                SignUpTextField(hint: "투명지", value: $viewModel.name)
+                SignUpTextField(hint: "투명지", value: $name)
                 
                 Text("학번")
                     .font(.custom("GmarketSansLight", size: 15))
                     .foregroundStyle(Color.darkNavy)
-                SignUpTextField(hint: "60221234", value: $viewModel.studentNum)
+                SignUpTextField(hint: "60221234", value: $studentNum)
                 
                 // 단과대학 선택
                 Menu {
@@ -133,5 +135,11 @@ struct InputClubAuthenticationView: View {
 }
 
 #Preview {
-    InputClubAuthenticationView(viewModel: SignUpViewModel(), onBack: {}, onSignUp: {})
+    InputClubAuthenticationView(
+        name: .constant(""),
+        studentNum: .constant(""),
+        viewModel: SignUpViewModel(),
+        onBack: {},
+        onSignUp: {}
+    )
 }
