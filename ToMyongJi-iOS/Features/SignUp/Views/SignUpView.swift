@@ -82,6 +82,8 @@ struct SignUpView: View {
                 )
             case .clubAuth:
                 InputClubAuthenticationView(
+                    name: $viewModel.name,
+                    studentNum: $viewModel.studentNum,
                     viewModel: viewModel,
                     onBack: {
                         withAnimation {
