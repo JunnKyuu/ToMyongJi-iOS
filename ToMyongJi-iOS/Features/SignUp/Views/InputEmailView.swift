@@ -53,7 +53,7 @@ struct InputEmailView: View {
                     .foregroundStyle(Color.darkNavy)
                 
                 HStack(spacing: 10) {
-                    SignUpTextField(hint: "example@email.com", value: $email)
+                    SignUpTextField(hint: "tomyongji@gmail.com", value: $email)
                         .textInputAutocapitalization(.never)
                         .autocorrectionDisabled()
                         .keyboardType(.emailAddress)

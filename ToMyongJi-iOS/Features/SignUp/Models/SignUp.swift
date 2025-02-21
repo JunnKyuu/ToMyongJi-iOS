@@ -30,6 +30,10 @@ struct EmailRequest: Codable {
     let email: String
 }
 
+struct EmailResponse: Codable {
+    let code: String
+}
+
 struct VerifyCodeRequest: Codable {
     let email: String
     let code: String
@@ -49,6 +53,11 @@ struct UserIdCheckResponse: Codable {
 }
 
 // 소속 인증
+struct Role: Identifiable {
+    let id: String
+    let role: String
+}
+
 struct ClubVerifyRequest: Codable {
     let clubId: Int
     let studentNum: String

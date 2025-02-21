@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct LoginView: View {
-    @Bindable private var viewModel = LoginViewModel()
-    @Binding var showSignup: Bool
     @Environment(\.dismiss) private var dismiss
+    @Bindable private var viewModel = LoginViewModel()
     @Bindable private var authManager = AuthenticationManager.shared
+    @Binding var showSignup: Bool
     @State private var showForgotIdView: Bool = false
     
     var body: some View {
@@ -64,9 +64,8 @@ struct LoginView: View {
                     .scaleEffect(1.5)
             }
         }
-        .alert(viewModel.isSuccess ? "로그인 성공" : "로그인 실패", isPresented: $viewModel.showAlert) {
+        .alert(viewModel.isSuccess ? "로그인에 성공했습니다." : "로그인에 실패했습니다.", isPresented: $viewModel.showAlert) {
             Button("확인") {
-                viewModel.showAlert = false
                 if viewModel.isSuccess {
                     dismiss()
                 }

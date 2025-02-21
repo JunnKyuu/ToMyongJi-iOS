@@ -81,6 +81,11 @@ extension SignUpEndpoint: Endpoint {
     }
     
     var encoding: ParameterEncoding {
-        JSONEncoding.default
+        switch self {
+        case .getColleges, .checkUserId:
+            return URLEncoding.default
+        default:
+            return JSONEncoding.default
+        }
     }
 }

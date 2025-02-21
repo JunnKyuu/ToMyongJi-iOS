@@ -9,9 +9,17 @@ import SwiftUI
 
 struct InputIDView: View {
     @Binding var userId: String
+    @Binding var isUserIdAvailable: Bool
+
     var onBack: () -> Void
     var onNext: () -> Void
-    @State private var isCheckingId: Bool = false
+    var checkUserId: () -> Void
+    var isValid: Bool {
+        let containsOnlyAllowedCharacters = userId.allSatisfy { char in
+            (char.isLetter && char.isASCII) || char.isNumber
+        }
+        return !userId.isEmpty && containsOnlyAllowedCharacters
+    }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
@@ -39,13 +47,20 @@ struct InputIDView: View {
                 .font(.custom("GmarketSansLight", size: 15))
                 .foregroundStyle(Color.darkNavy)
             HStack(spacing: 10) {
-                SignUpTextField(hint: "sampleID", value: $userId)
-                    .textInputAutocapitalization(.never)
-                    .autocorrectionDisabled()
+                SignUpTextField(hint: "아이디를 입력해주세요.", value: Binding(
+                    get: { userId },
+                    set: { newValue in
+                        let filtered = newValue.filter { char in
+                            char.isLetter || char.isNumber
+                        }
+                        userId = filtered
+                    }
+                ))
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
                 
                 Button {
-                    isCheckingId = true
-                    onNext()
+                    checkUserId()
                 } label: {
                     Text("중복 확인")
                         .font(.custom("GmarketSansMedium", size: 13))
@@ -55,7 +70,17 @@ struct InputIDView: View {
                         .background(userId.isEmpty ? Color.gray.opacity(0.3) : Color.softBlue)
                         .clipShape(RoundedRectangle(cornerRadius: 10))
                 }
-                .disabled(userId.isEmpty)
+                .disabled(userId.isEmpty || !isValid)
+            }
+            
+            if !userId.isEmpty {
+                VStack(alignment: .leading, spacing: 5) {
+                    if !userId.allSatisfy({ char in (char.isLetter && char.isASCII) || char.isNumber }) {
+                        Text("• 영어와 숫자만 입력해주세요")
+                            .font(.custom("GmarketSansLight", size: 12))
+                            .foregroundStyle(.red)
+                    }
+                }
             }
             
             Spacer()
@@ -69,9 +94,9 @@ struct InputIDView: View {
             }
             .frame(maxWidth: .infinity, alignment: .center)
             .padding(.vertical, 15)
-            .background((!isCheckingId || userId.isEmpty) ? Color.gray.opacity(0.3) : Color.softBlue)
+            .background((!isValid || !isUserIdAvailable) ? Color.gray.opacity(0.3) : Color.softBlue)
             .clipShape(RoundedRectangle(cornerRadius: 10))
-            .disabled(!isCheckingId || userId.isEmpty)
+            .disabled(!isValid || !isUserIdAvailable)
         }
         .padding()
     }
@@ -79,6 +104,6 @@ struct InputIDView: View {
 
 #Preview {
     NavigationStack {
-        InputIDView(userId: .constant(""), onBack: {}, onNext: {})
+        InputIDView(userId: .constant(""), isUserIdAvailable: .constant(true), onBack: {}, onNext: {}, checkUserId: {})
     }
 }
