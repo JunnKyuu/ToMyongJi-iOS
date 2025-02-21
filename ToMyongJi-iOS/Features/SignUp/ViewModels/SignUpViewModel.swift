@@ -20,7 +20,7 @@ class SignUpViewModel {
     var studentNum: String = ""
     var selectedCollege: College?
     var selectedClub: Club?
-    var selectedRole: String = "STU"
+    var selectedRole: String = ""
     
     // UI 상태
     var isLoading: Bool = false
@@ -47,9 +47,11 @@ class SignUpViewModel {
                     self?.showAlert(title: "오류", message: error.localizedDescription)
                 }
             } receiveValue: { [weak self] response in
-                self?.isUserIdAvailable = response.data
-                if !response.data {
+                if response.statusCode != 200 {
                     self?.showAlert(title: "알림", message: "이미 사용 중인 아이디입니다.")
+                } else {
+                    self?.showAlert(title: "알림", message: "사용가능한 아이디입니다.")
+                    self?.isUserIdAvailable = true
                 }
             }
             .store(in: &cancellables)
@@ -58,14 +60,10 @@ class SignUpViewModel {
     // 이메일 인증코드 발송
     func sendVerificationEmail() {
         let request = EmailRequest(email: email)
-        networkingManager.run(SignUpEndpoint.sendEmail(request), type: String.self)
-            .sink { [weak self] completion in
-                if case .failure(let error) = completion {
-                    self?.showAlert(title: "오류", message: error.localizedDescription)
-                }
-            } receiveValue: { [weak self] response in
+        networkingManager.run(SignUpEndpoint.sendEmail(request), type: Data.self)
+            .sink { [weak self] _ in
                 self?.showAlert(title: "알림", message: "인증코드가 발송되었습니다.")
-            }
+            } receiveValue: { _ in }
             .store(in: &cancellables)
     }
     

@@ -13,7 +13,8 @@ struct SplashScreenView: View {
     
     var body: some View {
         if isActive {
-            IntroView()
+//            IntroView()
+            MainTabView()
         } else {
             VStack {
                 Spacer()

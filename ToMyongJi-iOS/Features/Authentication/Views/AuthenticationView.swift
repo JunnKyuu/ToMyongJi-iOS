@@ -9,8 +9,9 @@ import SwiftUI
 
 struct AuthenticationView: View {
     @State private var showSignup: Bool = false
+    @State private var showLogin: Bool = true
     @State private var isKeyboardShowing: Bool = false
-    @Bindable private var authManager = AuthenticationManager.shared
+    @State private var authManager = AuthenticationManager.shared
     
     var body: some View {
         Group {

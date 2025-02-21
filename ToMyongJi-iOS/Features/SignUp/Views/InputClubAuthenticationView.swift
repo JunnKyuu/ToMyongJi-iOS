@@ -8,11 +8,18 @@
 import SwiftUI
 
 struct InputClubAuthenticationView: View {
+    @Environment(\.dismiss) private var dismiss
     @Binding var name: String
     @Binding var studentNum: String
+    @State private var showSignUpAlert: Bool = false
+    
     var viewModel: SignUpViewModel
     var onBack: () -> Void
     var onSignUp: () -> Void
+    var roles: [Role] = [
+        Role(id: "PRESIDENT", role: "회장"),
+        Role(id: "STU", role: "소속원")
+    ]
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
@@ -45,6 +52,7 @@ struct InputClubAuthenticationView: View {
                     .font(.custom("GmarketSansLight", size: 15))
                     .foregroundStyle(Color.darkNavy)
                 SignUpTextField(hint: "60221234", value: $studentNum)
+                
                 
                 // 단과대학 선택
                 Menu {
@@ -88,6 +96,30 @@ struct InputClubAuthenticationView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 10))
                     }
                 }
+                
+                // 자격 선택
+                if let club = viewModel.selectedClub {
+                    Menu {
+                        ForEach(roles) { role in
+                            Button(action: {
+                                viewModel.selectedRole = role.id
+                            }) {
+                                Text(role.role)
+                            }
+                        }
+                    } label: {
+                        HStack {
+                            Text(viewModel.selectedRole.isEmpty ? "자격 선택" : roles.first { $0.id == viewModel.selectedRole }?.role ?? "자격 선택")
+                                .font(.custom("GmarketSansLight", size: 15))
+                            Spacer()
+                            Image(systemName: "chevron.down")
+                        }
+                        .foregroundStyle(Color.darkNavy)
+                        .padding()
+                        .background(Color.gray.opacity(0.1))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                    }
+                }
             }
             
             Spacer()
@@ -109,6 +141,7 @@ struct InputClubAuthenticationView: View {
             // 회원가입 버튼
             Button {
                 onSignUp()
+                showSignUpAlert = true
             } label: {
                 Text("회원가입")
                     .font(.custom("GmarketSansMedium", size: 15))
@@ -121,6 +154,13 @@ struct InputClubAuthenticationView: View {
             .disabled(!viewModel.isClubVerified)
         }
         .padding()
+        .alert("회원가입 완료", isPresented: $showSignUpAlert) {
+            Button("확인") {
+                dismiss()
+            }
+        } message: {
+            Text("회원가입이 완료되었습니다.\n로그인 화면으로 이동합니다.")
+        }
         .onAppear {
             viewModel.fetchColleges()
         }

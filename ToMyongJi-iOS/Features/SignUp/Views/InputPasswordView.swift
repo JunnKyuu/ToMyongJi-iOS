@@ -14,7 +14,15 @@ struct InputPasswordView: View {
     @State private var confirmPassword: String = ""
     
     private var isPasswordValid: Bool {
-        return password.count >= 8 && password == confirmPassword
+        let hasUpperCase = password.contains(where: { $0.isUppercase })
+        let hasNumber = password.contains(where: { $0.isNumber })
+        let hasSpecialCharacter = password.contains(where: { "!@#$%^&*()_+-=[]{}|;:,.<>?".contains($0) })
+        
+        return password.count >= 8 && 
+               password == confirmPassword && 
+               hasUpperCase && 
+               hasNumber && 
+               hasSpecialCharacter
     }
     
     var body: some View {
@@ -43,12 +51,37 @@ struct InputPasswordView: View {
                     .font(.custom("GmarketSansLight", size: 15))
                     .foregroundStyle(Color.darkNavy)
                 SignUpTextField(
-                    hint: "영문, 숫자, 특수문자 포함 8자 이상",
+                    hint: "영문 대소문자, 숫자, 특수문자 포함 8자 이상",
                     isPassword: true,
                     value: $password
                 )
                 .textInputAutocapitalization(.never)
                 .autocorrectionDisabled()
+                
+                if !password.isEmpty {
+                    VStack(alignment: .leading, spacing: 5) {
+                        if !password.contains(where: { $0.isUppercase }) {
+                            Text("* 영문 대문자를 포함해주세요")
+                                .font(.custom("GmarketSansLight", size: 12))
+                                .foregroundStyle(.red)
+                        }
+                        if !password.contains(where: { $0.isNumber }) {
+                            Text("* 숫자를 포함해주세요")
+                                .font(.custom("GmarketSansLight", size: 12))
+                                .foregroundStyle(.red)
+                        }
+                        if !password.contains(where: { "!@#$%^&*()_+-=[]{}|;:,.<>?".contains($0) }) {
+                            Text("* 특수문자를 포함해주세요")
+                                .font(.custom("GmarketSansLight", size: 12))
+                                .foregroundStyle(.red)
+                        }
+                        if password.count < 8 {
+                            Text("* 8자 이상 입력해주세요")
+                                .font(.custom("GmarketSansLight", size: 12))
+                                .foregroundStyle(.red)
+                        }
+                    }
+                }
                 
                 Text("비밀번호 확인")
                     .font(.custom("GmarketSansLight", size: 15))

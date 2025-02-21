@@ -28,6 +28,7 @@ struct SignUpView: View {
     @Binding var showSignup: Bool
     @State private var viewModel = SignUpViewModel()
     @State private var currentPage: SignUpPage = .id
+    @State private var keyboardHeight: CGFloat = 0
     
     var body: some View {
         NavigationStack {
@@ -35,14 +36,17 @@ struct SignUpView: View {
             case .id:
                 InputIDView(
                     userId: $viewModel.userId,
+                    isUserIdAvailable: $viewModel.isUserIdAvailable,
                     onBack: { dismiss() },
                     onNext: {
-                        viewModel.checkUserId()
                         if viewModel.isUserIdAvailable {
                             withAnimation {
                                 currentPage = .password
                             }
                         }
+                    },
+                    checkUserId: {
+                        viewModel.checkUserId()
                     }
                 )
             case .password:
@@ -93,7 +97,10 @@ struct SignUpView: View {
                     onSignUp: {
                         viewModel.signUp { success in
                             if success {
-                                showSignup = false
+                                withAnimation {
+                                    dismiss()
+                                    showSignup = false
+                                }
                             }
                         }
                     }
@@ -106,6 +113,7 @@ struct SignUpView: View {
         } message: {
             Text(viewModel.alertMessage)
         }
+        .ignoresSafeArea(.keyboard)
     }
 }
 
