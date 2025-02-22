@@ -76,7 +76,7 @@ struct InputIDView: View {
             if !userId.isEmpty {
                 VStack(alignment: .leading, spacing: 5) {
                     if !userId.allSatisfy({ char in (char.isLetter && char.isASCII) || char.isNumber }) {
-                        Text("• 영어와 숫자만 입력해주세요")
+                        Text("영어와 숫자만 입력해주세요")
                             .font(.custom("GmarketSansLight", size: 12))
                             .foregroundStyle(.red)
                     }

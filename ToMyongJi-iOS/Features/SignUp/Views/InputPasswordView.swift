@@ -55,28 +55,27 @@ struct InputPasswordView: View {
                     isPassword: true,
                     value: $password
                 )
-                .textInputAutocapitalization(.never)
                 .autocorrectionDisabled()
                 
                 if !password.isEmpty {
                     VStack(alignment: .leading, spacing: 5) {
                         if !password.contains(where: { $0.isUppercase }) {
-                            Text("* 영문 대문자를 포함해주세요")
+                            Text("영문 대문자를 포함해주세요")
                                 .font(.custom("GmarketSansLight", size: 12))
                                 .foregroundStyle(.red)
                         }
                         if !password.contains(where: { $0.isNumber }) {
-                            Text("* 숫자를 포함해주세요")
+                            Text("숫자를 포함해주세요")
                                 .font(.custom("GmarketSansLight", size: 12))
                                 .foregroundStyle(.red)
                         }
                         if !password.contains(where: { "!@#$%^&*()_+-=[]{}|;:,.<>?".contains($0) }) {
-                            Text("* 특수문자를 포함해주세요")
+                            Text("특수문자를 포함해주세요")
                                 .font(.custom("GmarketSansLight", size: 12))
                                 .foregroundStyle(.red)
                         }
                         if password.count < 8 {
-                            Text("* 8자 이상 입력해주세요")
+                            Text("8자 이상 입력해주세요")
                                 .font(.custom("GmarketSansLight", size: 12))
                                 .foregroundStyle(.red)
                         }

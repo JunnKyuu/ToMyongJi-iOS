@@ -140,7 +140,7 @@ class SignUpViewModel {
                     self?.showAlert(title: "오류", message: error.localizedDescription)
                 }
             } receiveValue: { [weak self] response in
-                if response.statusCode == 0 {
+                if response.statusCode == 200 {
                     self?.showAlert(title: "알림", message: "회원가입이 완료되었습니다.")
                     completion(true)
                 } else {
