@@ -14,7 +14,6 @@ enum SignUpPage {
     case clubAuth
 }
 
-// SignUpField 구조체 추가
 struct SignUpField: Identifiable {
     let id = UUID()
     let show: Bool
@@ -109,7 +108,12 @@ struct SignUpView: View {
         }
         .navigationBarHidden(true)
         .alert(viewModel.alertTitle, isPresented: $viewModel.showAlert) {
-            Button("확인", role: .cancel) { }
+            Button("확인", role: .cancel) {
+                if viewModel.alertTitle == "알림" && viewModel.alertMessage == "회원가입이 완료되었습니다." {
+                    dismiss()
+                    showSignup = false
+                }
+            }
         } message: {
             Text(viewModel.alertMessage)
         }

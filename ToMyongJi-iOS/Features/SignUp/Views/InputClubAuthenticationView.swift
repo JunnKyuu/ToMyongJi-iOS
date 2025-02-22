@@ -154,13 +154,6 @@ struct InputClubAuthenticationView: View {
             .disabled(!viewModel.isClubVerified)
         }
         .padding()
-        .alert("회원가입 완료", isPresented: $showSignUpAlert) {
-            Button("확인") {
-                dismiss()
-            }
-        } message: {
-            Text("회원가입이 완료되었습니다.\n로그인 화면으로 이동합니다.")
-        }
         .onAppear {
             viewModel.fetchColleges()
         }
