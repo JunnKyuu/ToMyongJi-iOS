@@ -7,6 +7,7 @@
 
 import Foundation
 
+// 로그인
 struct LoginRequest: Codable {
     let userId: String
     let password: String
@@ -23,4 +24,3 @@ struct LoginData: Codable {
     let grantType: String
     let refreshToken: String
 }
-

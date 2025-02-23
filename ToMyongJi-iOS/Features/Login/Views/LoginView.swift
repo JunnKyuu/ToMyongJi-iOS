@@ -12,7 +12,7 @@ struct LoginView: View {
     @Bindable private var viewModel = LoginViewModel()
     @Bindable private var authManager = AuthenticationManager.shared
     @Binding var showSignup: Bool
-    @State private var showForgotIdView: Bool = false
+    @State private var showFindIdView: Bool = false
     
     var body: some View {
         VStack(spacing: 20) {
@@ -43,7 +43,7 @@ struct LoginView: View {
                 }
                 
                 Button("아이디 찾기") {
-                    showForgotIdView = true
+                    showFindIdView = true
                 }
             }
             .font(.custom("GmarketSansMedium", size: 13))
@@ -52,8 +52,8 @@ struct LoginView: View {
         }
         .padding(.horizontal, 25)
         .padding(.vertical, 15)
-        .sheet(isPresented: $showForgotIdView, content: {
-            ForgotIDView()
+        .sheet(isPresented: $showFindIdView, content: {
+            FindIDView()
                 .presentationDetents([.height(300)])
                 .presentationCornerRadius(30)
         })

@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-struct ForgotIDView: View {
+struct FindIDView: View {
     @Environment(\.dismiss) private var dismiss
-    @State private var emailID: String = ""
+    @Bindable private var viewModel: FindIDViewModel = FindIDViewModel()
     
     var body: some View {
         VStack(alignment: .leading, spacing: 15) {
@@ -33,27 +33,31 @@ struct ForgotIDView: View {
                 .padding(.top, -5)
             
             VStack(spacing: 25) {
-                CustomTF(sfIcon: "at", hint: "이메일 주소", value: $emailID)
+                CustomTF(sfIcon: "at", hint: "이메일 주소", value: $viewModel.email)
                 
-                // 인증 버튼
                 GradientButton(title: "아이디 찾기", icon: "chevron.right") {
-                    print("이메일 인증 버튼 클릭.")
-                    Task {
-                        dismiss()
-                        try? await Task.sleep(for: .seconds(0))
-                    }
+                    viewModel.findID()
                 }
                 .hSpacing(.trailing)
-                .disableWithOpacity(emailID.isEmpty)
+                .disableWithOpacity(viewModel.email.isEmpty)
             }
             .padding(.top, 20)
         }
         .padding(.vertical, 15)
         .padding(.horizontal, 25)
+        .alert(viewModel.isSuccess ? "아이디 찾기 성공" : "아이디 찾기 실패", isPresented: $viewModel.showAlert) {
+            Button("확인") {
+                if viewModel.isSuccess {
+                    dismiss()
+                }
+            }
+        } message: {
+            Text(viewModel.isSuccess ? "아이디: \(viewModel.userID)" : viewModel.alertMessage)
+        }
         .interactiveDismissDisabled()
     }
 }
 
 #Preview {
-    ForgotIDView()
+    FindIDView()
 }
