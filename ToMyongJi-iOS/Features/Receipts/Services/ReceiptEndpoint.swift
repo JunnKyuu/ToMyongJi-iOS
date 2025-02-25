@@ -10,11 +10,12 @@ import Alamofire
 
 enum ReceiptEndpoint {
     case receipt(studentClubId: Int)
+    case createReceipt(CreateReceiptRequest)
 }
 
 extension ReceiptEndpoint: Endpoint {
     var baseURL: String {
-//        return "api.tomyongji.com"
+        //        return "api.tomyongji.com"
         return "13.125.66.151"
     }
     
@@ -22,6 +23,8 @@ extension ReceiptEndpoint: Endpoint {
         switch self {
         case .receipt(let studentClubId):
             return "/api/receipt/club/\(studentClubId)"
+        case .createReceipt(let CreateReceiptRequest):
+            return "/api/receipt"
         }
     }
     
@@ -38,11 +41,21 @@ extension ReceiptEndpoint: Endpoint {
     }
     
     var method: HTTPMethod {
-        .get
+        switch self {
+        case .receipt(let studentClubId):
+            return .get
+        case .createReceipt:
+            return .post
+        }
     }
     
     var encoding: ParameterEncoding {
-        URLEncoding.default
+        switch self {
+        case .receipt(let studentClubId):
+            return URLEncoding.default
+        case .createReceipt:
+            return JSONEncoding.default
+        }
     }
 }
 
