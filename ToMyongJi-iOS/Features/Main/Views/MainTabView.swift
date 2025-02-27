@@ -20,7 +20,7 @@ struct MainTabView: View {
                 }
                 .tag(1)
             
-            CreateReceiptView()
+            CreateReceiptGuestView()
                 .tabItem {
                     Image(systemName: "pencil")
                     Text("작성")
