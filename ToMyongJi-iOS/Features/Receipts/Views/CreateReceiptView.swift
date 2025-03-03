@@ -8,29 +8,43 @@
 import SwiftUI
 
 struct CreateReceiptView: View {
+    // environment
     @Environment(\.colorScheme) private var scheme
     @Environment(\.dismiss) private var dismiss
-    @State private var sampleReceipts: [Receipt] = []
-    @State private var sampleBalance: Int = 1000000
-    @State private var showCreateForm: Bool = false
     
-    // Form fields
+    // sample data
+//    @State private var sampleReceipts: [Receipt] = []
+//    @State private var sampleBalance: Int = 1000000
+//    @State private var showCreateForm: Bool = false
+
+//    @State private var date: Date = Date()
+//    @State private var content: String = ""
+//    @State private var deposit: String = ""
+//    @State private var withdrawal: String = ""
+//    
+//    private let sampleClub = Club(
+//        studentClubId: 1,
+//        studentClubName: "융합소프트웨어학부 학생회"
+//    )
+    
+    @State private var showCreateForm: Bool = false
+    @State private var viewModel = ReceiptViewModel()
     @State private var date: Date = Date()
     @State private var content: String = ""
     @State private var deposit: String = ""
     @State private var withdrawal: String = ""
     
-    // Sample Club
-    private let sampleClub = Club(
-        studentClubId: 1,
-        studentClubName: "융합소프트웨어학부 학생회"
-    )
+    private let club: Club
+    
+    init(club: Club) {
+        self.club = club
+    }
     
     var body: some View {
         ScrollView(.vertical) {
             VStack(spacing: 0) {
                 VStack(alignment: .leading, spacing: 15) {
-                    Text(sampleClub.studentClubName)
+                    Text(club.studentClubName)
                         .font(.custom("GmarketSansBold", size: 28))
                         .foregroundStyle(.darkNavy)
                         .frame(height: 45)
@@ -40,7 +54,7 @@ struct CreateReceiptView: View {
                         let rect = $0.frame(in: .scrollView)
                         let minY = rect.minY.rounded()
                         
-                        ClubView(sampleClub, balance: sampleBalance)
+                        ClubView(club, balance: viewModel.balance)
                     }
                     .frame(height: 125)
                 }
@@ -64,7 +78,7 @@ struct CreateReceiptView: View {
                     }
                     
                     LazyVStack(spacing: 15) {
-                        ForEach(sampleReceipts) { receipt in
+                        ForEach(viewModel.receipts) { receipt in
                             ClubReceiptView(receipt)
                         }
                     }
@@ -84,42 +98,37 @@ struct CreateReceiptView: View {
                 content: $content,
                 deposit: $deposit,
                 withdrawal: $withdrawal,
-                onSave: addNewReceipt
+                onSave: createReceipt
             )
             .presentationDetents([.height(400)])
             .presentationCornerRadius(30)
         }
         .onAppear {
-            loadSampleData()
+            viewModel.getReceipts(studentClubId: club.studentClubId)
+        }
+        .alert(viewModel.alertTitle, isPresented: $viewModel.showAlert) {
+            Button("확인") {
+                if viewModel.alertTitle == "성공" {
+                    showCreateForm = false
+                    resetForm()
+                }
+            }
+        } message: {
+            Text(viewModel.alertMessage)
         }
     }
     
-    private var isFormValid: Bool {
-        !content.isEmpty && (
-            (!deposit.isEmpty && Int(deposit) ?? 0 > 0) ||
-            (!withdrawal.isEmpty && Int(withdrawal) ?? 0 > 0)
-        )
-    }
-    
-    private func addNewReceipt() {
+    private func createReceipt() {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         
-        let newReceipt = Receipt(
-            receiptId: sampleReceipts.count + 1,
-            date: dateFormatter.string(from: date),
-            content: content,
-            deposit: Int(deposit) ?? 0,
-            withdrawal: Int(withdrawal) ?? 0
-        )
+        viewModel.userId = AuthenticationManager.shared.userId
+        viewModel.date = dateFormatter.string(from: date)
+        viewModel.content = content
+        viewModel.deposit = Int(deposit) ?? 0
+        viewModel.withdrawal = Int(withdrawal) ?? 0
         
-        sampleReceipts.insert(newReceipt, at: 0)
-        updateBalance(deposit: Int(deposit) ?? 0, withdrawal: Int(withdrawal) ?? 0)
-        resetForm()
-    }
-    
-    private func updateBalance(deposit: Int, withdrawal: Int) {
-        sampleBalance += deposit - withdrawal
+        viewModel.createReceipt()
     }
     
     private func resetForm() {
@@ -127,13 +136,6 @@ struct CreateReceiptView: View {
         content = ""
         deposit = ""
         withdrawal = ""
-    }
-    
-    private func loadSampleData() {
-        sampleReceipts = [
-            Receipt(receiptId: 1, date: "2024-02-05", content: "MT 회비", deposit: 50000, withdrawal: 0),
-            Receipt(receiptId: 2, date: "2024-02-04", content: "간식비", deposit: 0, withdrawal: 30000)
-        ]
     }
 }
 
@@ -172,13 +174,12 @@ func ClubView(_ club: Club, balance: Int) -> some View {
                 
                 Text("현재 잔액")
                     .font(.custom("GmarketSansMedium", size: 18))
-                    .foregroundStyle(.darkNavy)
+                    .foregroundStyle(.white)
                 
                 Text("\(balance)")
                     .font(.custom("GmarketSansBold", size: 22))
-                    .foregroundStyle(.darkNavy)
+                    .foregroundStyle(.white)
             }
-            .foregroundStyle(.white)
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(20)
             .offset(y: progress * -25)
@@ -221,5 +222,5 @@ func ClubReceiptView(_ receipt: Receipt) -> some View {
 }
 
 #Preview {
-    CreateReceiptView()
+    CreateReceiptView(club: Club(studentClubId: 1, studentClubName: "융합소프트웨어학부 학생회"))
 }
