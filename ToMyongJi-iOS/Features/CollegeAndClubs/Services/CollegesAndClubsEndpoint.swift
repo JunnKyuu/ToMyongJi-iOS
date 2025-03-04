@@ -13,11 +13,6 @@ enum CollegesAndClubsEndpoint {
 }
 
 extension CollegesAndClubsEndpoint: Endpoint {
-    var baseURL: String {
-//        return "api.tomyongji.com"
-        return "13.125.66.151"
-    }
-    
     var path: String {
         switch self {
         case .collegesAndClubs:
@@ -29,7 +24,7 @@ extension CollegesAndClubsEndpoint: Endpoint {
         ["Content-Type": "application/json"]
     }
     
-    var parameters: [String : Any] {
+    var parameters: [String: Any] {
         [:]
     }
     

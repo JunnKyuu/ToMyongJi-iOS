@@ -17,11 +17,6 @@ enum ProfileEndpoint {
 }
 
 extension ProfileEndpoint: Endpoint {
-    var baseURL: String {
-//        return "api.tomyongji.com"
-        return "13.125.66.151"
-    }
-    
     var path: String {
         switch self {
         case .myProfile(let id):

@@ -13,10 +13,6 @@ enum FindIDEndpoint {
 }
 
 extension FindIDEndpoint: Endpoint {
-    var baseURL: String {
-        return "13.125.66.151"
-    }
-    
     var path: String {
         switch self {
         case .findID:
@@ -37,7 +33,7 @@ extension FindIDEndpoint: Endpoint {
         }
     }
     
-    var query: [String: String] {
+    var query: [String : String] {
         [:]
     }
     

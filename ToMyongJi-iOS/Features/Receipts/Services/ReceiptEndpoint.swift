@@ -14,11 +14,6 @@ enum ReceiptEndpoint {
 }
 
 extension ReceiptEndpoint: Endpoint {
-    var baseURL: String {
-        //        return "api.tomyongji.com"
-        return "13.125.66.151"
-    }
-    
     var path: String {
         switch self {
         case .receipt(let studentClubId):
@@ -32,7 +27,7 @@ extension ReceiptEndpoint: Endpoint {
         ["Content-Type": "application/json"]
     }
     
-    var parameters: [String : Any] {
+    var parameters: [String: Any] {
         [:]
     }
     
