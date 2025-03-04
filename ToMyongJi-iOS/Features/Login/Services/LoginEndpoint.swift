@@ -13,12 +13,6 @@ enum LoginEndpoint {
 }
 
 extension LoginEndpoint: Endpoint {
-    var baseURL: String {
-//        return "api.tomyongji.com"
-        return "13.125.66.151"
-
-    }
-    
     var path: String {
         switch self {
         case .login:

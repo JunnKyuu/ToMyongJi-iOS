@@ -24,7 +24,12 @@ struct MainTabView: View {
             
             Group {
                 if authManager.isAuthenticated {
-                    CreateReceiptView()
+                    // sample data
+                    let sampleClub = Club(
+                        studentClubId: 1,
+                        studentClubName: "융합소프트웨어학부 학생회"
+                    )
+                    CreateReceiptView(club: sampleClub)
                 } else {
                     Color.clear
                         .onAppear {

@@ -21,6 +21,10 @@ protocol Endpoint {
 }
 
 extension Endpoint {
+    var baseURL: String {
+        "15.164.162.164"
+    }
+    
     var url: URL {
         var components = URLComponents()
         components.scheme = "http"

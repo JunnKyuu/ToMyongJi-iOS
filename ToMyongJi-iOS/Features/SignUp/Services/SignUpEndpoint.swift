@@ -18,10 +18,6 @@ enum SignUpEndpoint {
 }
 
 extension SignUpEndpoint: Endpoint {
-    var baseURL: String {
-        return "13.125.66.151"
-    }
-    
     var path: String {
         switch self {
         case .getColleges:
