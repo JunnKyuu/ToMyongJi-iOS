@@ -12,21 +12,6 @@ struct CreateReceiptView: View {
     @Environment(\.colorScheme) private var scheme
     @Environment(\.dismiss) private var dismiss
     
-    // sample data
-//    @State private var sampleReceipts: [Receipt] = []
-//    @State private var sampleBalance: Int = 1000000
-//    @State private var showCreateForm: Bool = false
-
-//    @State private var date: Date = Date()
-//    @State private var content: String = ""
-//    @State private var deposit: String = ""
-//    @State private var withdrawal: String = ""
-//    
-//    private let sampleClub = Club(
-//        studentClubId: 1,
-//        studentClubName: "융합소프트웨어학부 학생회"
-//    )
-    
     @State private var showCreateForm: Bool = false
     @State private var viewModel = ReceiptViewModel()
     @State private var date: Date = Date()
@@ -122,7 +107,7 @@ struct CreateReceiptView: View {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         
-        viewModel.userId = AuthenticationManager.shared.userId
+        viewModel.userId = AuthenticationManager.shared.userLoginId ?? ""
         viewModel.date = dateFormatter.string(from: date)
         viewModel.content = content
         viewModel.deposit = Int(deposit) ?? 0
