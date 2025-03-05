@@ -73,7 +73,7 @@ class ReceiptViewModel {
                 }
             } receiveValue: { [weak self] response in
                 guard let self = self else { return }
-                if response.statusCode == 200 {
+                if response.statusCode == 201 {
                     self.receipts = response.data.receiptList
                     self.balance = response.data.balance
                     self.alertTitle = "성공"

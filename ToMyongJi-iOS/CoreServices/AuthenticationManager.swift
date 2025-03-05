@@ -15,6 +15,7 @@ class AuthenticationManager {
     private let accessTokenKey = "accessToken"
     private let userIdKey = "userId"
     private let userRoleKey = "userRole"
+    private let userLoginIdKey = "userLoginId"
     
     // 상태 변화를 감지하기 위한 프로퍼티
     var isAuthenticated: Bool
@@ -29,6 +30,7 @@ class AuthenticationManager {
         UserDefaults.standard.set(accessToken, forKey: accessTokenKey)
         UserDefaults.standard.set(decodedToken.id as Int, forKey: userIdKey)
         UserDefaults.standard.set(decodedToken.auth, forKey: userRoleKey)
+        UserDefaults.standard.set(decodedToken.sub, forKey: userLoginIdKey)
         isAuthenticated = true
     }
     
@@ -37,6 +39,7 @@ class AuthenticationManager {
         UserDefaults.standard.removeObject(forKey: accessTokenKey)
         UserDefaults.standard.removeObject(forKey: userIdKey)
         UserDefaults.standard.removeObject(forKey: userRoleKey)
+        UserDefaults.standard.removeObject(forKey: userLoginIdKey)
         isAuthenticated = false
     }
     
@@ -45,7 +48,7 @@ class AuthenticationManager {
         return UserDefaults.standard.string(forKey: accessTokenKey)
     }
     
-    // 저장된 사용자 ID 가져오기
+    // 저장된 사용자 인덱스 ID 가져오기
     var userId: Int? {
         if let id = UserDefaults.standard.object(forKey: userIdKey) as? Int {
             return id
@@ -56,5 +59,13 @@ class AuthenticationManager {
     // 저장된 사용자 권한 가져오기
     var userRole: String? {
         return UserDefaults.standard.string(forKey: userRoleKey)
+    }
+    
+    // 저장된 사용자 로그인 아이디 가져오기
+    var userLoginId: String? {
+        if let loginId = UserDefaults.standard.object(forKey: userLoginIdKey) as? String {
+            return loginId
+        }
+        return nil
     }
 }
