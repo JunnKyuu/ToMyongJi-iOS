@@ -71,7 +71,7 @@ struct MainTabView: View {
         } message: {
             Text("로그인 하시겠습니까?")
         }
-        .sheet(isPresented: $showLoginView, content: {
+        .fullScreenCover(isPresented: $showLoginView, content: {
             AuthenticationView()
         })
     }
