@@ -45,37 +45,45 @@ class ReceiptViewModel {
                 self?.errorMessage = error.localizedDescription
             }
         } receiveValue: { [weak self] response in
-            self?.receipts = response.data.receiptList
+            // 날짜 기준 내림차순 정렬 (최신순)
+            self?.receipts = response.data.receiptList.sorted { $0.date > $1.date }
             self?.balance = response.data.balance
         }
         .store(in: &cancellables)
     }
     
     // 영수증 생성
-    func createReceipt() {
+    func createReceipt(studentClubId: Int) {
         isLoading = true
         let request = CreateReceiptRequest(
-            userId: userId,
+            userId: userId,  // 로그인한 사용자의 ID
             date: date,
             content: content,
             deposit: deposit,
             withdrawal: withdrawal
         )
         
+        print("영수증 생성 요청 데이터:", request)
+        
         networkingManager.run(ReceiptEndpoint.createReceipt(request), type: CreateReceiptResponse.self)
             .sink { [weak self] completion in
                 guard let self = self else { return }
                 self.isLoading = false
                 if case .failure(let error) = completion {
+                    print("영수증 생성 실패:", error)
                     self.alertTitle = "오류"
-                    self.alertMessage = error.localizedDescription
+                    self.alertMessage = "영수증 작성에 실패하였습니다."
                     self.showAlert = true
                 }
             } receiveValue: { [weak self] response in
                 guard let self = self else { return }
+                self.isLoading = false
+                print("영수증 생성 응답:", response)
+                
                 if response.statusCode == 201 {
-                    self.receipts = response.data.receiptList
-                    self.balance = response.data.balance
+                    // 영수증 목록 새로고침
+                    self.getReceipts(studentClubId: studentClubId)
+                    
                     self.alertTitle = "성공"
                     self.alertMessage = "영수증이 생성되었습니다."
                     self.showAlert = true
@@ -88,10 +96,48 @@ class ReceiptViewModel {
                     self.withdrawal = 0
                 } else {
                     self.alertTitle = "실패"
-                    self.alertMessage = response.statusMessage
+                    self.alertMessage = response.statusMessage ?? "영수증 작성에 실패했습니다."
                     self.showAlert = true
                 }
             }
             .store(in: &cancellables)
+    }
+    
+    // 영수증 삭제
+    func deleteReceipt(receiptId: Int, studentClubId: Int) {
+        isLoading = true
+        
+        networkingManager.run(
+            ReceiptEndpoint.deleteReceipt(receiptId: receiptId),
+            type: DeleteReceiptResponse.self
+        )
+        .sink { [weak self] completion in
+            guard let self = self else { return }
+            self.isLoading = false
+            if case .failure(let error) = completion {
+                print("영수증 삭제 실패:", error)
+                self.alertTitle = "오류"
+                self.alertMessage = "영수증 삭제에 실패하였습니다."
+                self.showAlert = true
+            }
+        } receiveValue: { [weak self] response in
+            guard let self = self else { return }
+            self.isLoading = false
+            print("영수증 삭제 응답:", response)
+            
+            if response.statusCode == 200 {
+                // 영수증 목록 새로고침
+                self.getReceipts(studentClubId: studentClubId)
+                
+                self.alertTitle = "성공"
+                self.alertMessage = "영수증이 삭제되었습니다."
+                self.showAlert = true
+            } else {
+                self.alertTitle = "실패"
+                self.alertMessage = response.statusMessage ?? "영수증 삭제에 실패했습니다."
+                self.showAlert = true
+            }
+        }
+        .store(in: &cancellables)
     }
 }

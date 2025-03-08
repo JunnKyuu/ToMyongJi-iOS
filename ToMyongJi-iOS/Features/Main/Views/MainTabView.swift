@@ -12,6 +12,8 @@ struct MainTabView: View {
     @Bindable private var authManager = AuthenticationManager.shared
     @State private var showLoginAlert: Bool = false
     @State private var showLoginView: Bool = false
+    @State private var previousTab: Int = 1
+    @State private var profileViewModel = ProfileViewModel()
     
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -24,15 +26,21 @@ struct MainTabView: View {
             
             Group {
                 if authManager.isAuthenticated {
-                    // sample data
-                    let sampleClub = Club(
-                        studentClubId: 1,
-                        studentClubName: "융합소프트웨어학부 학생회"
-                    )
-                    CreateReceiptView(club: sampleClub)
+                    if profileViewModel.studentClubId != 0 {
+                        CreateReceiptView(club: Club(
+                            studentClubId: profileViewModel.studentClubId,
+                            studentClubName: profileViewModel.studentClub
+                        ))
+                    } else {
+                        ProgressView()
+                            .onAppear {
+                                profileViewModel.fetchUserProfile()
+                            }
+                    }
                 } else {
                     Color.clear
                         .onAppear {
+                            previousTab = selectedTab
                             showLoginAlert = true
                         }
                 }
@@ -49,6 +57,7 @@ struct MainTabView: View {
                 } else {
                     Color.clear
                         .onAppear {
+                            previousTab = selectedTab
                             showLoginAlert = true
                         }
                 }
@@ -74,6 +83,12 @@ struct MainTabView: View {
         .fullScreenCover(isPresented: $showLoginView, content: {
             AuthenticationView()
         })
+        .onChange(of: authManager.isAuthenticated) { _, newValue in
+            if newValue {
+                selectedTab = previousTab
+                profileViewModel.fetchUserProfile()
+            }
+        }
     }
 }
 

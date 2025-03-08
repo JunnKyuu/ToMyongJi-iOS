@@ -8,16 +8,19 @@
 import SwiftUI
 
 struct CreateReceiptView: View {
-    // environment
     @Environment(\.colorScheme) private var scheme
     @Environment(\.dismiss) private var dismiss
+    @Bindable private var authManager = AuthenticationManager.shared
     
     @State private var showCreateForm: Bool = false
     @State private var viewModel = ReceiptViewModel()
-    @State private var date: Date = Date()
+    
+    // 영수증
+    @State private var balance: Int = 0
+    @State private var date: String = ""
     @State private var content: String = ""
-    @State private var deposit: String = ""
-    @State private var withdrawal: String = ""
+    @State private var deposit: Int = 0
+    @State private var withdrawal: Int = 0
     
     private let club: Club
     
@@ -26,57 +29,62 @@ struct CreateReceiptView: View {
     }
     
     var body: some View {
-        ScrollView(.vertical) {
-            VStack(spacing: 0) {
-                VStack(alignment: .leading, spacing: 15) {
-                    Text(club.studentClubName)
-                        .font(.custom("GmarketSansBold", size: 28))
-                        .foregroundStyle(.darkNavy)
-                        .frame(height: 45)
-                        .padding(.horizontal, 15)
-                    
-                    GeometryReader {
-                        let rect = $0.frame(in: .scrollView)
-                        let minY = rect.minY.rounded()
-                        
-                        ClubView(club, balance: viewModel.balance)
-                    }
-                    .frame(height: 125)
-                }
+        VStack(spacing: 0) {
+            VStack(alignment: .leading, spacing: 15) {
+                Text(club.studentClubName)
+                    .font(.custom("GmarketSansBold", size: 28))
+                    .foregroundStyle(.darkNavy)
+                    .frame(height: 45)
+                    .padding(.horizontal, 15)
                 
-                VStack(spacing: 20) {
-                    Button {
-                        showCreateForm = true
-                    } label: {
-                        HStack {
-                            Image(systemName: "plus.circle.fill")
-                            Text("영수증 작성")
-                        }
-                        .font(.custom("GmarketSansMedium", size: 16))
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 15)
-                        .background(
-                            RoundedRectangle(cornerRadius: 12)
-                                .fill(Color.softBlue)
-                        )
-                    }
+                GeometryReader {
+                    let rect = $0.frame(in: .global)
+                    let minY = rect.minY.rounded()
                     
-                    LazyVStack(spacing: 15) {
-                        ForEach(viewModel.receipts) { receipt in
-                            ClubReceiptView(receipt)
+                    ClubView(club, balance: viewModel.balance)
+                }
+                .frame(height: 125)
+            }
+            .padding(.bottom, 10)
+            
+            VStack(spacing: 20) {
+                Button {
+                    showCreateForm = true
+                } label: {
+                    HStack {
+                        Image(systemName: "plus.circle.fill")
+                        Text("영수증 작성")
+                    }
+                    .font(.custom("GmarketSansMedium", size: 16))
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 15)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(Color.softBlue)
+                    )
+                }
+                .padding(.horizontal, 20)
+                
+                List {
+                    ForEach(viewModel.receipts) { receipt in
+                        ClubReceiptView(receipt: receipt, viewModel: viewModel, club: club)
+                    }
+                    .onDelete { indexSet in
+                        for index in indexSet {
+                            let receipt = viewModel.receipts[index]
+                            viewModel.deleteReceipt(receiptId: receipt.receiptId, studentClubId: club.studentClubId)
                         }
                     }
                 }
-                .padding(20)
-                .background {
-                    RoundedRectangle(cornerRadius: 30, style: .continuous)
-                        .fill(scheme == .dark ? .black : .white)
-                }
+                .listStyle(.plain)
+                .scrollContentBackground(.hidden)
             }
-            .padding(.vertical, 15)
+            .background {
+                RoundedRectangle(cornerRadius: 30, style: .continuous)
+                    .fill(scheme == .dark ? .black : .white)
+            }
         }
-        .scrollIndicators(.hidden)
         .sheet(isPresented: $showCreateForm) {
             CreateReceiptFormView(
                 date: $date,
@@ -98,33 +106,87 @@ struct CreateReceiptView: View {
                     resetForm()
                 }
             }
+            .foregroundStyle(.darkNavy)
         } message: {
             Text(viewModel.alertMessage)
+                .foregroundStyle(.darkNavy)
         }
     }
     
     private func createReceipt() {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
+        // decodedToken의 sub 값을 userId로 사용
+        guard let userId = authManager.userLoginId else {
+            viewModel.alertTitle = "오류"
+            viewModel.alertMessage = "사용자 정보를 찾을 수 없습니다."
+            viewModel.showAlert = true
+            return
+        }
         
-        viewModel.userId = AuthenticationManager.shared.userLoginId ?? ""
-        viewModel.date = dateFormatter.string(from: date)
+        // 입력값 검증
+        if content.isEmpty {
+            viewModel.alertTitle = "오류"
+            viewModel.alertMessage = "내용을 입력해주세요."
+            viewModel.showAlert = true
+            return
+        }
+        
+        if deposit == 0 && withdrawal == 0 {
+            viewModel.alertTitle = "오류"
+            viewModel.alertMessage = "입금 또는 출금 금액을 입력해주세요."
+            viewModel.showAlert = true
+            return
+        }
+        
+        // ViewModel에 데이터 설정
+        viewModel.userId = userId
+        viewModel.date = date 
         viewModel.content = content
-        viewModel.deposit = Int(deposit) ?? 0
-        viewModel.withdrawal = Int(withdrawal) ?? 0
+        viewModel.deposit = deposit
+        viewModel.withdrawal = withdrawal
         
-        viewModel.createReceipt()
+        // 영수증 생성 요청
+        viewModel.createReceipt(studentClubId: club.studentClubId)
     }
     
     private func resetForm() {
-        date = Date()
+        date = ""
         content = ""
-        deposit = ""
-        withdrawal = ""
+        deposit = 0
+        withdrawal = 0
+    }
+    
+    @ViewBuilder
+    private func ClubReceiptView(receipt: Receipt, viewModel: ReceiptViewModel, club: Club) -> some View {
+        HStack(spacing: 0) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text(receipt.content)
+                    .font(.custom("GmarketSansBold", size: 14))
+                    .foregroundStyle(.darkNavy)
+                
+                Text(receipt.date)
+                    .font(.custom("GmarketSansMedium", size: 12))
+                    .foregroundStyle(.gray)
+            }
+            
+            Spacer(minLength: 0)
+            
+            if receipt.deposit != 0 {
+                Text("+ \(receipt.deposit)")
+                    .font(.custom("GmarketSansBold", size: 14))
+                    .foregroundStyle(.deposit)
+            }
+            
+            if receipt.withdrawal != 0 {
+                Text("- \(receipt.withdrawal)")
+                    .font(.custom("GmarketSansBold", size: 14))
+                    .foregroundStyle(.withdrawal)
+            }
+        }
+        .padding(.horizontal, 15)
+        .padding(.vertical, 6)
     }
 }
 
-// Club View와 ClubReceiptView는 ReceiptListView와 동일한 구현을 사용
 @ViewBuilder
 func ClubView(_ club: Club, balance: Int) -> some View {
     GeometryReader {
@@ -173,37 +235,6 @@ func ClubView(_ club: Club, balance: Int) -> some View {
         .offset(y: progress * -topValue)
     }
     .padding(.horizontal, 15)
-}
-
-@ViewBuilder
-func ClubReceiptView(_ receipt: Receipt) -> some View {
-    HStack(spacing: 0) {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(receipt.content)
-                .font(.custom("GmarketSansBold", size: 14))
-                .foregroundStyle(.darkNavy)
-            
-            Text(receipt.date)
-                .font(.custom("GmarketSansMedium", size: 12))
-                .foregroundStyle(.gray)
-        }
-        
-        Spacer(minLength: 0)
-        
-        if receipt.deposit != 0 {
-            Text("+ \(receipt.deposit)")
-                .font(.custom("GmarketSansBold", size: 14))
-                .foregroundStyle(.deposit)
-        }
-        
-        if receipt.withdrawal != 0 {
-            Text("- \(receipt.withdrawal)")
-                .font(.custom("GmarketSansBold", size: 14))
-                .foregroundStyle(.withdrawal)
-        }
-    }
-    .padding(.horizontal, 15)
-    .padding(.vertical, 6)
 }
 
 #Preview {

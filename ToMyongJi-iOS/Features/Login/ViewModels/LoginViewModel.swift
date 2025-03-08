@@ -52,6 +52,7 @@ class LoginViewModel {
                         accessToken: loginResponse.data.accessToken,
                         decodedToken: decodedToken
                     )
+                    print(decodedToken)
                     self.alertMessage = "로그인에 성공했습니다."
                     self.showAlert = true
                     self.isSuccess = true

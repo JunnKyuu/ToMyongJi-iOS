@@ -12,11 +12,12 @@ struct AuthenticationView: View {
     @State private var showLogin: Bool = true
     @State private var isKeyboardShowing: Bool = false
     @State private var authManager = AuthenticationManager.shared
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         Group {
             if authManager.isAuthenticated {
-                ProfileView()
+                MainTabView()
             } else {
                 LoginView(showSignup: $showSignup)
                     .fullScreenCover(isPresented: $showSignup) {

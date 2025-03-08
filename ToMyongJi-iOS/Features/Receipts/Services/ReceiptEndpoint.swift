@@ -11,6 +11,7 @@ import Alamofire
 enum ReceiptEndpoint {
     case receipt(studentClubId: Int)
     case createReceipt(CreateReceiptRequest)
+    case deleteReceipt(receiptId: Int)
 }
 
 extension ReceiptEndpoint: Endpoint {
@@ -18,17 +19,36 @@ extension ReceiptEndpoint: Endpoint {
         switch self {
         case .receipt(let studentClubId):
             return "/api/receipt/club/\(studentClubId)"
-        case .createReceipt(let CreateReceiptRequest):
+        case .createReceipt:
             return "/api/receipt"
+        case .deleteReceipt(let receiptId):
+            return "/api/receipt/\(receiptId)"
         }
     }
     
     var headers: [String : String] {
-        ["Content-Type": "application/json"]
+        guard let token = AuthenticationManager.shared.accessToken else {
+            return ["Content-Type": "application/json"]
+        }
+        return [
+            "Content-Type": "application/json",
+            "Authorization": "Bearer \(token)"
+        ]
     }
     
     var parameters: [String: Any] {
-        [:]
+        switch self {
+        case .createReceipt(let request):
+            return [
+                "userId": request.userId,
+                "date": request.date,
+                "content": request.content,
+                "deposit": request.deposit,
+                "withdrawal": request.withdrawal
+            ]
+        default:
+            return [:]
+        }
     }
     
     var query: [String : String] {
@@ -37,19 +57,23 @@ extension ReceiptEndpoint: Endpoint {
     
     var method: HTTPMethod {
         switch self {
-        case .receipt(let studentClubId):
+        case .receipt:
             return .get
         case .createReceipt:
             return .post
+        case .deleteReceipt:
+            return .delete
         }
     }
     
     var encoding: ParameterEncoding {
         switch self {
-        case .receipt(let studentClubId):
+        case .receipt:
             return URLEncoding.default
         case .createReceipt:
             return JSONEncoding.default
+        case .deleteReceipt:
+            return URLEncoding.default
         }
     }
 }
