@@ -44,7 +44,7 @@ class SignUpViewModel {
             .sink { [weak self] completion in
                 self?.isLoading = false
                 if case .failure(let error) = completion {
-                    self?.showAlert(title: "오류", message: error.localizedDescription)
+                    self?.showAlert(title: "오류", message: "아이디 중복 체크에 실패하였습니다.")
                 }
             } receiveValue: { [weak self] response in
                 if response.statusCode != 200 {
@@ -73,7 +73,7 @@ class SignUpViewModel {
         networkingManager.run(SignUpEndpoint.verifyCode(request), type: VerifyCodeResponse.self)
             .sink { [weak self] completion in
                 if case .failure(let error) = completion {
-                    self?.showAlert(title: "오류", message: error.localizedDescription)
+                    self?.showAlert(title: "오류", message: "이메일 인증에 실패하였습니다.")
                 }
             } receiveValue: { [weak self] response in
                 self?.isEmailVerified = response.data
@@ -106,7 +106,7 @@ class SignUpViewModel {
         networkingManager.run(SignUpEndpoint.verifyClub(request), type: ClubVerifyResponse.self)
             .sink { [weak self] completion in
                 if case .failure(let error) = completion {
-                    self?.showAlert(title: "오류", message: error.localizedDescription)
+                    self?.showAlert(title: "오류", message: "소속 인증에 실패했습니다.")
                 }
             } receiveValue: { [weak self] response in
                 self?.isClubVerified = response.data
@@ -137,14 +137,14 @@ class SignUpViewModel {
         networkingManager.run(SignUpEndpoint.signUp(request), type: SignUpResponse.self)
             .sink { [weak self] completion in
                 if case .failure(let error) = completion {
-                    self?.showAlert(title: "오류", message: error.localizedDescription)
+                    self?.showAlert(title: "오류", message: "회원가입에 실패했습니다.")
                 }
             } receiveValue: { [weak self] response in
                 if response.statusCode == 200 {
                     self?.showAlert(title: "알림", message: "회원가입이 완료되었습니다.")
                     completion(true)
                 } else {
-                    self?.showAlert(title: "오류", message: response.statusMessage)
+                    self?.showAlert(title: "오류", message: "회원가입에 실패했습니다.")
                     completion(false)
                 }
             }

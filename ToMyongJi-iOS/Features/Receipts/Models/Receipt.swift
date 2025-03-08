@@ -31,7 +31,15 @@ struct CreateReceiptRequest: Codable {
 struct CreateReceiptResponse: Codable {
     let statusCode: Int
     let statusMessage: String
-    let data: ReceiptData
+    let data: SingleReceiptData
+}
+
+struct SingleReceiptData: Codable {
+    let receiptId: Int
+    let date: String
+    let content: String
+    let deposit: Int
+    let withdrawal: Int
 }
 
 // 영수증
@@ -46,6 +54,13 @@ struct Receipt: Identifiable, Codable {
     enum CodingKeys: String, CodingKey {
         case receiptId, date, content, deposit, withdrawal
     }
+}
+
+// 영수증 삭제
+struct DeleteReceiptResponse: Codable {
+    let statusCode: Int
+    let statusMessage: String
+    let data: SingleReceiptData
 }
 
 
