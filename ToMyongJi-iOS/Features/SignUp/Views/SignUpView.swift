@@ -8,6 +8,7 @@
 import SwiftUI
 
 enum SignUpPage {
+    case agree
     case id
     case password
     case email
@@ -32,6 +33,15 @@ struct SignUpView: View {
     var body: some View {
         NavigationStack {
             switch currentPage {
+            case .agree:
+                SignUpAgreeView(onBack: {dismiss()},
+                                onNext: {
+                    if viewModel.isAgree {
+                        withAnimation {
+                            currentPage = .id
+                        }
+                    }
+                })
             case .id:
                 InputIDView(
                     userId: $viewModel.userId,
