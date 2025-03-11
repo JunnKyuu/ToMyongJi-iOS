@@ -23,6 +23,7 @@ class SignUpViewModel {
     var selectedRole: String = ""
     
     // UI 상태
+    var isAgree: Bool = false
     var isLoading: Bool = false
     var showAlert: Bool = false
     var alertTitle: String = ""
