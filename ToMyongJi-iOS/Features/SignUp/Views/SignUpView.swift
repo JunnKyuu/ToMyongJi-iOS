@@ -34,7 +34,7 @@ struct SignUpView: View {
         NavigationStack {
             switch currentPage {
             case .agree:
-                SignUpAgreeView(onBack: {dismiss()},
+                SignUpAgreeView(isAgree: $viewModel.isAgree, onBack: {dismiss()},
                                 onNext: {
                     if viewModel.isAgree {
                         withAnimation {
