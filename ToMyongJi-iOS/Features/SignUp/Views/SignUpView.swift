@@ -27,16 +27,17 @@ struct SignUpView: View {
     @Environment(\.dismiss) var dismiss
     @Binding var showSignup: Bool
     @State private var viewModel = SignUpViewModel()
-    @State private var currentPage: SignUpPage = .id
+    @State private var currentPage: SignUpPage = .agree
     @State private var keyboardHeight: CGFloat = 0
     
     var body: some View {
         NavigationStack {
             switch currentPage {
             case .agree:
-                SignUpAgreeView(isAgree: $viewModel.isAgree, onBack: {dismiss()},
+                SignUpAgreeView(isAgreeAll: $viewModel.isAgreeAll,
+                                onBack: { dismiss() },
                                 onNext: {
-                    if viewModel.isAgree {
+                    if viewModel.isAgreeAll {
                         withAnimation {
                             currentPage = .id
                         }
@@ -46,7 +47,9 @@ struct SignUpView: View {
                 InputIDView(
                     userId: $viewModel.userId,
                     isUserIdAvailable: $viewModel.isUserIdAvailable,
-                    onBack: { dismiss() },
+                    onBack: { withAnimation {
+                        currentPage = .agree
+                    } },
                     onNext: {
                         if viewModel.isUserIdAvailable {
                             withAnimation {
