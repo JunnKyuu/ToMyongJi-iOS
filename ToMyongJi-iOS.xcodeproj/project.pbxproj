@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F58E93F12D81A7F4009C1F74 /* AdminTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F58E93F02D81A7F4009C1F74 /* AdminTabView.swift */; };
 		F59C39F52CFB1F8E002AD9DA /* ToMyongJi_iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59C39F32CFB1F8E002AD9DA /* ToMyongJi_iOSApp.swift */; };
 		F59C39F62CFB1F8E002AD9DA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59C39EA2CFB1F8E002AD9DA /* ContentView.swift */; };
 		F59C39F72CFB1F8E002AD9DA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F59C39F02CFB1F8E002AD9DA /* Assets.xcassets */; };
@@ -19,6 +20,7 @@
 
 /* Begin PBXFileReference section */
 		F50703992CFABC0D00D0817A /* ToMyongJi-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ToMyongJi-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F58E93F02D81A7F4009C1F74 /* AdminTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminTabView.swift; sourceTree = "<group>"; };
 		F59C39EA2CFB1F8E002AD9DA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		F59C39EE2CFB1F8E002AD9DA /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		F59C39F02CFB1F8E002AD9DA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -129,6 +131,7 @@
 			isa = PBXGroup;
 			children = (
 				F59C39FD2CFB21D5002AD9DA /* MainTabView.swift */,
+				F58E93F02D81A7F4009C1F74 /* AdminTabView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -289,6 +292,7 @@
 				F59C39F52CFB1F8E002AD9DA /* ToMyongJi_iOSApp.swift in Sources */,
 				F59C39F62CFB1F8E002AD9DA /* ContentView.swift in Sources */,
 				F59C39FE2CFB21D5002AD9DA /* MainTabView.swift in Sources */,
+				F58E93F12D81A7F4009C1F74 /* AdminTabView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
