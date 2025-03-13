@@ -38,7 +38,7 @@ struct GetClubMembersResponse: Codable {
     let data: [ClubMemberData]
 }
 
-struct DeleteMemberResponse: Codable {
+struct DeleteClubMemberResponse: Codable {
     let statusCode: Int
     let statusMessage: String
     let data: ClubMemberData
