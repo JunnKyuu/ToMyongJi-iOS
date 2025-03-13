@@ -16,77 +16,81 @@ struct MainTabView: View {
     @State private var profileViewModel = ProfileViewModel()
     
     var body: some View {
-        TabView(selection: $selectedTab) {
-            CollegesAndClubsView()
-                .tabItem {
-                    Image(systemName: "magnifyingglass")
-                    Text("조회")
-                }
-                .tag(1)
-            
-            Group {
-                if authManager.isAuthenticated {
-                    if profileViewModel.studentClubId != 0 {
-                        CreateReceiptView(club: Club(
-                            studentClubId: profileViewModel.studentClubId,
-                            studentClubName: profileViewModel.studentClub
-                        ))
+        if authManager.userRole == "ADMIN" {
+            AdminTabView()
+        } else {
+            TabView(selection: $selectedTab) {
+                CollegesAndClubsView()
+                    .tabItem {
+                        Image(systemName: "magnifyingglass")
+                        Text("조회")
+                    }
+                    .tag(1)
+                
+                Group {
+                    if authManager.isAuthenticated {
+                        if profileViewModel.studentClubId != 0 {
+                            CreateReceiptView(club: Club(
+                                studentClubId: profileViewModel.studentClubId,
+                                studentClubName: profileViewModel.studentClub
+                            ))
+                        } else {
+                            ProgressView()
+                                .onAppear {
+                                    profileViewModel.fetchUserProfile()
+                                }
+                        }
                     } else {
-                        ProgressView()
+                        Color.clear
                             .onAppear {
-                                profileViewModel.fetchUserProfile()
+                                previousTab = selectedTab
+                                showLoginAlert = true
                             }
                     }
-                } else {
-                    Color.clear
-                        .onAppear {
-                            previousTab = selectedTab
-                            showLoginAlert = true
-                        }
                 }
-            }
-            .tabItem {
-                Image(systemName: "pencil")
-                Text("작성")
-            }
-            .tag(2)
-            
-            Group {
-                if authManager.isAuthenticated {
-                    ProfileView()
-                } else {
-                    Color.clear
-                        .onAppear {
-                            previousTab = selectedTab
-                            showLoginAlert = true
-                        }
+                .tabItem {
+                    Image(systemName: "pencil")
+                    Text("작성")
                 }
+                .tag(2)
+                
+                Group {
+                    if authManager.isAuthenticated {
+                        ProfileView()
+                    } else {
+                        Color.clear
+                            .onAppear {
+                                previousTab = selectedTab
+                                showLoginAlert = true
+                            }
+                    }
+                }
+                .tabItem {
+                    Image(systemName: "person.circle")
+                    Text("프로필")
+                }
+                .tag(3)
             }
-            .tabItem {
-                Image(systemName: "person.circle")
-                Text("프로필")
+            .tint(Color.softBlue)
+            .navigationBarBackButtonHidden()
+            .alert("로그인 후 이용 가능합니다.", isPresented: $showLoginAlert) {
+                Button("취소", role: .cancel) {
+                    selectedTab = 1
+                }
+                Button("확인") {
+                    showLoginView = true
+                }
+            } message: {
+                Text("로그인 하시겠습니까?")
             }
-            .tag(3)
-        }
-        .tint(Color.softBlue)
-        .navigationBarBackButtonHidden()
-        .alert("로그인 후 이용 가능합니다.", isPresented: $showLoginAlert) {
-            Button("취소", role: .cancel) {
-                selectedTab = 1
-            }
-            Button("확인") {
-                showLoginView = true
-            }
-        } message: {
-            Text("로그인 하시겠습니까?")
-        }
-        .fullScreenCover(isPresented: $showLoginView, content: {
-            AuthenticationView()
-        })
-        .onChange(of: authManager.isAuthenticated) { _, newValue in
-            if newValue {
-                selectedTab = previousTab
-                profileViewModel.fetchUserProfile()
+            .fullScreenCover(isPresented: $showLoginView, content: {
+                AuthenticationView()
+            })
+            .onChange(of: authManager.isAuthenticated) { _, newValue in
+                if newValue {
+                    selectedTab = previousTab
+                    profileViewModel.fetchUserProfile()
+                }
             }
         }
     }
