@@ -16,14 +16,12 @@ struct AdminView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
-                // admin 타이틀
                 VStack(alignment: .leading, spacing: 30) {
                     Text("관리자 페이지")
                         .font(.custom("GmarketSansBold", size: 28))
                         .foregroundStyle(Color.darkNavy)
                         .padding(.bottom, 20)
                     
-                    // 회장 관리
                     VStack(alignment: .leading, spacing: 15) {
                         Text("회장 관리")
                             .font(.custom("GmarketSansMedium", size: 20))
@@ -32,6 +30,9 @@ struct AdminView: View {
                             .font(.custom("GmarketSansLight", size: 13))
                             .foregroundStyle(.gray)
                             .padding(.top, -5)
+                        
+                        // 회장 저장/변경을 위한 단과 대학 및 학생회 선택
+                        SelectCollegesAndClubsView(viewModel: viewModel)
                     }
                     
                     /// 현재 회장 정보

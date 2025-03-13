@@ -143,7 +143,7 @@ class ProfileViewModel {
     func deleteMember(studentNum: String) {
         networkingManager.run(
             ProfileEndpoint.deleteMember(studentNum: studentNum),
-            type: DeleteMemberResponse.self
+            type: DeleteClubMemberResponse.self
         )
         .sink { completion in
             if case .failure(let error) = completion {

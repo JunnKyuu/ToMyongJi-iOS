@@ -6,11 +6,19 @@
 //
 
 import Foundation
+import Combine
 
-@Observable class AdminViewModel {
+@Observable
+class AdminViewModel {
+    // 단과대학 및 소속
+    var colleges: [College] = []
+    var collegeName: String?
+    var selectedCollege: College?
+    var selectedClub: Club?
+    
     // 현재 회장 정보
-    var currentPresidentStudentNum: String = "60222126"  // 샘플
-    var currentPresidentName: String = "이준규"  // 샘플
+    var currentPresidentStudentNum: String = "60222126"
+    var currentPresidentName: String = "이준규"
     
     // 새 회장 정보
     var newPresidentStudentNum: String = ""
@@ -26,8 +34,26 @@ import Foundation
     var alertTitle: String = ""
     var alertMessage: String = ""
     
+    private var cancellables = Set<AnyCancellable>()
+    private var networkingManager = AlamofireNetworkingManager.shared
+    
+
+    
     init() {
         loadSampleData()
+    }
+    
+    // 단과대학 및 소속 정보 가져오기
+    func fetchCollegesAndClubs() {
+        networkingManager.run(AdminEndpoint.getCollegesAndClubs, type: CollegesAndClubsResponse.self)
+            .sink { [weak self] completion in
+                if case .failure(let error) = completion {
+                    self?.showAlert(title: "오류", message: error.localizedDescription)
+                }
+            } receiveValue: { [weak self] response in
+                self?.colleges = response.data
+            }
+            .store(in: &cancellables)
     }
     
     func changePresident() {
