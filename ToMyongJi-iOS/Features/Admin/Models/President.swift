@@ -8,13 +8,19 @@
 import Foundation
 
 struct President: Codable {
-    let clubID: Int
+    let clubId: Int
     let studentNum: String
     let name: String
 }
 
+struct GetPresidentResponse: Codable {
+    let statusCode: Int
+    let statusMessage: String
+    let data: President
+}
+
 struct AddPresidentRequest: Codable {
-    let clubID: Int
+    let clubId: Int
     let studentNum: String
     let name: String
 }
@@ -22,11 +28,11 @@ struct AddPresidentRequest: Codable {
 struct AddPresidentResponse: Codable {
     let statusCode: Int
     let statusMessage: String
-    let data: President?
+    let data: President
 }
 
 struct UpdatePresidentRequest: Codable {
-    let clubID: Int
+    let clubId: Int
     let studentNum: String
     let name: String
 }
@@ -34,6 +40,6 @@ struct UpdatePresidentRequest: Codable {
 struct UpdatePresidentResponse: Codable {
     let statusCode: Int
     let statusMessage: String
-    let data: President?
+    let data: President
 }
 

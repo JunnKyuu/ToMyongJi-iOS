@@ -14,7 +14,7 @@ struct Member: Codable {
 }
 
 struct AddMemberRequest: Codable {
-    let clubID: Int
+    let clubId: Int
     let studentNum: String
     let name: String
 }

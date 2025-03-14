@@ -22,15 +22,15 @@ protocol Endpoint {
 
 extension Endpoint {
     var baseURL: String {
-//        "15.164.162.164"
-        "api.tomyongji.com"
+        "15.164.162.164"
+//        "api.tomyongji.com"
     }
     
     var url: URL {
         var components = URLComponents()
-        components.scheme = "https"
+        components.scheme = "http"
         components.host = self.baseURL
-//        components.port = 8080
+        components.port = 8080
         components.path = self.path
         if !self.query.isEmpty {
             components.queryItems = self.query.map { URLQueryItem(name: $0, value: $1) }

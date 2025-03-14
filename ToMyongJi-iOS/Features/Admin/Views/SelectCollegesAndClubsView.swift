@@ -38,6 +38,7 @@ struct SelectCollegesAndClubsView: View {
                 Menu {
                     ForEach(college.clubs) { club in
                         Button(club.studentClubName) {
+                            viewModel.selectedClubId = club.studentClubId
                             viewModel.selectedClub = club
                         }
                     }

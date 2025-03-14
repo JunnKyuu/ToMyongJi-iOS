@@ -14,11 +14,20 @@ class AdminViewModel {
     var colleges: [College] = []
     var collegeName: String?
     var selectedCollege: College?
-    var selectedClub: Club?
+    var selectedClub: Club? {
+        didSet {
+            if let club = selectedClub {
+                selectedClubId = club.studentClubId
+                print("Club Selected: \(club.studentClubName), ID: \(club.studentClubId)")
+                fetchPresident()
+            }
+        }
+    }
+    var selectedClubId: Int = 0
     
     // 현재 회장 정보
-    var currentPresidentStudentNum: String = "60222126"
-    var currentPresidentName: String = "이준규"
+    var currentPresidentStudentNum: String = ""
+    var currentPresidentName: String = ""
     
     // 새 회장 정보
     var newPresidentStudentNum: String = ""
@@ -37,12 +46,6 @@ class AdminViewModel {
     private var cancellables = Set<AnyCancellable>()
     private var networkingManager = AlamofireNetworkingManager.shared
     
-
-    
-    init() {
-        loadSampleData()
-    }
-    
     // 단과대학 및 소속 정보 가져오기
     func fetchCollegesAndClubs() {
         networkingManager.run(AdminEndpoint.getCollegesAndClubs, type: CollegesAndClubsResponse.self)
@@ -56,18 +59,34 @@ class AdminViewModel {
             .store(in: &cancellables)
     }
     
-    func changePresident() {
-        // API 연동 전 임시 로직
-        guard !newPresidentStudentNum.isEmpty && !newPresidentName.isEmpty else {
-            showAlert(title: "입력 오류", message: "학번과 이름을 모두 입력해주세요.")
-            return
-        }
-        
-        currentPresidentStudentNum = newPresidentStudentNum
-        currentPresidentName = newPresidentName
-        newPresidentStudentNum = ""
-        newPresidentName = ""
-        showAlert(title: "변경 완료", message: "회장이 변경되었습니다.")
+    func fetchPresident() {
+        networkingManager.run(AdminEndpoint.getPresident(clubId: selectedClubId), type: GetPresidentResponse.self)
+            .sink { [weak self] completion in
+                if case .failure(let error) = completion {
+                    self?.showAlert(title: "오류", message: "해당 학과의 회장 정보가 없습니다.")
+                }
+            } receiveValue: { [weak self] response in
+                print("President Data Received")
+                self?.currentPresidentStudentNum = response.data.studentNum
+                self?.currentPresidentName = response.data.name
+            }
+            .store(in: &cancellables)
+    }
+    
+    func updatePresident() {
+        networkingManager.run(AdminEndpoint.updatePresident(clubId: selectedClubId, studentNum: newPresidentStudentNum, name: newPresidentName), type: UpdatePresidentResponse.self)
+            .sink { [weak self] completion in
+                if case .failure(let error) = completion {
+                    self?.showAlert(title: "오류", message: "회장을 변경하는데 실패했습니다.")
+                }
+            } receiveValue: { [weak self] response in
+                self?.currentPresidentStudentNum = response.data.studentNum
+                self?.currentPresidentName = response.data.name
+                self?.newPresidentStudentNum = ""
+                self?.newPresidentName = ""
+                self?.showAlert(title: "성공", message: "회장이 정상적으로 변경되었습니다.")
+            }
+            .store(in: &cancellables)
     }
     
     func addMember() {
@@ -90,13 +109,5 @@ class AdminViewModel {
         alertTitle = title
         alertMessage = message
         showAlert = true
-    }
-    
-    private func loadSampleData() {
-        members = [
-            AdminMember(studentNum: "77777777", name: "손흥민"),
-            AdminMember(studentNum: "10101010", name: "이강인"),
-            AdminMember(studentNum: "44444444", name: "김민재")
-        ]
     }
 }
