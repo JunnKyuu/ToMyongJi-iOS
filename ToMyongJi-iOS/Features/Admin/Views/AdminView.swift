@@ -31,7 +31,7 @@ struct AdminView: View {
                             .foregroundStyle(.gray)
                             .padding(.top, -5)
                         
-                        // 회장 저장/변경을 위한 단과 대학 및 학생회 선택
+                        // 단과 대학 및 학생회 선택
                         SelectCollegesAndClubsView(viewModel: viewModel)
                     }
                     
@@ -79,7 +79,7 @@ struct AdminView: View {
                                 )
                             
                             Button {
-                                viewModel.changePresident()
+                                viewModel.updatePresident()
                             } label: {
                                 Text("변경")
                                     .font(.custom("GmarketSansMedium", size: 14))

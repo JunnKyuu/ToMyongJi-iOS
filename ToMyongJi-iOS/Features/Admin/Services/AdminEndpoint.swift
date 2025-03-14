@@ -11,10 +11,10 @@ import Alamofire
 enum AdminEndpoint {
     case getCollegesAndClubs
     case getPresident(clubId: Int)
-    case addPresident(clubID: Int, studentNum: String, name: String)
-    case updatePresident(clubID: Int, studentNum: String, name: String)
+    case addPresident(clubId: Int, studentNum: String, name: String)
+    case updatePresident(clubId: Int, studentNum: String, name: String)
     case getMember(clubId: Int)
-    case addMember(clubID: Int, studentNum: String, name: String)
+    case addMember(clubId: Int, studentNum: String, name: String)
     case deleteMember(memberId: Int)
 }
 
@@ -50,14 +50,14 @@ extension AdminEndpoint: Endpoint {
     
     var parameters: [String: Any] {
         switch self {
-        case .addPresident(let clubID, let studentNum, let name):
-            let request = AddPresidentRequest(clubID: clubID, studentNum: studentNum, name: name)
+        case .addPresident(let clubId, let studentNum, let name):
+            let request = AddPresidentRequest(clubId: clubId, studentNum: studentNum, name: name)
             return try! JSONSerialization.jsonObject(with: JSONEncoder().encode(request)) as! [String: Any]
-        case .updatePresident(let clubID, let studentNum, let name):
-            let request = UpdatePresidentRequest(clubID: clubID, studentNum: studentNum, name: name)
+        case .updatePresident(let clubId, let studentNum, let name):
+            let request = UpdatePresidentRequest(clubId: clubId, studentNum: studentNum, name: name)
             return try! JSONSerialization.jsonObject(with: JSONEncoder().encode(request)) as! [String: Any]
-        case .addMember(let clubID, let studentNum, let name):
-            let request = AddMemberRequest(clubID: clubID, studentNum: studentNum, name: name)
+        case .addMember(let clubId, let studentNum, let name):
+            let request = AddMemberRequest(clubId: clubId, studentNum: studentNum, name: name)
             return try! JSONSerialization.jsonObject(with: JSONEncoder().encode(request)) as! [String: Any]
         default:
             return [:]
