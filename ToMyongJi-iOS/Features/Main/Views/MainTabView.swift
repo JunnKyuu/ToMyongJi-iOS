@@ -14,6 +14,7 @@ struct MainTabView: View {
     @State private var showLoginView: Bool = false
     @State private var previousTab: Int = 1
     @State private var profileViewModel = ProfileViewModel()
+    @State private var showTokenExpiredAlert: Bool = false // 추가
     
     var body: some View {
         if authManager.userRole == "ADMIN" {
@@ -83,6 +84,15 @@ struct MainTabView: View {
             } message: {
                 Text("로그인 하시겠습니까?")
             }
+            // 토큰 만료 알림 추가
+            .alert("세션 만료", isPresented: $showTokenExpiredAlert) {
+                Button("확인") {
+                    authManager.clearAuthentication()
+                    showLoginView = true
+                }
+            } message: {
+                Text("접속한지 오랜시간이 지났습니다. 다시 로그인해주세요.")
+            }
             .fullScreenCover(isPresented: $showLoginView, content: {
                 AuthenticationView()
             })
@@ -91,6 +101,12 @@ struct MainTabView: View {
                     selectedTab = previousTab
                     profileViewModel.fetchUserProfile()
                 }
+            }
+            // 토큰 만료 감지 추가
+            .onReceive(NotificationCenter.default.publisher(for: .tokenExpired)) { _ in
+                selectedTab = 1
+                previousTab = 1
+                showTokenExpiredAlert = true
             }
         }
     }

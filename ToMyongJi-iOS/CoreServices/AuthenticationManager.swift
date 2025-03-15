@@ -16,31 +16,55 @@ class AuthenticationManager {
     private let userIdKey = "userId"
     private let userRoleKey = "userRole"
     private let userLoginIdKey = "userLoginId"
+    private let tokenExpirationKey = "tokenExpiration"
     
     // 상태 변화를 감지하기 위한 프로퍼티
     var isAuthenticated: Bool = false
     var userRole: String? = nil
     var userId: Int? = nil
     var userLoginId: String? = nil
+    var accessToken: String? = nil
+    
+    private var tokenExpirationTimer: Timer?
     
     private init() {
         // 초기화 시 현재 인증 상태 설정
         self.isAuthenticated = UserDefaults.standard.string(forKey: accessTokenKey) != nil
         self.userRole = UserDefaults.standard.string(forKey: userRoleKey)
         self.userLoginId = UserDefaults.standard.string(forKey: userLoginIdKey)
+        self.accessToken = UserDefaults.standard.string(forKey: accessTokenKey)
+        
+        // 저장된 만료 시간 확인
+        if let expirationDate = UserDefaults.standard.object(forKey: tokenExpirationKey) as? Date {
+            if expirationDate > Date() {
+                startExpirationTimer(expirationDate: expirationDate)
+            } else {
+                clearAuthentication()
+            }
+        }
     }
     
     // 토큰 및 사용자 정보 저장
     func saveAuthentication(accessToken: String, decodedToken: DecodedToken) {
+        // 현재 시간으로부터 30분 후의 만료 시간 설정
+        let expirationDate = Date().addingTimeInterval(30 * 60)
+        
         UserDefaults.standard.set(accessToken, forKey: accessTokenKey)
         UserDefaults.standard.set(decodedToken.id as Int, forKey: userIdKey)
         UserDefaults.standard.set(decodedToken.auth, forKey: userRoleKey)
         UserDefaults.standard.set(decodedToken.sub, forKey: userLoginIdKey)
+        UserDefaults.standard.set(expirationDate, forKey: tokenExpirationKey)
         
+        print("accessToken: \(accessToken)")
+        print("decodedToken: \(decodedToken)")
+        
+        self.accessToken = accessToken
         isAuthenticated = true
         userRole = decodedToken.auth
         userId = decodedToken.id
         userLoginId = decodedToken.sub
+        
+        startExpirationTimer(expirationDate: expirationDate)
     }
     
     // 로그아웃 시 저장된 정보 삭제
@@ -49,14 +73,46 @@ class AuthenticationManager {
         UserDefaults.standard.removeObject(forKey: userIdKey)
         UserDefaults.standard.removeObject(forKey: userRoleKey)
         UserDefaults.standard.removeObject(forKey: userLoginIdKey)
+        UserDefaults.standard.removeObject(forKey: tokenExpirationKey)
         
+        accessToken = nil
         isAuthenticated = false
         userRole = nil
         userId = nil
         userLoginId = nil
+        
+        tokenExpirationTimer?.invalidate()
+        tokenExpirationTimer = nil
     }
     
-    var accessToken: String? {
-        return UserDefaults.standard.string(forKey: accessTokenKey)
+    // 토큰 만료 타이머 시작
+    private func startExpirationTimer(expirationDate: Date) {
+        tokenExpirationTimer?.invalidate()
+        
+        let timeInterval = expirationDate.timeIntervalSinceNow
+        if timeInterval > 0 {
+            tokenExpirationTimer = Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: false) { [weak self] _ in
+                self?.handleTokenExpiration()
+            }
+        }
     }
+    
+    // 토큰 만료 처리
+    private func handleTokenExpiration() {
+        clearAuthentication()
+        NotificationCenter.default.post(name: .tokenExpired, object: nil)
+    }
+    
+    // 토큰 만료 여부 확인
+    func isTokenValid() -> Bool {
+        guard let expirationDate = UserDefaults.standard.object(forKey: tokenExpirationKey) as? Date else {
+            return false
+        }
+        return expirationDate > Date()
+    }
+}
+
+// Notification 이름 정의
+extension Notification.Name {
+    static let tokenExpired = Notification.Name("tokenExpired")
 }

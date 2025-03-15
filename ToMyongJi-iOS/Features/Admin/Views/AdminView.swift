@@ -79,9 +79,31 @@ struct AdminView: View {
                                 )
                             
                             Button {
-                                viewModel.updatePresident()
+                                if viewModel.newPresidentStudentNum.isEmpty || viewModel.newPresidentName.isEmpty {
+                                    viewModel.alertTitle = "입력 오류"
+                                    viewModel.alertMessage = "학번과 이름을 모두 입력해주세요."
+                                    viewModel.showAlert = true
+                                    return
+                                } else if viewModel.newPresidentStudentNum == viewModel.currentPresidentStudentNum {
+                                    viewModel.alertTitle = "입력 오류"
+                                    viewModel.alertMessage = "현재 회장과 동일한 학번입니다."
+                                    viewModel.showAlert = true
+                                    return
+                                } else if viewModel.newPresidentName == viewModel.currentPresidentName {
+                                    viewModel.alertTitle = "입력 오류"
+                                    viewModel.alertMessage = "현재 회장과 동일한 이름입니다."
+                                    viewModel.showAlert = true
+                                    return
+                                } else {
+                                    // 현재 회장 정보가 비어있으면 추가, 있으면 변경
+                                    if viewModel.currentPresidentStudentNum.isEmpty && viewModel.currentPresidentName.isEmpty {
+                                        viewModel.addPresident()
+                                    } else {
+                                        viewModel.updatePresident()
+                                    }
+                                }
                             } label: {
-                                Text("변경")
+                                Text("저장")
                                     .font(.custom("GmarketSansMedium", size: 14))
                                     .foregroundColor(.white)
                                     .padding(.horizontal, 15)
@@ -109,30 +131,30 @@ struct AdminView: View {
                             .padding(.top, -5)
                     }
                     
-                    /// 구성원 추가
-                    AddAdminMemberRow(
-                        studentNum: $viewModel.newMemberStudentNum,
-                        name: $viewModel.newMemberName
-                    ) {
-                        viewModel.addMember()
-                    }
-                    .padding(.bottom, 20)
-                    
-                    /// 구성원 목록
-                    VStack {
-                        ForEach(viewModel.members) { member in
-                            AdminMemberRow(
-                                studentNum: member.studentNum,
-                                name: member.name
-                            ) {
-                                viewModel.deleteMember(studentNum: member.studentNum)
-                            }
-                        }
-                    }
-                    .background(
-                        RoundedRectangle(cornerRadius: 15)
-                            .fill(Color.softBlue.opacity(0.3))
-                    )
+//                    /// 구성원 추가
+//                    AddAdminMemberRow(
+//                        studentNum: $viewModel.newMemberStudentNum,
+//                        name: $viewModel.newMemberName
+//                    ) {
+//                        viewModel.addMember()
+//                    }
+//                    .padding(.bottom, 20)
+//                    
+//                    /// 구성원 목록
+//                    VStack {
+//                        ForEach(viewModel.members) { member in
+//                            AdminMemberRow(
+//                                studentNum: member.studentNum,
+//                                name: member.name
+//                            ) {
+//                                viewModel.deleteMember(studentNum: member.studentNum)
+//                            }
+//                        }
+//                    }
+//                    .background(
+//                        RoundedRectangle(cornerRadius: 15)
+//                            .fill(Color.softBlue.opacity(0.3))
+//                    )
                 }
                 .padding(.top, 30)
                 
