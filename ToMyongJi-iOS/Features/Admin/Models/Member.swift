@@ -7,10 +7,17 @@
 
 import Foundation
 
-struct Member: Codable {
-    let memberID: Int
+struct Member: Codable, Identifiable {
+    var id: Int { memberId }
+    let memberId: Int
     let studentNum: String
     let name: String
+}
+
+struct GetMemberResponse: Codable {
+    let statusCode: Int
+    let statusMessage: String
+    let data: [Member]
 }
 
 struct AddMemberRequest: Codable {
@@ -22,5 +29,11 @@ struct AddMemberRequest: Codable {
 struct AddMemberResponse: Codable {
     let statusCode: Int
     let statusMessage: String
-    let data: Member?
+    let data: Member
+}
+
+struct DeleteMemberResponse: Codable {
+    let statusCode: Int
+    let statusMessage: String
+    let data: Member
 }
