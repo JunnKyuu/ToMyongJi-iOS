@@ -8,24 +8,21 @@
 import SwiftUI
 
 struct AdminMemberRow: View {
-    let studentNum: String
-    let name: String
-    var onDelete: () -> Void
+    let member: Member
+    var deleteMember: (Int) -> Void
     
     var body: some View {
-        HStack(spacing: 15) {
-            HStack(spacing: 10) {
-                Text("학번: \(studentNum)")
-                    .font(.custom("GmarketSansLight", size: 14))
-                Spacer()
-                Text("이름: \(name)")
-                    .font(.custom("GmarketSansLight", size: 14))
-                Spacer()
-            }
-            
+        HStack(spacing: 10) {
+            Text("학번: \(member.studentNum)")
+                .font(.custom("GmarketSansLight", size: 14))
+            Spacer()
+            Text("이름: \(member.name)")
+                .font(.custom("GmarketSansLight", size: 14))
             Spacer()
             
-            Button(action: onDelete) {
+            Button(action: {
+                deleteMember(member.memberId)
+            }) {
                 Text("삭제")
                     .font(.custom("GmarketSansMedium", size: 14))
                     .foregroundColor(.white)
@@ -38,9 +35,9 @@ struct AdminMemberRow: View {
         .padding(.horizontal, 15)
         .padding(.vertical, 10)
     }
+        
 }
 
 #Preview {
-    AdminMemberRow(studentNum: "60222126", name: "이준규", onDelete: { print("Deleted") })
-
+    AdminMemberRow(member: Member(memberId: 1, studentNum: "2021", name: "이준규"), deleteMember: {_ in })
 }

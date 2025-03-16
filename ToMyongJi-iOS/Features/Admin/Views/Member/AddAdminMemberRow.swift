@@ -8,15 +8,12 @@
 import SwiftUI
 
 struct AddAdminMemberRow: View {
-    @Binding var studentNum: String
-    @Binding var name: String
+    @Bindable var viewModel: AdminViewModel
     @FocusState var isFocused: Bool
-    
-    var onAdd: () -> Void
     
     var body: some View {
         HStack(spacing: 20) {
-            TextField("학번", text: $studentNum)
+            TextField("학번", text: $viewModel.newMemberStudentNum)
                 .font(.custom("GmarketSansLight", size: 14))
                 .padding(10)
                 .focused($isFocused)
@@ -24,7 +21,7 @@ struct AddAdminMemberRow: View {
                     RoundedRectangle(cornerRadius: 10)
                         .stroke(isFocused ? Color.softBlue : Color.gray.opacity(0.2), lineWidth: 1.5)
                 )
-            TextField("이름", text: $name)
+            TextField("이름", text: $viewModel.newMemberName)
                 .font(.custom("GmarketSansLight", size: 14))
                 .padding(10)
                 .focused($isFocused)
@@ -33,7 +30,7 @@ struct AddAdminMemberRow: View {
                         .stroke(isFocused ? Color.softBlue : Color.gray.opacity(0.2), lineWidth: 1.5)
                 )
             
-            Button(action: onAdd) {
+            Button(action: viewModel.addMember) {
                 Text("추가")
                     .font(.custom("GmarketSansMedium", size: 14))
                     .foregroundColor(.white)

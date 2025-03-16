@@ -14,7 +14,7 @@ struct MainTabView: View {
     @State private var showLoginView: Bool = false
     @State private var previousTab: Int = 1
     @State private var profileViewModel = ProfileViewModel()
-    @State private var showTokenExpiredAlert: Bool = false // 추가
+    @State private var showTokenExpiredAlert: Bool = false
     
     var body: some View {
         if authManager.userRole == "ADMIN" {
