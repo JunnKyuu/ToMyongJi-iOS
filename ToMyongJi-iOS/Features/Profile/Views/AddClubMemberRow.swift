@@ -25,7 +25,7 @@ struct AddClubMemberRow: View {
                     .foregroundColor(.white)
                     .padding(.horizontal, 15)
                     .padding(.vertical, 8)
-                    .background(Color.deposit)
+                    .background(Color.darkNavy)
                     .cornerRadius(8)
             }
         }

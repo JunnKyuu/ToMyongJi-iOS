@@ -134,7 +134,7 @@ struct InputClubAuthenticationView: View {
             }
             .frame(maxWidth: .infinity, alignment: .center)
             .padding(.vertical, 15)
-            .background(isFormValid ? Color.softBlue : Color.gray.opacity(0.3))
+            .background(isFormValid ? Color.darkNavy : Color.gray.opacity(0.3))
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .disabled(!isFormValid)
             
@@ -149,7 +149,7 @@ struct InputClubAuthenticationView: View {
             }
             .frame(maxWidth: .infinity, alignment: .center)
             .padding(.vertical, 15)
-            .background(viewModel.isClubVerified ? Color.softBlue : Color.gray.opacity(0.3))
+            .background(viewModel.isClubVerified ? Color.darkNavy : Color.gray.opacity(0.3))
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .disabled(!viewModel.isClubVerified)
         }

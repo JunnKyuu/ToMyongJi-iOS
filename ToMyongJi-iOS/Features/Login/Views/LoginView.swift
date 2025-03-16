@@ -13,6 +13,12 @@ struct LoginView: View {
     @Bindable private var authManager = AuthenticationManager.shared
     @Binding var showSignup: Bool
     @State private var showFindIdView: Bool = false
+    @FocusState private var focusField: Field?
+    
+    enum Field {
+        case id
+        case password
+    }
     
     var body: some View {
         VStack(spacing: 20) {
@@ -23,17 +29,50 @@ struct LoginView: View {
                 .frame(width: 200)
                 .padding(.vertical, 50)
             
-            // 아이디 입력
-            CustomTF(sfIcon: "person", hint: "아이디를 입력해주세요.", value: $viewModel.userId)
-            
-            // 비밀번호 입력
-            CustomTF(sfIcon: "lock", hint: "비밀번호를 입력해주세요.", isPassword: true, value: $viewModel.password)
+            // 입력 필드들을 감싸는 카드 뷰
+            VStack(spacing: 0) {
+                // 아이디 입력
+                TextField("아이디 또는 전화번호", text: $viewModel.userId)
+                    .font(.custom("GmarketSansLight", size: 15))
+                    .padding()
+                    .focused($focusField, equals: .id)
+                    .submitLabel(.next)
+                    .onSubmit {
+                        focusField = .password
+                    }
+                
+                Divider()
+                    .background(Color.gray.opacity(0.2))
+                
+                // 비밀번호 입력
+                SecureField("비밀번호", text: $viewModel.password)
+                    .font(.custom("GmarketSansLight", size: 15))
+                    .padding()
+                    .focused($focusField, equals: .password)
+                    .submitLabel(.done)
+                    .onSubmit {
+                        viewModel.login()
+                    }
+            }
+            .background(Color.gray.opacity(0.1))
+            .clipShape(RoundedRectangle(cornerRadius: 10))
             
             // 로그인 버튼
-            GradientButton(title: "로그인", icon: "arrow.right") {
+            Button(action: {
                 viewModel.login()
+            }) {
+                Text("로그인")
+                    .font(.custom("GmarketSansMedium", size: 16))
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 15)
+                    .background(
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(Color.darkNavy)
+                            .opacity(viewModel.userId.isEmpty || viewModel.password.isEmpty ? 0.5 : 1)
+                    )
             }
-            .disableWithOpacity(viewModel.userId.isEmpty || viewModel.password.isEmpty || viewModel.isLoading)
+            .disabled(viewModel.userId.isEmpty || viewModel.password.isEmpty || viewModel.isLoading)
             .padding(.top, 20)
             
             // 회원가입 및 아이디 찾기 버튼

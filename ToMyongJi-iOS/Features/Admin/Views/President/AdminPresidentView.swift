@@ -45,7 +45,7 @@ struct AdminPresidentView: View {
                     .focused($isFocused)
                     .overlay(
                         RoundedRectangle(cornerRadius: 10)
-                            .stroke(isFocused ? Color.softBlue : Color.gray.opacity(0.2), lineWidth: 1.5)
+                            .stroke(isFocused ? Color.darkNavy : Color.gray.opacity(0.2), lineWidth: 1.5)
                     )
                 TextField("이름", text: $viewModel.newPresidentName)
                     .font(.custom("GmarketSansLight", size: 14))
@@ -53,7 +53,7 @@ struct AdminPresidentView: View {
                     .focused($isFocused)
                     .overlay(
                         RoundedRectangle(cornerRadius: 10)
-                            .stroke(isFocused ? Color.softBlue : Color.gray.opacity(0.2), lineWidth: 1.5)
+                            .stroke(isFocused ? Color.darkNavy : Color.gray.opacity(0.2), lineWidth: 1.5)
                     )
                 
                 Button {
@@ -86,7 +86,7 @@ struct AdminPresidentView: View {
                         .foregroundColor(.white)
                         .padding(.horizontal, 15)
                         .padding(.vertical, 8)
-                        .background(Color.deposit)
+                        .background(Color.darkNavy)
                         .cornerRadius(8)
                 }
             }

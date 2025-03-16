@@ -25,7 +25,7 @@ struct AdminMemberView: View {
                     .padding(.top, -5)
             }
             
-            /// 구성원 추가
+            // 구성원 추가
             HStack(spacing: 20) {
                 TextField("학번", text: $viewModel.newMemberStudentNum)
                     .font(.custom("GmarketSansLight", size: 14))
@@ -33,7 +33,7 @@ struct AdminMemberView: View {
                     .focused($isFocused)
                     .overlay(
                         RoundedRectangle(cornerRadius: 10)
-                            .stroke(isFocused ? Color.softBlue : Color.gray.opacity(0.2), lineWidth: 1.5)
+                            .stroke(isFocused ? Color.darkNavy : Color.gray.opacity(0.2), lineWidth: 1.5)
                     )
                 TextField("이름", text: $viewModel.newMemberName)
                     .font(.custom("GmarketSansLight", size: 14))
@@ -41,7 +41,7 @@ struct AdminMemberView: View {
                     .focused($isFocused)
                     .overlay(
                         RoundedRectangle(cornerRadius: 10)
-                            .stroke(isFocused ? Color.softBlue : Color.gray.opacity(0.2), lineWidth: 1.5)
+                            .stroke(isFocused ? Color.darkNavy : Color.gray.opacity(0.2), lineWidth: 1.5)
                     )
                 
                 Button(action: {
@@ -56,13 +56,13 @@ struct AdminMemberView: View {
                         .foregroundColor(.white)
                         .padding(.horizontal, 15)
                         .padding(.vertical, 8)
-                        .background(Color.deposit)
+                        .background(Color.darkNavy)
                         .cornerRadius(8)
                 }
             }
             .padding(.bottom, 20)
 
-            /// 구성원 목록
+            // 구성원 목록
             if !viewModel.members.isEmpty {
                 VStack(spacing: 0) {
                     ForEach(viewModel.members) { member in

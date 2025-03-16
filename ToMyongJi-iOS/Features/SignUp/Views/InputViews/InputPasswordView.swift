@@ -113,7 +113,7 @@ struct InputPasswordView: View {
             }
             .frame(maxWidth: .infinity, alignment: .center)
             .padding(.vertical, 15)
-            .background(!isPasswordValid ? Color.gray.opacity(0.3) : Color.softBlue)
+            .background(!isPasswordValid ? Color.gray.opacity(0.3) : Color.darkNavy)
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .disabled(!isPasswordValid)
         }

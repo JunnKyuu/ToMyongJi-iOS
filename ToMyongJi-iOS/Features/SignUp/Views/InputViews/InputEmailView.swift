@@ -72,7 +72,7 @@ struct InputEmailView: View {
                             .foregroundStyle(.white)
                             .padding(.horizontal, 15)
                             .padding(.vertical, 15)
-                            .background(email.isEmpty ? Color.gray.opacity(0.3) : Color.softBlue)
+                            .background(email.isEmpty ? Color.gray.opacity(0.3) : Color.darkNavy)
                             .clipShape(RoundedRectangle(cornerRadius: 10))
                     }
                     .disabled(email.isEmpty || !isValidEmail(email))
@@ -97,7 +97,7 @@ struct InputEmailView: View {
                                 .foregroundStyle(.white)
                                 .padding(.horizontal, 15)
                                 .padding(.vertical, 15)
-                                .background(verificationCode.count != 8 ? Color.gray.opacity(0.3) : Color.softBlue)
+                                .background(verificationCode.count != 8 ? Color.gray.opacity(0.3) : Color.darkNavy)
                                 .clipShape(RoundedRectangle(cornerRadius: 10))
                         }
                         .disabled(verificationCode.count != 8)
@@ -116,7 +116,7 @@ struct InputEmailView: View {
             }
             .frame(maxWidth: .infinity, alignment: .center)
             .padding(.vertical, 15)
-            .background(!isVerified ? Color.gray.opacity(0.3) : Color.softBlue)
+            .background(!isVerified ? Color.gray.opacity(0.3) : Color.darkNavy)
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .disabled(!isVerified)
         }

@@ -67,7 +67,7 @@ struct InputIDView: View {
                         .foregroundStyle(.white)
                         .padding(.horizontal, 15)
                         .padding(.vertical, 15)
-                        .background(userId.isEmpty ? Color.gray.opacity(0.3) : Color.softBlue)
+                        .background(userId.isEmpty ? Color.gray.opacity(0.3) : Color.darkNavy)
                         .clipShape(RoundedRectangle(cornerRadius: 10))
                 }
                 .disabled(userId.isEmpty || !isValid)
@@ -94,7 +94,7 @@ struct InputIDView: View {
             }
             .frame(maxWidth: .infinity, alignment: .center)
             .padding(.vertical, 15)
-            .background((!isValid || !isUserIdAvailable) ? Color.gray.opacity(0.3) : Color.softBlue)
+            .background((!isValid || !isUserIdAvailable) ? Color.gray.opacity(0.3) : Color.darkNavy)
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .disabled(!isValid || !isUserIdAvailable)
         }
