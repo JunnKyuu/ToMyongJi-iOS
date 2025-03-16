@@ -28,7 +28,7 @@ struct AdminTabView: View {
                     }
                     .tag(2)
             }
-            .tint(Color.softBlue)
+            .tint(Color.darkNavy)
             // 토큰 만료 알림 추가
             .alert("세션 만료", isPresented: $showTokenExpiredAlert) {
                 Button("확인") {

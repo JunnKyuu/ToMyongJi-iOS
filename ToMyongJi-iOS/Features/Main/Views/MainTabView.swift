@@ -72,7 +72,7 @@ struct MainTabView: View {
                 }
                 .tag(3)
             }
-            .tint(Color.softBlue)
+            .tint(Color.darkNavy)
             .navigationBarBackButtonHidden()
             .alert("로그인 후 이용 가능합니다.", isPresented: $showLoginAlert) {
                 Button("취소", role: .cancel) {

@@ -106,7 +106,7 @@ struct SignUpAgreeView: View {
             .background(
                 (!isAgreeService || !isAgreePrivacy || !isAgreeClub)
                 ? Color.gray.opacity(0.3)
-                : Color.softBlue
+                : Color.darkNavy
             )
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .disabled(!isAgreeService || !isAgreePrivacy || !isAgreeClub)

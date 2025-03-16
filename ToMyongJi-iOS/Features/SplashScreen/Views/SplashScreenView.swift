@@ -31,7 +31,7 @@ struct SplashScreenView: View {
                     .padding(.bottom, 30)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color.softBlue)
+            .background(Color.white)
             .opacity(opacity)
             .onAppear {
                 withAnimation(.easeIn(duration: 1.5)) {

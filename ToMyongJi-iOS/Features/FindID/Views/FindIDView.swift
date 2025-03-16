@@ -10,6 +10,7 @@ import SwiftUI
 struct FindIDView: View {
     @Environment(\.dismiss) private var dismiss
     @Bindable private var viewModel: FindIDViewModel = FindIDViewModel()
+    @FocusState private var isFocused: Bool
     
     var body: some View {
         VStack(alignment: .leading, spacing: 15) {
@@ -32,15 +33,39 @@ struct FindIDView: View {
                 .foregroundStyle(.gray)
                 .padding(.top, -5)
             
-            VStack(spacing: 25) {
-                CustomTF(sfIcon: "at", hint: "이메일 주소", value: $viewModel.email)
-                
-                GradientButton(title: "아이디 찾기", icon: "chevron.right") {
-                    viewModel.findID()
-                }
-                .hSpacing(.trailing)
-                .disableWithOpacity(viewModel.email.isEmpty)
+            // 입력 필드를 감싸는 카드 뷰
+            VStack(spacing: 0) {
+                TextField("이메일 주소", text: $viewModel.email)
+                    .font(.custom("GmarketSansLight", size: 15))
+                    .padding()
+                    .focused($isFocused)
+                    .submitLabel(.done)
+                    .keyboardType(.emailAddress)
+                    .autocapitalization(.none)
+                    .onSubmit {
+                        viewModel.findID()
+                    }
             }
+            .background(Color.gray.opacity(0.1))
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .padding(.top, 20)
+            
+            // 아이디 찾기 버튼
+            Button(action: {
+                viewModel.findID()
+            }) {
+                Text("아이디 찾기")
+                    .font(.custom("GmarketSansMedium", size: 16))
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 15)
+                    .background(
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(Color.darkNavy)
+                            .opacity(viewModel.email.isEmpty ? 0.5 : 1)
+                    )
+            }
+            .disabled(viewModel.email.isEmpty)
             .padding(.top, 20)
         }
         .padding(.vertical, 15)

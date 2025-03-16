@@ -65,7 +65,7 @@ struct SignUpTextField: View {
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
-                    .stroke(isFocused || (isPassword && passwordState != nil) ? Color.softBlue : Color.gray.opacity(0.2), lineWidth: 1)
+                    .stroke(isFocused || (isPassword && passwordState != nil) ? Color.darkNavy : Color.gray.opacity(0.2), lineWidth: 1)
             )
             .animation(.easeInOut(duration: 0.2), value: isFocused)
         }
