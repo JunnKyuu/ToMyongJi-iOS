@@ -24,6 +24,7 @@ class AuthenticationManager {
     var userId: Int? = nil
     var userLoginId: String? = nil
     var accessToken: String? = nil
+    var tokenExpiration: Date? = nil
     
     private var tokenExpirationTimer: Timer?
     
@@ -33,6 +34,7 @@ class AuthenticationManager {
         self.userRole = UserDefaults.standard.string(forKey: userRoleKey)
         self.userLoginId = UserDefaults.standard.string(forKey: userLoginIdKey)
         self.accessToken = UserDefaults.standard.string(forKey: accessTokenKey)
+        self.tokenExpiration = UserDefaults.standard.object(forKey: tokenExpirationKey) as? Date
         
         // 저장된 만료 시간 확인
         if let expirationDate = UserDefaults.standard.object(forKey: tokenExpirationKey) as? Date {
@@ -46,23 +48,24 @@ class AuthenticationManager {
     
     // 토큰 및 사용자 정보 저장
     func saveAuthentication(accessToken: String, decodedToken: DecodedToken) {
-        // 현재 시간으로부터 30분 후의 만료 시간 설정
-        let expirationDate = Date().addingTimeInterval(30 * 60)
+        // JWT 토큰의 exp 값을 사용하여 만료 시간 설정
+        let expirationDate = Date(timeIntervalSince1970: TimeInterval(decodedToken.exp))
+        UserDefaults.standard.set(expirationDate, forKey: tokenExpirationKey)
         
         UserDefaults.standard.set(accessToken, forKey: accessTokenKey)
         UserDefaults.standard.set(decodedToken.id as Int, forKey: userIdKey)
         UserDefaults.standard.set(decodedToken.auth, forKey: userRoleKey)
         UserDefaults.standard.set(decodedToken.sub, forKey: userLoginIdKey)
-        UserDefaults.standard.set(expirationDate, forKey: tokenExpirationKey)
         
-        print("accessToken: \(accessToken)")
-        print("decodedToken: \(decodedToken)")
+//        print("accessToken: \(accessToken)")
+//        print("decodedToken: \(decodedToken)")
         
         self.accessToken = accessToken
         isAuthenticated = true
         userRole = decodedToken.auth
         userId = decodedToken.id
         userLoginId = decodedToken.sub
+        tokenExpiration = expirationDate
         
         startExpirationTimer(expirationDate: expirationDate)
     }
