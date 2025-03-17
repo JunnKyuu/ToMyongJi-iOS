@@ -32,7 +32,7 @@ struct LoginView: View {
             // 입력 필드들을 감싸는 카드 뷰
             VStack(spacing: 0) {
                 // 아이디 입력
-                TextField("아이디 또는 전화번호", text: $viewModel.userId)
+                TextField("아이디", text: $viewModel.userId)
                     .font(.custom("GmarketSansLight", size: 15))
                     .padding()
                     .focused($focusField, equals: .id)
