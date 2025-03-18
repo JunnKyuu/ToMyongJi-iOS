@@ -32,7 +32,7 @@ struct CreateReceiptView: View {
         VStack(spacing: 0) {
             VStack(alignment: .leading, spacing: 15) {
                 Text(club.studentClubName)
-                    .font(.custom("GmarketSansBold", size: 28))
+                    .font(.custom("GmarketSansBold", size: 23))
                     .foregroundStyle(.darkNavy)
                     .frame(height: 45)
                     .padding(.horizontal, 15)
@@ -224,7 +224,7 @@ func ClubView(_ club: Club, balance: Int) -> some View {
                     .foregroundStyle(.white)
                 
                 Text("\(balance)")
-                    .font(.custom("GmarketSansBold", size: 22))
+                    .font(.custom("GmarketSansBold", size: 20))
                     .foregroundStyle(.white)
             }
             .frame(maxWidth: .infinity, alignment: .leading)

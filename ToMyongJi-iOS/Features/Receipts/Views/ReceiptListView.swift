@@ -24,7 +24,7 @@ struct ReceiptListView: View {
             VStack(spacing: 0) {
                 VStack(alignment: .leading, spacing: 15, content: {
                     Text(club.studentClubName)
-                        .font(.custom("GmarketSansBold", size: 28))
+                        .font(.custom("GmarketSansBold", size: 23))
                         .foregroundStyle(.darkNavy)
                         .frame(height: 45)
                         .padding(.horizontal, 15)
@@ -150,7 +150,7 @@ struct ReceiptListView: View {
                         .foregroundStyle(.darkNavy)
 
                     Text("\(balance)")
-                        .font(.custom("GmarketSansBold", size: 22))
+                        .font(.custom("GmarketSansBold", size: 20))
                         .foregroundStyle(.darkNavy)
                 })
                 .foregroundStyle(.white)
