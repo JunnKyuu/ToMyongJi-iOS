@@ -25,7 +25,7 @@ struct ReceiptListView: View {
                 VStack(alignment: .leading, spacing: 15, content: {
                     Text(club.studentClubName)
                         .font(.custom("GmarketSansBold", size: 23))
-                        .foregroundStyle(.darkNavy)
+                        .foregroundStyle(Color.darkNavy)
                         .frame(height: 45)
                         .padding(.horizontal, 15)
                     
@@ -147,11 +147,11 @@ struct ReceiptListView: View {
                     
                     Text("현재 잔액")
                         .font(.custom("GmarketSansMedium", size: 18))
-                        .foregroundStyle(.darkNavy)
+                        .foregroundStyle(Color.darkNavy)
 
                     Text("\(balance)")
                         .font(.custom("GmarketSansBold", size: 20))
-                        .foregroundStyle(.darkNavy)
+                        .foregroundStyle(Color.darkNavy)
                 })
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -171,7 +171,7 @@ struct ReceiptListView: View {
             VStack(alignment: .leading, spacing: 4, content: {
                 Text(receipt.content)
                     .font(.custom("GmarketSansBold", size: 14))
-                    .foregroundStyle(.darkNavy)
+                    .foregroundStyle(Color.darkNavy)
                 
                 Text(receipt.date)
                     .font(.custom("GmarketSansMedium", size: 12))
@@ -183,13 +183,13 @@ struct ReceiptListView: View {
             if receipt.deposit != 0 {
                 Text("+ \(receipt.deposit)")
                     .font(.custom("GmarketSansBold", size: 14))
-                    .foregroundStyle(.deposit)
+                    .foregroundStyle(Color.deposit)
             }
 
             if receipt.withdrawal != 0 {
                 Text("- \(receipt.withdrawal)")
                     .font(.custom("GmarketSansBold", size: 14))
-                    .foregroundStyle(.withdrawal)
+                    .foregroundStyle(Color.withdrawal)
             }
         }
         .padding(.horizontal, 15)

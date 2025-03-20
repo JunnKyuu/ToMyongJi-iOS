@@ -19,22 +19,22 @@
 // MARK: - Asset Catalogs
 
 // swiftlint:disable identifier_name line_length nesting type_body_length type_name
-public enum UIAsset {
-  public static let accentColor = UIColors(name: "AccentColor")
-  public static let createReceiptScreenshot = UIImages(name: "create-receipt-screenshot")
-  public static let darkNavy = UIColors(name: "darkNavy")
-  public static let deposit = UIColors(name: "deposit")
-  public static let logo = UIImages(name: "logo")
-  public static let profileScreenshot = UIImages(name: "profile-screenshot")
-  public static let receiptListScreenshot = UIImages(name: "receipt-list-screenshot")
-  public static let softBlue = UIColors(name: "softBlue")
-  public static let withdrawal = UIColors(name: "withdrawal")
+public enum ToMyongJiIOSAsset {
+  public static let accentColor = ToMyongJiIOSColors(name: "AccentColor")
+  public static let createReceiptScreenshot = ToMyongJiIOSImages(name: "create-receipt-screenshot")
+  public static let darkNavy = ToMyongJiIOSColors(name: "darkNavy")
+  public static let deposit = ToMyongJiIOSColors(name: "deposit")
+  public static let logo = ToMyongJiIOSImages(name: "logo")
+  public static let profileScreenshot = ToMyongJiIOSImages(name: "profile-screenshot")
+  public static let receiptListScreenshot = ToMyongJiIOSImages(name: "receipt-list-screenshot")
+  public static let softBlue = ToMyongJiIOSColors(name: "softBlue")
+  public static let withdrawal = ToMyongJiIOSColors(name: "withdrawal")
 }
 // swiftlint:enable identifier_name line_length nesting type_body_length type_name
 
 // MARK: - Implementation Details
 
-public final class UIColors {
+public final class ToMyongJiIOSColors {
   public fileprivate(set) var name: String
 
   #if os(macOS)
@@ -73,10 +73,10 @@ public final class UIColors {
   }
 }
 
-public extension UIColors.Color {
+public extension ToMyongJiIOSColors.Color {
   @available(iOS 11.0, tvOS 11.0, watchOS 4.0, macOS 10.13, visionOS 1.0, *)
-  convenience init?(asset: UIColors) {
-    let bundle = UIResources.bundle
+  convenience init?(asset: ToMyongJiIOSColors) {
+    let bundle = ToMyongJiIOSResources.bundle
     #if os(iOS) || os(tvOS) || os(visionOS)
     self.init(named: asset.name, in: bundle, compatibleWith: nil)
     #elseif os(macOS)
@@ -90,14 +90,14 @@ public extension UIColors.Color {
 #if canImport(SwiftUI)
 @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, visionOS 1.0, *)
 public extension SwiftUI.Color {
-  init(asset: UIColors) {
-    let bundle = UIResources.bundle
+  init(asset: ToMyongJiIOSColors) {
+    let bundle = ToMyongJiIOSResources.bundle
     self.init(asset.name, bundle: bundle)
   }
 }
 #endif
 
-public struct UIImages {
+public struct ToMyongJiIOSImages {
   public fileprivate(set) var name: String
 
   #if os(macOS)
@@ -107,7 +107,7 @@ public struct UIImages {
   #endif
 
   public var image: Image {
-    let bundle = UIResources.bundle
+    let bundle = ToMyongJiIOSResources.bundle
     #if os(iOS) || os(tvOS) || os(visionOS)
     let image = Image(named: name, in: bundle, compatibleWith: nil)
     #elseif os(macOS)
@@ -132,18 +132,18 @@ public struct UIImages {
 #if canImport(SwiftUI)
 @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, visionOS 1.0, *)
 public extension SwiftUI.Image {
-  init(asset: UIImages) {
-    let bundle = UIResources.bundle
+  init(asset: ToMyongJiIOSImages) {
+    let bundle = ToMyongJiIOSResources.bundle
     self.init(asset.name, bundle: bundle)
   }
 
-  init(asset: UIImages, label: Text) {
-    let bundle = UIResources.bundle
+  init(asset: ToMyongJiIOSImages, label: Text) {
+    let bundle = ToMyongJiIOSResources.bundle
     self.init(asset.name, bundle: bundle, label: label)
   }
 
-  init(decorative asset: UIImages) {
-    let bundle = UIResources.bundle
+  init(decorative asset: ToMyongJiIOSImages) {
+    let bundle = ToMyongJiIOSResources.bundle
     self.init(decorative: asset.name, bundle: bundle)
   }
 }

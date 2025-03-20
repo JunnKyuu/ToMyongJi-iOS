@@ -7,23 +7,37 @@
 
 import SwiftUI
 
-struct CustomTF: View {
-    var sfIcon: String
-    var iconTint: Color = .gray
-    var hint: String
-    var isPassword: Bool = false
+public struct CustomTF: View {
+    public var sfIcon: String
+    public var iconTint: Color = .gray
+    public var hint: String
+    public var isPassword: Bool = false
     
-    @Binding var value: String
-    @State private var showPassword: Bool = false
-    @FocusState private var isFocused: Bool
-    @FocusState private var passwordState: HideState?
+    @Binding public var value: String
+    @State public var showPassword: Bool = false
+    @FocusState public var isFocused: Bool
+    @FocusState var passwordState: HideState?
+    
+    public init(
+        sfIcon: String,
+        iconTint: Color = .gray,
+        hint: String,
+        isPassword: Bool = false,
+        value: Binding<String>
+    ) {
+        self.sfIcon = sfIcon
+        self.iconTint = iconTint
+        self.hint = hint
+        self.isPassword = isPassword
+        self._value = value
+    }
     
     enum HideState {
         case hide
         case reveal
     }
     
-    var body: some View {
+    public var body: some View {
         HStack(spacing: 12) {
             Image(systemName: sfIcon)
                 .foregroundStyle(iconTint)

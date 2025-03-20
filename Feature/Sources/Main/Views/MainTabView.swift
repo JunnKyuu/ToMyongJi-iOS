@@ -8,16 +8,18 @@
 import SwiftUI
 import Core
 
-struct MainTabView: View {
-    @State private var selectedTab: Int = 1
-    @Bindable private var authManager = AuthenticationManager.shared
-    @State private var showLoginAlert: Bool = false
-    @State private var showLoginView: Bool = false
-    @State private var previousTab: Int = 1
-    @State private var profileViewModel = ProfileViewModel()
-    @State private var showTokenExpiredAlert: Bool = false
+public struct MainTabView: View {
+    @AppStorage("selectedTab") public var selectedTab: Int = 1
+    @Bindable public var authManager = AuthenticationManager.shared
+    @State public var showLoginAlert: Bool = false
+    @State public var showLoginView: Bool = false
+    @State public var previousTab: Int = 1
+    @State public var profileViewModel = ProfileViewModel()
+    @State public var showTokenExpiredAlert: Bool = false
     
-    var body: some View {
+    public init() {}
+    
+    public var body: some View {
         if authManager.userRole == "ADMIN" {
             AdminTabView()
         } else {

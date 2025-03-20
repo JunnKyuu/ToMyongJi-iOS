@@ -10,7 +10,7 @@ import Combine
 import Core
 
 @Observable
-class ProfileViewModel {
+public class ProfileViewModel {
     var name: String = ""
     var studentNum: String = ""
     var collegeName: String = ""

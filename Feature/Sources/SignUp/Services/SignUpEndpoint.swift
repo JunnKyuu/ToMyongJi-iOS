@@ -7,6 +7,7 @@
 
 import Foundation
 import Alamofire
+import Core
 
 public enum SignUpEndpoint {
     case getColleges

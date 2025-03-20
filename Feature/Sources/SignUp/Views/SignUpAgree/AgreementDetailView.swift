@@ -19,7 +19,7 @@ struct AgreementDetailView: View {
                 VStack(alignment: .leading, spacing: 15) {
                     Text(getAgreementContent())
                         .font(.custom("GmarketSansLight", size: 14))
-                        .foregroundStyle(.darkNavy)
+                        .foregroundStyle(Color.darkNavy)
                 }
                 .padding()
             }
@@ -30,7 +30,7 @@ struct AgreementDetailView: View {
                     Button("닫기") {
                         dismiss()
                     }
-                    .foregroundStyle(.darkNavy)
+                    .foregroundStyle(Color.darkNavy)
                 }
             }
         }
