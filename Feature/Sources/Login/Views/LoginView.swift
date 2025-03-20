@@ -23,6 +23,19 @@ struct LoginView: View {
     
     var body: some View {
         VStack(spacing: 20) {
+            Button(action: {
+                dismiss()
+                if let tabSelection = UserDefaults.standard.value(forKey: "selectedTab") as? Int {
+                    UserDefaults.standard.set(1, forKey: "selectedTab")
+                }
+            }) {
+                Image(systemName: "chevron.left")
+                    .font(.title3.bold())
+                    .foregroundStyle(Color.darkNavy)
+                    .contentShape(.rect)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            Spacer()
             // 로고 이미지
             Image("logo")
                 .resizable()
@@ -70,7 +83,7 @@ struct LoginView: View {
                     .background(
                         RoundedRectangle(cornerRadius: 10)
                             .fill(Color.darkNavy)
-                            .opacity(viewModel.userId.isEmpty || viewModel.password.isEmpty ? 0.5 : 1)
+                            .opacity(viewModel.userId.isEmpty || viewModel.password.isEmpty ? 0.1 : 1)
                     )
             }
             .disabled(viewModel.userId.isEmpty || viewModel.password.isEmpty || viewModel.isLoading)
@@ -89,6 +102,9 @@ struct LoginView: View {
             .font(.custom("GmarketSansMedium", size: 13))
             .tint(.gray)
             .padding(.top, 15)
+            Spacer()
+            Spacer()
+            Spacer()
         }
         .padding(.horizontal, 25)
         .padding(.vertical, 15)

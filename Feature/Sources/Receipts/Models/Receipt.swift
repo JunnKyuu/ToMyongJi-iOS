@@ -8,48 +8,89 @@
 import Foundation
 
 // 영수증 조회
-struct ReceiptResponse: Codable {
+public struct ReceiptResponse: Codable {
     let statusCode: Int
     let statusMessage: String
     let data: ReceiptData
+    
+    public init(statusCode: Int, statusMessage: String, data: ReceiptData) {
+        self.statusCode = statusCode
+        self.statusMessage = statusMessage
+        self.data = data
+    }
 }
 
-struct ReceiptData: Codable {
+public struct ReceiptData: Codable {
     let receiptList: [Receipt]
     let balance: Int
+    
+    public init(receiptList: [Receipt], balance: Int) {
+        self.receiptList = receiptList
+        self.balance = balance
+    }
 }
 
 // 영수증 작성
-struct CreateReceiptRequest: Codable {
+public struct CreateReceiptRequest: Codable {
     let userId: String
     let date: String
     let content: String
     let deposit: Int
     let withdrawal: Int
+    
+    public init(userId: String, date: String, content: String, deposit: Int, withdrawal: Int) {
+        self.userId = userId
+        self.date = date
+        self.content = content
+        self.deposit = deposit
+        self.withdrawal = withdrawal
+    }
 }
 
-struct CreateReceiptResponse: Codable {
+public struct CreateReceiptResponse: Codable {
     let statusCode: Int
     let statusMessage: String
     let data: SingleReceiptData
+    
+    public init(statusCode: Int, statusMessage: String, data: SingleReceiptData) {
+        self.statusCode = statusCode
+        self.statusMessage = statusMessage
+        self.data = data
+    }
 }
 
-struct SingleReceiptData: Codable {
+public struct SingleReceiptData: Codable {
     let receiptId: Int
     let date: String
     let content: String
     let deposit: Int
     let withdrawal: Int
+    
+    public init(receiptId: Int, date: String, content: String, deposit: Int, withdrawal: Int) {
+        self.receiptId = receiptId
+        self.date = date
+        self.content = content
+        self.deposit = deposit
+        self.withdrawal = withdrawal
+    }
 }
 
 // 영수증
-struct Receipt: Identifiable, Codable {
-    let id: UUID = UUID()
+public struct Receipt: Identifiable, Codable {
+    public let id: UUID = UUID()
     let receiptId: Int
     let date: String
     let content: String
     let deposit: Int
     let withdrawal: Int
+    
+    public init(receiptId: Int, date: String, content: String, deposit: Int, withdrawal: Int) {
+        self.receiptId = receiptId
+        self.date = date
+        self.content = content
+        self.deposit = deposit
+        self.withdrawal = withdrawal
+    }
     
     enum CodingKeys: String, CodingKey {
         case receiptId, date, content, deposit, withdrawal
@@ -57,10 +98,16 @@ struct Receipt: Identifiable, Codable {
 }
 
 // 영수증 삭제
-struct DeleteReceiptResponse: Codable {
+public struct DeleteReceiptResponse: Codable {
     let statusCode: Int
     let statusMessage: String
     let data: SingleReceiptData
+    
+    public init(statusCode: Int, statusMessage: String, data: SingleReceiptData) {
+        self.statusCode = statusCode
+        self.statusMessage = statusMessage
+        self.data = data
+    }
 }
 
 

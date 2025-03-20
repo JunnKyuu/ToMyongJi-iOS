@@ -12,8 +12,12 @@ let project = Project(
             destinations: [.iPhone, .iPad],
             product: .app,
             bundleId: "com.tomyongji.ios",
-            infoPlist: .file(path: Path("App/Resources/Info.plist")),
+            infoPlist: .file(path: "App/Resources/Info.plist"),
             sources: ["App/Sources/**"],
+            resources: [
+                "UI/Resources/Assets.xcassets",
+                "UI/Resources/Fonts/**"
+            ],
             dependencies: [
                 .target(name: "Core"),
                 .target(name: "Feature"),
@@ -21,14 +25,16 @@ let project = Project(
             ]
         ),
         .target(
-            name: "Core",
+            name: "App",
             destinations: [.iPhone, .iPad],
             product: .framework,
-            bundleId: "com.tomyongji.core",
+            bundleId: "com.tomyongji.app",
             infoPlist: .extendingDefault(with: [:]),
-            sources: ["Core/Sources/**"],
+            sources: ["App/Sources/**"],
             dependencies: [
-                .package(product: "Alamofire")
+                .target(name: "Core"),
+                .target(name: "UI"),
+                .target(name: "Feature")
             ]
         ),
         .target(
@@ -44,6 +50,17 @@ let project = Project(
             ]
         ),
         .target(
+            name: "Core",
+            destinations: [.iPhone, .iPad],
+            product: .framework,
+            bundleId: "com.tomyongji.core",
+            infoPlist: .extendingDefault(with: [:]),
+            sources: ["Core/Sources/**"],
+            dependencies: [
+                .package(product: "Alamofire")
+            ]
+        ),
+        .target(
             name: "UI",
             destinations: [.iPhone, .iPad],
             product: .framework,
@@ -52,7 +69,7 @@ let project = Project(
             sources: ["UI/Sources/**"],
             resources: [
                 "UI/Resources/Assets.xcassets",
-                "UI/Resources/Fonts"
+                "UI/Resources/Fonts/**"
             ]
         )
     ]

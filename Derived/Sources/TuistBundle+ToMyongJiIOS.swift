@@ -8,14 +8,14 @@ import Foundation
 private class BundleFinder {}
 
 extension Foundation.Bundle {
-/// Since UI is a framework, the bundle for classes within this module can be used directly.
+/// Since ToMyongJi-iOS is a application, the bundle for classes within this module can be used directly.
 static let module = Bundle(for: BundleFinder.self)
 }
 
 // MARK: - Objective-C Bundle Accessor
 
 @objc
-public class UIResources: NSObject {
+public class ToMyongJiIOSResources: NSObject {
 @objc public class var bundle: Bundle {
     return .module
 }

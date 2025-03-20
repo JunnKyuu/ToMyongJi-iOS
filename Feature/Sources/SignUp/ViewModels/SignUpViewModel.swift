@@ -8,6 +8,7 @@
 import Foundation
 import Combine
 import Alamofire
+import Core
 
 @Observable
 class SignUpViewModel {

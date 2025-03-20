@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import Core
 
 @Observable
 class ReceiptViewModel {

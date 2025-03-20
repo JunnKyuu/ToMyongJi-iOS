@@ -16,7 +16,7 @@ struct CollegesAndClubsView: View {
                 VStack {
                     Text("학생회를 선택해주세요.")
                         .font(.custom("GmarketSansBold", size: 28))
-                        .foregroundStyle(.darkNavy)
+                        .foregroundStyle(Color.darkNavy)
                         .frame(height: 45)
                         .multilineTextAlignment(.leading)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -61,7 +61,7 @@ struct CollegeCard: View {
                 VStack(alignment: .leading, spacing: 5) {
                     Text(college.collegeName)
                         .font(.custom("GmarketSansBold", size: 18))
-                        .foregroundStyle(.darkNavy)
+                        .foregroundStyle(Color.darkNavy)
                     Text("\(college.clubs.count)개의 학생회")
                         .font(.custom("GmarketSansMedium", size: 14))
                         .foregroundStyle(.gray)

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UI
 
 struct AddClubMemberRow: View {
     @Binding var studentNum: String

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Core
 
 struct CreateReceiptView: View {
     @Environment(\.colorScheme) private var scheme
@@ -33,7 +34,7 @@ struct CreateReceiptView: View {
             VStack(alignment: .leading, spacing: 15) {
                 Text(club.studentClubName)
                     .font(.custom("GmarketSansBold", size: 23))
-                    .foregroundStyle(.darkNavy)
+                    .foregroundStyle(Color.darkNavy)
                     .frame(height: 45)
                     .padding(.horizontal, 15)
                 
@@ -106,10 +107,10 @@ struct CreateReceiptView: View {
                     resetForm()
                 }
             }
-            .foregroundStyle(.darkNavy)
+            .foregroundStyle(Color.darkNavy)
         } message: {
             Text(viewModel.alertMessage)
-                .foregroundStyle(.darkNavy)
+                .foregroundStyle(Color.darkNavy)
         }
     }
     
@@ -161,7 +162,7 @@ struct CreateReceiptView: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text(receipt.content)
                     .font(.custom("GmarketSansBold", size: 14))
-                    .foregroundStyle(.darkNavy)
+                    .foregroundStyle(Color.darkNavy)
                 
                 Text(receipt.date)
                     .font(.custom("GmarketSansMedium", size: 12))
@@ -173,13 +174,13 @@ struct CreateReceiptView: View {
             if receipt.deposit != 0 {
                 Text("+ \(receipt.deposit)")
                     .font(.custom("GmarketSansBold", size: 14))
-                    .foregroundStyle(.deposit)
+                    .foregroundStyle(Color.deposit)
             }
             
             if receipt.withdrawal != 0 {
                 Text("- \(receipt.withdrawal)")
                     .font(.custom("GmarketSansBold", size: 14))
-                    .foregroundStyle(.withdrawal)
+                    .foregroundStyle(Color.withdrawal)
             }
         }
         .padding(.horizontal, 15)
