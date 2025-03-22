@@ -60,12 +60,14 @@ struct CreateReceiptFormView: View {
                 
                 HStack(spacing: 15) {
                     CustomTF(sfIcon: "plus.circle", hint: "입금", value: $inputDeposit)
+                        .disabled(!inputWithdrawal.isEmpty)
                         .keyboardType(.numberPad)
                         .onChange(of: inputDeposit) { _, newValue in
                             deposit = Int(newValue) ?? 0
                         }
                     
                     CustomTF(sfIcon: "minus.circle", hint: "출금", value: $inputWithdrawal)
+                        .disabled(!inputDeposit.isEmpty)
                         .keyboardType(.numberPad)
                         .onChange(of: inputWithdrawal) { _, newValue in
                             withdrawal = Int(newValue) ?? 0
