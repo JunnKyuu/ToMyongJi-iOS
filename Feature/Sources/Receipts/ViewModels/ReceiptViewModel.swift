@@ -13,6 +13,7 @@ import Core
 class ReceiptViewModel {
     // 영수증 조회 데이터
     var receipts: [Receipt] = []
+    var filteredReceipts: [Receipt] = []
     var balance: Int = 0
     
     // 영수증 생성 입력 데이터
@@ -28,6 +29,18 @@ class ReceiptViewModel {
     var showAlert: Bool = false
     var alertTitle: String = ""
     var alertMessage: String = ""
+    
+    // 필터링 상태
+    var isFiltered: Bool = false
+    var selectedMonth: Int = Calendar.current.component(.month, from: Date())
+    
+    // 연도/월 표시 형식
+    var formattedYearMonth: String {
+        if isFiltered {
+            return "\(selectedMonth)월"
+        }
+        return "전체 조회"
+    }
     
     private var networkingManager: AlamofireNetworkingManager = AlamofireNetworkingManager.shared
     private var cancellables = Set<AnyCancellable>()
@@ -46,11 +59,46 @@ class ReceiptViewModel {
                 self?.errorMessage = error.localizedDescription
             }
         } receiveValue: { [weak self] response in
+            guard let self = self else { return }
             // 날짜 기준 내림차순 정렬 (최신순)
-            self?.receipts = response.data.receiptList.sorted { $0.date > $1.date }
-            self?.balance = response.data.balance
+            self.receipts = response.data.receiptList.sorted { $0.date > $1.date }
+            self.filterReceipts()
+            self.balance = response.data.balance
         }
         .store(in: &cancellables)
+    }
+    
+    // 필터링
+    func filterReceipts() {
+        if isFiltered {
+            filterReceiptsByMonth()
+        } else {
+            filteredReceipts = receipts
+        }
+    }
+    
+    // 월별 필터링
+    func filterReceiptsByMonth() {
+        let calendar = Calendar.current
+        
+        filteredReceipts = receipts.filter { receipt in
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            if let date = dateFormatter.date(from: receipt.date) {
+                let month = calendar.component(.month, from: date)
+                return month == selectedMonth
+            }
+            return false
+        }
+    }
+    
+    // 필터링 상태 업데이트
+    func updateFilter(isFiltered: Bool, month: Int? = nil) {
+        self.isFiltered = isFiltered
+        if let month = month {
+            self.selectedMonth = month
+        }
+        filterReceipts()
     }
     
     // 영수증 생성

@@ -12,6 +12,7 @@ struct CreateReceiptView: View {
     @Environment(\.colorScheme) private var scheme
     @Environment(\.dismiss) private var dismiss
     @Bindable private var authManager = AuthenticationManager.shared
+    @State private var showingMonthPicker = false
     
     @State private var showCreateForm: Bool = false
     @State private var viewModel = ReceiptViewModel()
@@ -32,11 +33,16 @@ struct CreateReceiptView: View {
     var body: some View {
         VStack(spacing: 0) {
             VStack(alignment: .leading, spacing: 15) {
-                Text(club.studentClubName)
-                    .font(.custom("GmarketSansBold", size: 23))
-                    .foregroundStyle(Color.darkNavy)
-                    .frame(height: 45)
-                    .padding(.horizontal, 15)
+                HStack {
+                    Text(club.studentClubName)
+                        .font(.custom("GmarketSansBold", size: 23))
+                        .foregroundStyle(Color.darkNavy)
+                    
+                    Spacer()
+                }
+                .frame(height: 45)
+                .padding(.horizontal, 15)
+                .padding(.top)
                 
                 GeometryReader {
                     let rect = $0.frame(in: .global)
@@ -57,7 +63,7 @@ struct CreateReceiptView: View {
                         Text("영수증 작성")
                     }
                     .font(.custom("GmarketSansMedium", size: 16))
-                    .foregroundColor(.white)
+                    .foregroundStyle(Color.darkNavy)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 15)
                     .background(
@@ -67,13 +73,46 @@ struct CreateReceiptView: View {
                 }
                 .padding(.horizontal, 20)
                 
+                Menu {
+                    Button {
+                        viewModel.updateFilter(isFiltered: false)
+                    } label: {
+                        HStack {
+                            Text("전체 조회")
+                            if !viewModel.isFiltered {
+                                Image(systemName: "checkmark")
+                            }
+                        }
+                    }
+                    
+                    Button {
+                        showingMonthPicker = true
+                    } label: {
+                        HStack {
+                            Text("월 선택")
+                            if viewModel.isFiltered {
+                                Image(systemName: "checkmark")
+                            }
+                        }
+                    }
+                } label: {
+                    HStack(spacing: 4) {
+                        Text(viewModel.formattedYearMonth)
+                        Image(systemName: "chevron.down")
+                    }
+                    .font(.custom("GmarketSansLight", size: 12))
+                    .foregroundStyle(.gray)
+                }
+                .frame(maxWidth: .infinity, alignment: .trailing)
+                .padding(.horizontal, 15)
+                
                 List {
-                    ForEach(viewModel.receipts) { receipt in
+                    ForEach(viewModel.filteredReceipts) { receipt in
                         ClubReceiptView(receipt: receipt, viewModel: viewModel, club: club)
                     }
                     .onDelete { indexSet in
                         for index in indexSet {
-                            let receipt = viewModel.receipts[index]
+                            let receipt = viewModel.filteredReceipts[index]
                             viewModel.deleteReceipt(receiptId: receipt.receiptId, studentClubId: club.studentClubId)
                         }
                     }
@@ -97,6 +136,16 @@ struct CreateReceiptView: View {
             .presentationDetents([.height(400)])
             .presentationCornerRadius(30)
         }
+        .sheet(isPresented: $showingMonthPicker) {
+            MonthPickerView(
+                selectedMonth: viewModel.selectedMonth
+            ) { month in
+                viewModel.updateFilter(isFiltered: true, month: month)
+                showingMonthPicker = false
+            }
+            .presentationDetents([.height(250)])
+            .presentationCornerRadius(30)
+        }
         .onAppear {
             viewModel.getReceipts(studentClubId: club.studentClubId)
         }
@@ -112,6 +161,12 @@ struct CreateReceiptView: View {
             Text(viewModel.alertMessage)
                 .foregroundStyle(Color.darkNavy)
         }
+    }
+    
+    func backgroundLimitOffset(_ proxy: GeometryProxy) -> CGFloat {
+        let minY = proxy.frame(in: .scrollView).minY
+        
+        return minY < 100 ? -minY + 100 : 0
     }
     
     private func createReceipt() {
@@ -140,7 +195,7 @@ struct CreateReceiptView: View {
         
         // ViewModel에 데이터 설정
         viewModel.userId = userId
-        viewModel.date = date 
+        viewModel.date = date
         viewModel.content = content
         viewModel.deposit = deposit
         viewModel.withdrawal = withdrawal
@@ -222,11 +277,11 @@ func ClubView(_ club: Club, balance: Int) -> some View {
                 
                 Text("현재 잔액")
                     .font(.custom("GmarketSansMedium", size: 18))
-                    .foregroundStyle(.white)
-                
+                    .foregroundStyle(Color.darkNavy)
+
                 Text("\(balance)")
                     .font(.custom("GmarketSansBold", size: 20))
-                    .foregroundStyle(.white)
+                    .foregroundStyle(Color.darkNavy)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(20)
