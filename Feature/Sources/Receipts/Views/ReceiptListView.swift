@@ -7,12 +7,11 @@
 
 import SwiftUI
 
-import SwiftUI
-
 struct ReceiptListView: View {
     @Environment(\.colorScheme) private var scheme
     @Environment(\.dismiss) private var dismiss
     @State private var viewModel = ReceiptViewModel()
+    @State private var showingMonthPicker = false
     private var club: Club
     
     init(club: Club) {
@@ -23,11 +22,15 @@ struct ReceiptListView: View {
         ScrollView(.vertical) {
             VStack(spacing: 0) {
                 VStack(alignment: .leading, spacing: 15, content: {
-                    Text(club.studentClubName)
-                        .font(.custom("GmarketSansBold", size: 23))
-                        .foregroundStyle(Color.darkNavy)
-                        .frame(height: 45)
-                        .padding(.horizontal, 15)
+                    VStack {
+                        Text(club.studentClubName)
+                            .font(.custom("GmarketSansBold", size: 23))
+                            .foregroundStyle(Color.darkNavy)
+                        
+                        Spacer()
+                    }
+                    .frame(height: 45)
+                    .padding(.horizontal, 15)
                     
                     GeometryReader {
                         let rect = $0.frame(in: .scrollView)
@@ -40,10 +43,30 @@ struct ReceiptListView: View {
                 
                 LazyVStack(spacing: 15) {
                     Menu {
+                        Button {
+                            viewModel.updateFilter(isFiltered: false)
+                        } label: {
+                            HStack {
+                                Text("전체 조회")
+                                if !viewModel.isFiltered {
+                                    Image(systemName: "checkmark")
+                                }
+                            }
+                        }
                         
+                        Button {
+                            showingMonthPicker = true
+                        } label: {
+                            HStack {
+                                Text("월 선택")
+                                if viewModel.isFiltered {
+                                    Image(systemName: "checkmark")
+                                }
+                            }
+                        }
                     } label: {
                         HStack(spacing: 4) {
-                            Text("정렬")
+                            Text(viewModel.formattedYearMonth)
                             Image(systemName: "chevron.down")
                         }
                         .font(.custom("GmarketSansLight", size: 12))
@@ -51,7 +74,7 @@ struct ReceiptListView: View {
                     }
                     .frame(maxWidth: .infinity, alignment: .trailing)
                     
-                    ForEach(viewModel.receipts) { receipt in
+                    ForEach(viewModel.filteredReceipts) { receipt in
                         ClubReceiptView(receipt)
                     }
                 }
@@ -96,6 +119,16 @@ struct ReceiptListView: View {
                 if viewModel.isLoading {
                     ProgressView()
                 }
+            }
+            .sheet(isPresented: $showingMonthPicker) {
+                MonthPickerView(
+                    selectedMonth: viewModel.selectedMonth
+                ) { month in
+                    viewModel.updateFilter(isFiltered: true, month: month)
+                    showingMonthPicker = false
+                }
+                .presentationDetents([.height(250)])
+                .presentationCornerRadius(30)
             }
         }
         .scrollTargetBehavior(CustomScrollBehaviour())
