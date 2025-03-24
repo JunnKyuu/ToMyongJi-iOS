@@ -131,7 +131,7 @@ struct ReceiptListView: View {
                 .presentationCornerRadius(30)
             }
         }
-        .scrollTargetBehavior(CustomScrollBehaviour())
+        .scrollDisabled(false)
         .scrollIndicators(.hidden)
         .onAppear {
             viewModel.getReceipts(studentClubId: club.studentClubId)
@@ -227,14 +227,6 @@ struct ReceiptListView: View {
         }
         .padding(.horizontal, 15)
         .padding(.vertical, 6)
-    }
-}
-
-struct CustomScrollBehaviour: ScrollTargetBehavior {
-    func updateTarget(_ target: inout ScrollTarget, context: TargetContext) {
-        if target.rect.minY < 75 {
-            target.rect = .zero
-        }
     }
 }
 
