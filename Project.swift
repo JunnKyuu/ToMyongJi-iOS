@@ -22,8 +22,7 @@ let project = Project(
                 .target(name: "Core"),
                 .target(name: "Feature"),
                 .target(name: "UI")
-            ],
-            deploymentTarget: .iOS(targetVersion: "16.0", devices: [.iphone, .ipad])
+            ]
         ),
         .target(
             name: "App",
@@ -36,8 +35,7 @@ let project = Project(
                 .target(name: "Core"),
                 .target(name: "UI"),
                 .target(name: "Feature")
-            ],
-            deploymentTarget: .iOS(targetVersion: "16.0", devices: [.iphone, .ipad])
+            ]
         ),
         .target(
             name: "Feature",
@@ -49,8 +47,7 @@ let project = Project(
             dependencies: [
                 .target(name: "Core"),
                 .target(name: "UI")
-            ],
-            deploymentTarget: .iOS(targetVersion: "16.0", devices: [.iphone, .ipad])
+            ]
         ),
         .target(
             name: "Core",
@@ -61,8 +58,7 @@ let project = Project(
             sources: ["Core/Sources/**"],
             dependencies: [
                 .package(product: "Alamofire")
-            ],
-            deploymentTarget: .iOS(targetVersion: "16.0", devices: [.iphone, .ipad])
+            ]
         ),
         .target(
             name: "UI",
@@ -74,8 +70,18 @@ let project = Project(
             resources: [
                 "UI/Resources/Assets.xcassets",
                 "UI/Resources/Fonts/**"
-            ],
-            deploymentTarget: .iOS(targetVersion: "16.0", devices: [.iphone, .ipad])
+            ]
+        ),
+        .target(
+            name: "CoreTests",
+            destinations: [.iPhone, .iPad],
+            product: .unitTests,
+            bundleId: "com.tomyongji.coreTests",
+            infoPlist: .extendingDefault(with: [:]),
+            sources: ["Core/Tests/**"],
+            dependencies: [
+                .target(name: "Core")
+            ]
         )
     ]
 )
