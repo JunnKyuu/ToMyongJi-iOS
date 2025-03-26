@@ -9,7 +9,7 @@ let project = Project(
     targets: [
         .target(
             name: "ToMyongJi-iOS",
-            destinations: [.iPhone, .iPad],
+            destinations: [.iPhone],
             product: .app,
             bundleId: "com.tomyongji.ios",
             infoPlist: .file(path: "App/Resources/Info.plist"),
@@ -26,7 +26,7 @@ let project = Project(
         ),
         .target(
             name: "App",
-            destinations: [.iPhone, .iPad],
+            destinations: [.iPhone],
             product: .framework,
             bundleId: "com.tomyongji.app",
             infoPlist: .extendingDefault(with: [:]),
@@ -39,7 +39,7 @@ let project = Project(
         ),
         .target(
             name: "Feature",
-            destinations: [.iPhone, .iPad],
+            destinations: [.iPhone],
             product: .framework,
             bundleId: "com.tomyongji.feature",
             infoPlist: .extendingDefault(with: [:]),
@@ -51,7 +51,7 @@ let project = Project(
         ),
         .target(
             name: "Core",
-            destinations: [.iPhone, .iPad],
+            destinations: [.iPhone],
             product: .framework,
             bundleId: "com.tomyongji.core",
             infoPlist: .extendingDefault(with: [:]),
@@ -62,7 +62,7 @@ let project = Project(
         ),
         .target(
             name: "UI",
-            destinations: [.iPhone, .iPad],
+            destinations: [.iPhone],
             product: .framework,
             bundleId: "com.tomyongji.ui",
             infoPlist: .extendingDefault(with: [:]),
@@ -74,7 +74,7 @@ let project = Project(
         ),
         .target(
             name: "CoreTests",
-            destinations: [.iPhone, .iPad],
+            destinations: [.iPhone],
             product: .unitTests,
             bundleId: "com.tomyongji.coreTests",
             infoPlist: .extendingDefault(with: [:]),
