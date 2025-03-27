@@ -15,16 +15,16 @@ final class AlamofireNetworkingManagerTests: XCTestCase {
     var sut: AlamofireNetworkingManager!
     var cancellables: Set<AnyCancellable>!
     
-    override func setUp() {
-        super.setUp()
+    override func setUpWithError() throws {
+        try super.setUpWithError()
         sut = AlamofireNetworkingManager.shared
         cancellables = []
     }
     
-    override func tearDown() {
+    override func tearDownWithError() throws {
+        try super.tearDown()
         sut = nil
         cancellables = nil
-        super.tearDown()
     }
     
     // MARK: - API 호출 테스트
