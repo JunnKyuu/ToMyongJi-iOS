@@ -83,6 +83,7 @@ public class AuthenticationManager {
         userRole = nil
         userId = nil
         userLoginId = nil
+        tokenExpiration = nil
         
         tokenExpirationTimer?.invalidate()
         tokenExpirationTimer = nil
@@ -101,17 +102,25 @@ public class AuthenticationManager {
     }
     
     // 토큰 만료 처리
-    private func handleTokenExpiration() {
+    public func handleTokenExpiration() {
         clearAuthentication()
         NotificationCenter.default.post(name: .tokenExpired, object: nil)
     }
     
     // 토큰 만료 여부 확인
     public func isTokenValid() -> Bool {
-        guard let expirationDate = UserDefaults.standard.object(forKey: tokenExpirationKey) as? Date else {
+        guard let expirationDate = tokenExpiration,
+              let accessToken = accessToken,
+              !accessToken.isEmpty else {
+            handleTokenExpiration()
             return false
         }
-        return expirationDate > Date()
+        
+        let isValid = expirationDate > Date()
+        if !isValid {
+            handleTokenExpiration()
+        }
+        return isValid
     }
 }
 
