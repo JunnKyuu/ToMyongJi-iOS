@@ -345,10 +345,18 @@
 			);
 			target = DE41B31E49415D6F9F1E4580 /* ToMyongJi-iOS */;
 		};
+		F5D1CB402D9AA91E00B4A5D5 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				EndpointEnumTests.swift,
+			);
+			target = DE41B31E49415D6F9F1E4580 /* ToMyongJi-iOS */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		F51DD7482D95194C00249FF0 /* Authentication */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (F51DD74C2D95195A00249FF0 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Authentication; sourceTree = "<group>"; };
+		F5D1CB3C2D9AA90E00B4A5D5 /* Endpoint */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (F5D1CB402D9AA91E00B4A5D5 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Endpoint; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -427,6 +435,7 @@
 		0390F904E1F037F08DFFDA45 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				F5D1CB3C2D9AA90E00B4A5D5 /* Endpoint */,
 				F51DD7482D95194C00249FF0 /* Authentication */,
 				4B789673EBCAA4E188583135 /* Network */,
 			);
@@ -1150,6 +1159,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				F51DD7482D95194C00249FF0 /* Authentication */,
+				F5D1CB3C2D9AA90E00B4A5D5 /* Endpoint */,
 			);
 			name = CoreTests;
 			productName = CoreTests;
