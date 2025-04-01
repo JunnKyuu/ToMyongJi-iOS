@@ -22,7 +22,7 @@ final class AlamofireNetworkingManagerTests: XCTestCase {
     }
     
     override func tearDownWithError() throws {
-        try super.tearDown()
+        try super.tearDownWithError()
         sut = nil
         cancellables = nil
     }

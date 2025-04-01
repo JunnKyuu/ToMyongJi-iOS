@@ -338,6 +338,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		F51263172D9BC4FC00EA0071 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Login/LoginViewModelTests.swift,
+			);
+			target = DE41B31E49415D6F9F1E4580 /* ToMyongJi-iOS */;
+		};
 		F51DD74C2D95195A00249FF0 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -355,6 +362,7 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		F512630C2D9BBDAA00EA0071 /* Tests */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (F51263172D9BC4FC00EA0071 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Tests; sourceTree = "<group>"; };
 		F51DD7482D95194C00249FF0 /* Authentication */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (F51DD74C2D95195A00249FF0 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Authentication; sourceTree = "<group>"; };
 		F5D1CB3C2D9AA90E00B4A5D5 /* Endpoint */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (F5D1CB402D9AA91E00B4A5D5 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Endpoint; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -551,6 +559,7 @@
 		2F2E9C0F39173F477693C062 /* Feature */ = {
 			isa = PBXGroup;
 			children = (
+				F512630C2D9BBDAA00EA0071 /* Tests */,
 				DF1440F8006D5C5CAA0604E2 /* Sources */,
 			);
 			path = Feature;
@@ -1116,6 +1125,9 @@
 			dependencies = (
 				D37EC570C4C419799DD8FAA9 /* PBXTargetDependency */,
 				94EA7000270DD73477E09493 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				F512630C2D9BBDAA00EA0071 /* Tests */,
 			);
 			name = Feature;
 			productName = Feature;

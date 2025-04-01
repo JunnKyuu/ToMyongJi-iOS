@@ -20,10 +20,10 @@ class LoginViewModel {
     var showAlert: Bool = false
     var isSuccess: Bool = false
     
-    private let networkingManager = AlamofireNetworkingManager.shared
-    private let tokenService = TokenService.shared
-    private let authManager = AuthenticationManager.shared
-    private var cancellables = Set<AnyCancellable>()
+    public let networkingManager = AlamofireNetworkingManager.shared
+    public let tokenService = TokenService.shared
+    public let authManager = AuthenticationManager.shared
+    public var cancellables = Set<AnyCancellable>()
     
     func login() {
         isLoading = true
