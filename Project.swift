@@ -82,6 +82,17 @@ let project = Project(
             dependencies: [
                 .target(name: "Core")
             ]
+        ),
+        .target(
+            name: "FeatureTests",
+            destinations: [.iPhone],
+            product: .unitTests,
+            bundleId: "com.tomyongji.featureTests",
+            infoPlist: .extendingDefault(with: [:]),
+            sources: ["Feature/Tests/**"],
+            dependencies: [
+                .target(name: "Feature")
+            ]
         )
     ]
 )
