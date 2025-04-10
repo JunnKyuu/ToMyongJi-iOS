@@ -40,6 +40,32 @@ public class AlamofireNetworkingManager {
         .eraseToAnyPublisher()
     }
     
+    public func runWithStringResponse(_ endpoint: Endpoint) -> AnyPublisher<String, APIError> {
+        let headersArray = endpoint.headers.map {
+            HTTPHeader(name: $0, value: $1)
+        }
+        
+        let headers = HTTPHeaders(headersArray)
+        
+        return Future<String, APIError> { promise in
+            AF.request(endpoint.url,
+                      method: endpoint.method,
+                      parameters: endpoint.parameters,
+                      encoding: endpoint.encoding,
+                      headers: headers)
+            .responseString { response in
+                switch response.result {
+                case .success(let value):
+                    promise(.success(value))
+                case .failure(let error):
+                    promise(.failure(APIError.networkingError(error: error)))
+                }
+            }
+        }
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
+    }
+    
     public func handleCompletion(completion: Subscribers.Completion<APIError>) {
         switch completion {
         case .finished:

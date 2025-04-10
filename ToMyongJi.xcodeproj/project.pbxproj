@@ -371,10 +371,18 @@
 			);
 			target = DE41B31E49415D6F9F1E4580 /* ToMyongJi-iOS */;
 		};
+		F5F746A92D9E5CB60035E687 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				SignUpViewModelTests.swift,
+			);
+			target = DE41B31E49415D6F9F1E4580 /* ToMyongJi-iOS */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		F5BEF9CF2D9E47FB00F40303 /* FindID */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (F5BEF9D32D9E480D00F40303 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = FindID; sourceTree = "<group>"; };
+		F5F746A52D9E5CA20035E687 /* SignUp */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (F5F746A92D9E5CB60035E687 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = SignUp; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -586,6 +594,7 @@
 		30E92F57802149B8CF434BA5 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				F5F746A52D9E5CA20035E687 /* SignUp */,
 				F5BEF9CF2D9E47FB00F40303 /* FindID */,
 				9679F70AFD6E1ECFC50B0049 /* Login */,
 			);
@@ -1221,6 +1230,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				F5BEF9CF2D9E47FB00F40303 /* FindID */,
+				F5F746A52D9E5CA20035E687 /* SignUp */,
 			);
 			name = FeatureTests;
 			productName = FeatureTests;
