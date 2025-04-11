@@ -51,14 +51,6 @@ public struct EmailRequest: Codable {
     }
 }
 
-//public struct EmailResponse: Codable {
-//    let code: String
-//    
-//    public init(code: String) {
-//        self.code = code
-//    }
-//}
-
 public struct VerifyCodeRequest: Codable {
     let email: String
     let code: String

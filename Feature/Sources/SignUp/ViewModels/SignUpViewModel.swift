@@ -32,6 +32,7 @@ class SignUpViewModel {
     var isEmailVerified: Bool = false
     var isClubVerified: Bool = false
     var isUserIdAvailable: Bool = false
+    var isSignUpCompleted: Bool = false
     
     // 데이터
     var colleges: [College] = []
@@ -78,7 +79,7 @@ class SignUpViewModel {
                 }
             } receiveValue: { [weak self] response in
                 guard let self = self else { return }
-                self.verificationCode = response
+//                self.verificationCode = response
                 self.showAlert(title: "알림", message: "인증코드가 발송되었습니다.")
             }
             .store(in: &cancellables)
@@ -124,6 +125,7 @@ class SignUpViewModel {
             } receiveValue: { [weak self]
                 response in
                 guard let self = self else { return }
+                self.showAlert(title: "알림", message: "단과대학 정보를 가져오는 데 성공했습니다.")
                 self.colleges = response.data
             }
             .store(in: &cancellables)
@@ -131,8 +133,9 @@ class SignUpViewModel {
     
     // 소속 인증
     func verifyClub() {
-        guard let clubId = selectedClub?.studentClubId else { return }
-        let request = ClubVerifyRequest(clubId: clubId, studentNum: studentNum, role: selectedRole)
+        guard let cludId = selectedClub?.studentClubId else { return }
+        
+        let request = ClubVerifyRequest(clubId: cludId, studentNum: studentNum, role: selectedRole)
         networkingManager.run(SignUpEndpoint.verifyClub(request), type: ClubVerifyResponse.self)
             .sink { [weak self] completion in
                 guard let self = self else { return }
@@ -146,7 +149,7 @@ class SignUpViewModel {
                 guard let self = self else { return }
                 self.isClubVerified = response.data
                 if response.data {
-                    self.showAlert(title: "알림", message: "소속이 인증되었습니다.")
+                    self.showAlert(title: "알림", message: "소속 인증에 성공했습니다.")
                 } else {
                     self.showAlert(title: "알림", message: "소속 인증에 실패했습니다.")
                 }
@@ -181,7 +184,8 @@ class SignUpViewModel {
             } receiveValue: { [weak self] response in
                 guard let self = self else { return }
                 if response.statusCode == 200 {
-                    self.showAlert(title: "알림", message: "회원가입이 완료되었습니다.")
+                    self.showAlert(title: "알림", message: "회원가입에 성공했습니다.")
+                    self.isSignUpCompleted = true
                     completion(true)
                 } else {
                     self.showAlert(title: "오류", message: "회원가입에 실패했습니다.")
