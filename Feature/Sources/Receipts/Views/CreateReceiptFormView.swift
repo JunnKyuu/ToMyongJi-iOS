@@ -7,6 +7,7 @@
 
 import SwiftUI
 import UI
+import Core
 
 struct CreateReceiptFormView: View {
     @Environment(\.dismiss) private var dismiss
@@ -104,6 +105,6 @@ struct CreateReceiptFormView: View {
     }
 }
 
-#Preview {
-    CreateReceiptFormView(date: .constant(""), content: .constant(""), deposit: .constant(0), withdrawal: .constant(0), onSave: {})
-}
+//#Preview {
+//    CreateReceiptFormView(date: .constant(""), content: .constant(""), deposit: .constant(0), withdrawal: .constant(0), onSave: {})
+//}

@@ -36,7 +36,7 @@ struct ReceiptListView: View {
                         let rect = $0.frame(in: .scrollView)
                         let minY = rect.minY.rounded()
                         
-                        ClubView(club, balance: viewModel.balance)
+                        ClubView(club)
                     }
                     .frame(height: 125)
                 })
@@ -147,7 +147,7 @@ struct ReceiptListView: View {
     
     // Club View
     @ViewBuilder
-    func ClubView(_ club: Club, balance: Int) -> some View {
+    func ClubView(_ club: Club) -> some View {
         GeometryReader {
             let rect = $0.frame(in: .scrollView(axis: .vertical))
             let minY = rect.minY
@@ -180,10 +180,6 @@ struct ReceiptListView: View {
                     
                     Text("현재 잔액")
                         .font(.custom("GmarketSansMedium", size: 18))
-                        .foregroundStyle(Color.darkNavy)
-
-                    Text("\(balance)")
-                        .font(.custom("GmarketSansBold", size: 20))
                         .foregroundStyle(Color.darkNavy)
                 })
                 .foregroundStyle(.white)

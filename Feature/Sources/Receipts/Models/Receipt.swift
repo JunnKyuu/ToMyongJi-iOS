@@ -54,14 +54,14 @@ public struct RecieptForStudentClubData: Codable {
 
 // MARK: - 영수증 작성
 public struct CreateReceiptRequest: Codable {
-    let userId: String
+    let userLoginId: String
     let date: String
     let content: String
     let deposit: Int
     let withdrawal: Int
     
-    public init(userId: String, date: String, content: String, deposit: Int, withdrawal: Int) {
-        self.userId = userId
+    public init(userLoginId: String, date: String, content: String, deposit: Int, withdrawal: Int) {
+        self.userLoginId = userLoginId
         self.date = date
         self.content = content
         self.deposit = deposit

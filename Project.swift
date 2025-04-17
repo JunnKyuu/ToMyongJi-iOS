@@ -7,6 +7,7 @@ let project = Project(
         .remote(url: "https://github.com/Alamofire/Alamofire.git", requirement: .upToNextMajor(from: "5.0.0"))
     ],
     targets: [
+        // MARK: - App Target
         .target(
             name: "ToMyongJi-iOS",
             destinations: [.iPhone],
@@ -24,6 +25,8 @@ let project = Project(
                 .target(name: "UI")
             ]
         ),
+        
+        // MARK: - Framework Targets
         .target(
             name: "App",
             destinations: [.iPhone],
@@ -72,6 +75,8 @@ let project = Project(
                 "UI/Resources/Fonts/**"
             ]
         ),
+        
+        // MARK: - Test Targets
         .target(
             name: "CoreTests",
             destinations: [.iPhone],
