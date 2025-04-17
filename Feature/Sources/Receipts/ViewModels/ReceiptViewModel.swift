@@ -42,8 +42,8 @@ class ReceiptViewModel {
         return "전체 조회"
     }
     
+    public var authManager: AuthenticationManager = AuthenticationManager.shared
     private var networkingManager: AlamofireNetworkingManager = AlamofireNetworkingManager.shared
-    private var authManager: AuthenticationManager = AuthenticationManager.shared
     private var cancellables = Set<AnyCancellable>()
     
     // 영수증 조회
@@ -58,7 +58,7 @@ class ReceiptViewModel {
             guard let self = self else { return }
             self.isLoading = false
             switch completion {
-            case .failure(let error):
+            case .failure:
                 self.showAlert(title: "실패", message: "영수증 조회에 실패했습니다.")
             case .finished:
                 break
@@ -77,7 +77,7 @@ class ReceiptViewModel {
     func getStudentClubReceipts(userId: Int) {
         isLoading = true
         
-        networkingManager.run(ReceiptEndpoint.receiptForStudentClub(userId: authManager.userId ?? 0), type: ReceiptForStudentClubResponse.self)
+        networkingManager.run(ReceiptEndpoint.receiptForStudentClub(userId: userId), type: ReceiptForStudentClubResponse.self)
             .sink { [weak self] completion in
                 guard let self = self else { return }
                 self.isLoading = false
@@ -131,16 +131,17 @@ class ReceiptViewModel {
     }
     
     // 영수증 생성
-    func createReceipt(studentClubId: Int) {
+    func createReceipt() {
         isLoading = true
+        
         let request = CreateReceiptRequest(
-            userId: userLoginId,  // 로그인한 사용자의 ID
+            userLoginId: userLoginId,
             date: date,
             content: content,
             deposit: deposit,
             withdrawal: withdrawal
         )
-                
+        
         networkingManager.run(ReceiptEndpoint.createReceipt(request), type: CreateReceiptResponse.self)
             .sink { [weak self] completion in
                 guard let self = self else { return }
@@ -156,20 +157,15 @@ class ReceiptViewModel {
                 guard let self = self else { return }
                 self.isLoading = false
                 
-                if response.statusCode == 201 {
-                    // 영수증 목록 새로고침
-                    self.getReceipts(studentClubId: studentClubId)
-                    self.showAlert(title: "성공", message: "영수증 작성에 성공했습니다.")
-                    
-                    // 입력 필드 초기화
-                    self.userLoginId = ""
-                    self.date = ""
-                    self.content = ""
-                    self.deposit = 0
-                    self.withdrawal = 0
-                } else {
-                    self.showAlert(title: "실패", message: "영수증 작성에 실패했습니다.")
-                }
+                self.getStudentClubReceipts(userId: authManager.userId ?? 0)
+                self.showAlert(title: "성공", message: "영수증 작성에 성공했습니다.")
+                
+                // 입력 필드 초기화
+                self.userLoginId = ""
+                self.date = ""
+                self.content = ""
+                self.deposit = 0
+                self.withdrawal = 0
             }
             .store(in: &cancellables)
     }
@@ -196,12 +192,8 @@ class ReceiptViewModel {
             guard let self = self else { return }
             self.isLoading = false
             
-            if response.statusCode == 200 {
-                self.getReceipts(studentClubId: studentClubId)
-                self.showAlert(title: "성공", message: "영수증이 삭제되었습니다.")
-            } else {
-                self.showAlert(title: "실패", message: "영수증 삭제에 실패했습니다.")
-            }
+            self.getReceipts(studentClubId: studentClubId)
+            self.showAlert(title: "성공", message: "영수증 삭제에 성공했습니다.")
         }
         .store(in: &cancellables)
     }

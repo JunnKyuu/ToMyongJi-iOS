@@ -45,7 +45,7 @@ extension ReceiptEndpoint: Endpoint {
         switch self {
         case .createReceipt(let request):
             return [
-                "userId": request.userId,
+                "userId": request.userLoginId,
                 "date": request.date,
                 "content": request.content,
                 "deposit": request.deposit,

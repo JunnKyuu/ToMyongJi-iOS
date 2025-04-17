@@ -147,7 +147,7 @@ struct CreateReceiptView: View {
             .presentationCornerRadius(30)
         }
         .onAppear {
-            viewModel.getReceipts(studentClubId: club.studentClubId)
+            viewModel.getStudentClubReceipts(userId: authManager.userId ?? 0)
         }
         .alert(viewModel.alertTitle, isPresented: $viewModel.showAlert) {
             Button("확인") {
@@ -170,8 +170,8 @@ struct CreateReceiptView: View {
     }
     
     private func createReceipt() {
-        // decodedToken의 sub 값을 userId로 사용
-        guard let userId = authManager.userLoginId else {
+        // decodedToken의 sub 값을 userLoginId로 사용
+        guard let userLoginId = authManager.userLoginId else {
             viewModel.alertTitle = "오류"
             viewModel.alertMessage = "사용자 정보를 찾을 수 없습니다."
             viewModel.showAlert = true
@@ -194,14 +194,14 @@ struct CreateReceiptView: View {
         }
         
         // ViewModel에 데이터 설정
-        viewModel.userId = userId
+        viewModel.userLoginId = userLoginId
         viewModel.date = date
         viewModel.content = content
         viewModel.deposit = deposit
         viewModel.withdrawal = withdrawal
         
         // 영수증 생성 요청
-        viewModel.createReceipt(studentClubId: club.studentClubId)
+        viewModel.createReceipt()
     }
     
     private func resetForm() {
@@ -293,6 +293,6 @@ func ClubView(_ club: Club, balance: Int) -> some View {
     .padding(.horizontal, 15)
 }
 
-#Preview {
-    CreateReceiptView(club: Club(studentClubId: 1, studentClubName: "융합소프트웨어학부 학생회"))
-}
+//#Preview {
+//    CreateReceiptView(club: Club(studentClubId: 1, studentClubName: "융합소프트웨어학부 학생회"))
+//}
