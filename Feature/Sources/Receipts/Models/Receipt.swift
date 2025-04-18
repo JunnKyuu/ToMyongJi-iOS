@@ -11,9 +11,9 @@ import Foundation
 public struct ReceiptResponse: Codable {
     let statusCode: Int
     let statusMessage: String
-    let data: ReceiptData
+    let data: [Receipt]
     
-    public init(statusCode: Int, statusMessage: String, data: ReceiptData) {
+    public init(statusCode: Int, statusMessage: String, data: [Receipt]) {
         self.statusCode = statusCode
         self.statusMessage = statusMessage
         self.data = data

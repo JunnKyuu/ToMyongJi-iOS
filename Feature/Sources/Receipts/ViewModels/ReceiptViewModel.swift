@@ -67,7 +67,7 @@ class ReceiptViewModel {
             guard let self = self else { return }
             
             // 날짜 기준 내림차순 정렬 (최신순)
-            self.receipts = response.data.receiptList.sorted { $0.date > $1.date }
+            self.receipts = response.data.sorted { $0.date > $1.date }
             self.filterReceipts()
         }
         .store(in: &cancellables)
