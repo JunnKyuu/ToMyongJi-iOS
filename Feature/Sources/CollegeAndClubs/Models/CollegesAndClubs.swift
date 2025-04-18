@@ -22,8 +22,8 @@ struct College: Codable, Identifiable {
 }
 
 struct Club: Codable, Identifiable {
-    let studentClubId: Int
-    let studentClubName: String
+    var studentClubId: Int
+    var studentClubName: String
     
     var id: Int { studentClubId }
 }

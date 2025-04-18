@@ -7,13 +7,13 @@
 
 import Foundation
 
-// 영수증 조회
+// MARK: - 영수증 조회
 public struct ReceiptResponse: Codable {
     let statusCode: Int
     let statusMessage: String
-    let data: ReceiptData
+    let data: [Receipt]
     
-    public init(statusCode: Int, statusMessage: String, data: ReceiptData) {
+    public init(statusCode: Int, statusMessage: String, data: [Receipt]) {
         self.statusCode = statusCode
         self.statusMessage = statusMessage
         self.data = data
@@ -21,6 +21,27 @@ public struct ReceiptResponse: Codable {
 }
 
 public struct ReceiptData: Codable {
+    let receiptList: [Receipt]
+    
+    public init(receiptList: [Receipt]) {
+        self.receiptList = receiptList
+    }
+}
+
+// MARK: - 학생회를 위한 영수증 조회
+public struct ReceiptForStudentClubResponse: Codable {
+    let statusCode: Int
+    let statusMessage: String
+    let data: RecieptForStudentClubData
+    
+    public init(statusCode: Int, statusMessage: String, data: RecieptForStudentClubData) {
+        self.statusCode = statusCode
+        self.statusMessage = statusMessage
+        self.data = data
+    }
+}
+
+public struct RecieptForStudentClubData: Codable {
     let receiptList: [Receipt]
     let balance: Int
     
@@ -30,16 +51,17 @@ public struct ReceiptData: Codable {
     }
 }
 
-// 영수증 작성
+
+// MARK: - 영수증 작성
 public struct CreateReceiptRequest: Codable {
-    let userId: String
+    let userLoginId: String
     let date: String
     let content: String
     let deposit: Int
     let withdrawal: Int
     
-    public init(userId: String, date: String, content: String, deposit: Int, withdrawal: Int) {
-        self.userId = userId
+    public init(userLoginId: String, date: String, content: String, deposit: Int, withdrawal: Int) {
+        self.userLoginId = userLoginId
         self.date = date
         self.content = content
         self.deposit = deposit
@@ -75,7 +97,7 @@ public struct SingleReceiptData: Codable {
     }
 }
 
-// 영수증
+// MARK: - 영수증
 public struct Receipt: Identifiable, Codable {
     public let id: UUID = UUID()
     let receiptId: Int
@@ -97,7 +119,7 @@ public struct Receipt: Identifiable, Codable {
     }
 }
 
-// 영수증 삭제
+// MARK: - 영수증 삭제
 public struct DeleteReceiptResponse: Codable {
     let statusCode: Int
     let statusMessage: String

@@ -12,6 +12,7 @@ import Core
 
 public enum ReceiptEndpoint {
     case receipt(studentClubId: Int)
+    case receiptForStudentClub(userId: Int)
     case createReceipt(CreateReceiptRequest)
     case deleteReceipt(receiptId: Int)
 }
@@ -20,7 +21,9 @@ extension ReceiptEndpoint: Endpoint {
     public var path: String {
         switch self {
         case .receipt(let studentClubId):
-            return "/api/receipt/club/\(studentClubId)"
+            return "/api/receipt/club/\(studentClubId)/student"
+        case .receiptForStudentClub(let userId):
+            return "/api/receipt/club/\(userId)"
         case .createReceipt:
             return "/api/receipt"
         case .deleteReceipt(let receiptId):
@@ -42,7 +45,7 @@ extension ReceiptEndpoint: Endpoint {
         switch self {
         case .createReceipt(let request):
             return [
-                "userId": request.userId,
+                "userId": request.userLoginId,
                 "date": request.date,
                 "content": request.content,
                 "deposit": request.deposit,
@@ -59,7 +62,7 @@ extension ReceiptEndpoint: Endpoint {
     
     public var method: HTTPMethod {
         switch self {
-        case .receipt:
+        case .receipt, .receiptForStudentClub:
             return .get
         case .createReceipt:
             return .post
@@ -70,12 +73,10 @@ extension ReceiptEndpoint: Endpoint {
     
     public var encoding: ParameterEncoding {
         switch self {
-        case .receipt:
+        case .receipt, .receiptForStudentClub, .deleteReceipt:
             return URLEncoding.default
         case .createReceipt:
             return JSONEncoding.default
-        case .deleteReceipt:
-            return URLEncoding.default
         }
     }
 }
