@@ -96,7 +96,6 @@ let project = Project(
             infoPlist: .extendingDefault(with: [:]),
             sources: ["Feature/Tests/**"],
             dependencies: [
-                .target(name: "Core"),
                 .target(name: "Feature")
             ]
         )

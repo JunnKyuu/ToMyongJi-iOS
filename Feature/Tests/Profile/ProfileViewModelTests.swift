@@ -8,7 +8,6 @@
 
 import XCTest
 @testable import Feature
-@testable import Core
 
 final class ProfileViewModelTests: XCTestCase {
     var profileSut: ProfileViewModel!
@@ -39,7 +38,7 @@ final class ProfileViewModelTests: XCTestCase {
         try super.tearDownWithError()
         profileSut = nil
         loginSut = nil
-        AuthenticationManager.shared.clearAuthentication()
+        loginSut.authManager.clearAuthentication()
     }
     
     // MARK: - 유저 정보 조회 테스트
