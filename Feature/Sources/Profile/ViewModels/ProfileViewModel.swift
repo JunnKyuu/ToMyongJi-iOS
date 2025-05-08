@@ -26,8 +26,8 @@ public class ProfileViewModel {
     var alertTitle: String = ""
     var alertMessage: String = ""
     
+    public let authManager = AuthenticationManager.shared
     private var cancellables = Set<AnyCancellable>()
-    private let authManager = AuthenticationManager.shared
     private let networkingManager = AlamofireNetworkingManager.shared
     
     init() {
@@ -37,6 +37,7 @@ public class ProfileViewModel {
         }
     }
     
+    // 유저 자격 한글로 매핑
     private func mapRole(_ role: String) -> String {
         switch role {
         case "STU":
@@ -48,22 +49,20 @@ public class ProfileViewModel {
         }
     }
     
+    // 유저 정보 조회
     func fetchUserProfile() {
-        guard !isLoading else { return }
+        isLoading = true
         guard let userId = authManager.userId else {
             self.errorMessage = "사용자 ID를 찾을 수 없습니다"
             return
         }
-        
-        isLoading = true
-        print("사용자 ID: \(userId)의 프로필 정보를 가져오는 중")
         
         networkingManager.run(
             ProfileEndpoint.myProfile(id: userId),
             type: ProfileResponse.self
         )
         .flatMap { [weak self] response -> AnyPublisher<ClubResponse, APIError> in
-            print("프로필 정보 수신 완료: \(response)")
+            self?.isLoading = false
             self?.name = response.data.name
             self?.studentNum = response.data.studentNum
             self?.collegeName = response.data.college ?? "소속 없음"
@@ -85,83 +84,99 @@ public class ProfileViewModel {
             .eraseToAnyPublisher() ?? Empty().eraseToAnyPublisher()
         }
         .sink { [weak self] completion in
-            self?.isLoading = false
-            if case .failure(let error) = completion {
-                self?.errorMessage = error.localizedDescription
-                print("프로필 정보 가져오기 실패: \(error)")
+            guard let self = self else { return }
+            self.isLoading = false
+            
+            switch completion {
+            case .failure:
+                self.showAlert(title: "실패", message: "유저 정보를 조회하는데 실패했습니다.")
+            case .finished:
+                break
             }
         } receiveValue: { _ in }
-        .store(in: &cancellables)
+            .store(in: &cancellables)
     }
     
+    // 소속 부원 조회
     func fetchClubMembers() {
-        guard let userId = authManager.userId else {
-            print("소속부원 목록 가져오기 실패: 사용자 ID를 찾을 수 없음")
-            return
-        }
+        isLoading = true
+        guard let userId = authManager.userId else { return }
         
         networkingManager.run(
             ProfileEndpoint.getMembers(id: userId),
             type: GetClubMembersResponse.self
         )
         .sink { completion in
-            if case .failure(let error) = completion {
-                print("소속부원 목록 가져오기 실패: \(error)")
+            self.isLoading = false
+            switch completion {
+            case .failure:
+                self.showAlert(title: "오류", message: "소속부원 목록을 가져오는데 실패했습니다.")
+            case .finished:
+                break
             }
+            
         } receiveValue: { [weak self] response in
-            self?.clubMembers = response.data.map { data in
+            guard let self = self else { return }
+            self.clubMembers = response.data.map { data in
                 ClubMember(memberId: data.memberId, studentNum: data.studentNum, name: data.name)
             }
-            print("소속부원 목록 가져오기 성공")
         }
         .store(in: &cancellables)
     }
     
+    // 소속 부원 추가
     func addMember(studentNum: String, name: String) {
+        isLoading = true
         networkingManager.run(
             ProfileEndpoint.addMember(studentNum: studentNum, name: name),
             type: AddClubMemberResponse.self
         )
         .sink { completion in
-            if case .failure(let error) = completion {
-                self.alertTitle = "추가 실패"
-                self.alertMessage = "소속부원 추가에 실패했습니다: \(error.localizedDescription)"
-                self.showAlert = true
-                print("소속부원 추가 실패: \(error)")
+            self.isLoading = false
+            switch completion {
+            case .failure:
+                self.showAlert(title: "실패", message: "소속부원 추가에 실패했습니다.")
+            case .finished:
+                break
             }
         } receiveValue: { [weak self] response in
+            guard let self = self else { return }
             if response.statusCode == 201 {
-                self?.fetchClubMembers()
-                self?.alertTitle = "추가 성공"
-                self?.alertMessage = "소속부원이 추가되었습니다."
-                self?.showAlert = true
-                print("소속부원 추가 성공")
+                self.fetchClubMembers()
+                self.showAlert(title: "성공", message: "소속부원 추가에 성공했습니다.")
             }
         }
         .store(in: &cancellables)
     }
     
+    // 소속 부원 삭제
     func deleteMember(studentNum: String) {
+        isLoading = true
         networkingManager.run(
             ProfileEndpoint.deleteMember(studentNum: studentNum),
             type: DeleteClubMemberResponse.self
         )
         .sink { completion in
-            if case .failure(let error) = completion {
-                self.alertTitle = "삭제 실패"
-                self.alertMessage = "소속부원 삭제에 실패했습니다: \(error.localizedDescription)"
-                self.showAlert = true
-                print("소속부원 삭제 실패: \(error)")
+            self.isLoading = false
+            switch completion {
+            case .failure:
+                self.showAlert(title: "실패", message: "소속부원 삭제에 실패했습니다.")
+            case .finished:
+                break
             }
         } receiveValue: { [weak self] response in
+            guard let self = self else { return }
             if response.statusCode == 200 {
-                self?.clubMembers.removeAll { $0.studentNum == studentNum }
-                self?.alertTitle = "삭제 성공"
-                self?.alertMessage = "소속부원이 삭제되었습니다."
-                self?.showAlert = true
-                print("소속부원 삭제 성공")
+                self.clubMembers.removeAll { $0.studentNum == studentNum }
+                self.showAlert(title: "성공", message: "소속부원이 정상적으로 삭제되었습니다.")
             }
         }
         .store(in: &cancellables)
+    }
+    
+    private func showAlert(title: String, message: String) {
+        alertTitle = title
+        alertMessage = message
+        showAlert = true
     }
 }

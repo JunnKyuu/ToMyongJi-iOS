@@ -21,12 +21,9 @@
 // swiftlint:disable identifier_name line_length nesting type_body_length type_name
 public enum UIAsset {
   public static let accentColor = UIColors(name: "AccentColor")
-  public static let createReceiptScreenshot = UIImages(name: "create-receipt-screenshot")
   public static let darkNavy = UIColors(name: "darkNavy")
   public static let deposit = UIColors(name: "deposit")
   public static let logo = UIImages(name: "logo")
-  public static let profileScreenshot = UIImages(name: "profile-screenshot")
-  public static let receiptListScreenshot = UIImages(name: "receipt-list-screenshot")
   public static let softBlue = UIColors(name: "softBlue")
   public static let withdrawal = UIColors(name: "withdrawal")
 }

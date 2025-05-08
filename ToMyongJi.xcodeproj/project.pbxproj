@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 55;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -44,6 +44,7 @@
 		439B1E0DDAC7DDCFD4661D45 /* MonthPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD6502D342639F99F469DFFD /* MonthPickerView.swift */; };
 		4717D3205BEBECFF15468204 /* SignUpAgreeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 131942CF256661618987D380 /* SignUpAgreeView.swift */; };
 		4768A3DC7C1892F0FA9B49CF /* GmarketSansBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 7F4EE414B972F985522AAC3F /* GmarketSansBold.otf */; };
+		4F96D765313209DD3D524270 /* Core.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E6E6FA698BFDCA48CBC1A58 /* Core.framework */; };
 		4F979A0F9C7493F874BBBA2F /* LoginViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432A6A47ADFAEE9A3AB423B9 /* LoginViewModelTests.swift */; };
 		505C4B116508D151AF3961B0 /* SignUpViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E6902EC00D9051FA198300E /* SignUpViewModelTests.swift */; };
 		50AD9E71978D1F56DB597DF9 /* InputEmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56B5171995BA262DFC700D09 /* InputEmailView.swift */; };
@@ -83,6 +84,7 @@
 		A8FFD092A2FE7D3EDECF345B /* InputIDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E546E5157879AFE739DA333 /* InputIDView.swift */; };
 		AC76142CA39EADAEA1CC6C91 /* TuistBundle+ToMyongJiIOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19EB8B72124B9B11439FE3FB /* TuistBundle+ToMyongJiIOS.swift */; };
 		B1A81BC8B44860D29B1EFC4B /* GradientButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9496419038EE7CD9CF6E9F4 /* GradientButton.swift */; };
+		B23C9BF8301723D980424E83 /* ProfileViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CECA24A68B0ADDB963522FA /* ProfileViewModelTests.swift */; };
 		B6D2189864C9172D31536E66 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 9EA400C9487153F5D15F0843 /* Alamofire */; };
 		B90A7255CC05B1147500AA73 /* ProfileMyInfoRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABE866F14C89078EF98DBE63 /* ProfileMyInfoRow.swift */; };
 		BFA320E678B0CB02C556B15D /* AgreementDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91F90D7DF4BAC24F0FE20E25 /* AgreementDetailView.swift */; };
@@ -124,6 +126,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = DCFC6BD53C5504F6AF0FDBDD;
 			remoteInfo = UI;
+		};
+		0B2B3A97FD723658D7A6BC31 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9DE9128F1973497FDC82560F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8BFBC7B529ACBD5B074DBED3;
+			remoteInfo = Core;
 		};
 		0F86034092DCB4C7B801293B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -287,6 +296,7 @@
 		2789C497FD47EE83841F5912 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		29452F0FF0CF6C327447CFB0 /* InputPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputPasswordView.swift; sourceTree = "<group>"; };
 		2B14476FFBA7E4A7E3574445 /* AdminPresidentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminPresidentView.swift; sourceTree = "<group>"; };
+		2CECA24A68B0ADDB963522FA /* ProfileViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModelTests.swift; sourceTree = "<group>"; };
 		31BC02550B7EE4F52E59EB67 /* AdminViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminViewModel.swift; sourceTree = "<group>"; };
 		323C6862B40AB698B53CB061 /* CreateReceiptFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateReceiptFormView.swift; sourceTree = "<group>"; };
 		32D2E0AB107A9C0689AA58B0 /* AddClubMemberRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddClubMemberRow.swift; sourceTree = "<group>"; };
@@ -382,6 +392,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F96D765313209DD3D524270 /* Core.framework in Frameworks */,
 				78BCFD39761E82405618839B /* Feature.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -580,6 +591,7 @@
 			children = (
 				53B204D93E007CC627C19F1D /* FindID */,
 				9679F70AFD6E1ECFC50B0049 /* Login */,
+				522882930965DC0E79DC8CF1 /* Profile */,
 				6A5782EF9A2595DD394E4812 /* Receipts */,
 				CD3584CFF033BE6A180A3804 /* SignUp */,
 			);
@@ -705,6 +717,14 @@
 				4B5E06D46FC963AEDBFB9B20 /* Views */,
 			);
 			path = Admin;
+			sourceTree = "<group>";
+		};
+		522882930965DC0E79DC8CF1 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				2CECA24A68B0ADDB963522FA /* ProfileViewModelTests.swift */,
+			);
+			path = Profile;
 			sourceTree = "<group>";
 		};
 		53B204D93E007CC627C19F1D /* FindID */ = {
@@ -1235,6 +1255,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				4E4D993D9CB5E09B99C21EE4 /* PBXTargetDependency */,
 				FE229448DA43E935D6573061 /* PBXTargetDependency */,
 			);
 			name = FeatureTests;
@@ -1329,6 +1350,8 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				ORGANIZATIONNAME = ToMyongJi;
+				TargetAttributes = {
+				};
 			};
 			buildConfigurationList = D83261D0E22D58AD5DBEE3E0 /* Build configuration list for PBXProject "ToMyongJi" */;
 			compatibilityVersion = "Xcode 14.0";
@@ -1448,6 +1471,7 @@
 			files = (
 				D962BBE272EFF7572F2F4DE7 /* FindIDViewModelTests.swift in Sources */,
 				4F979A0F9C7493F874BBBA2F /* LoginViewModelTests.swift in Sources */,
+				B23C9BF8301723D980424E83 /* ProfileViewModelTests.swift in Sources */,
 				090BC95C2E939D90B1235265 /* ReceiptViewModelTests.swift in Sources */,
 				505C4B116508D151AF3961B0 /* SignUpViewModelTests.swift in Sources */,
 			);
@@ -1556,6 +1580,12 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		4E4D993D9CB5E09B99C21EE4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Core;
+			target = 8BFBC7B529ACBD5B074DBED3 /* Core */;
+			targetProxy = 0B2B3A97FD723658D7A6BC31 /* PBXContainerItemProxy */;
+		};
 		6226B1EE91370DA7FD0C5943 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = UI;
@@ -1635,7 +1665,10 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+					"$(inherited)",
+					DEBUG,
+				);
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -1648,15 +1681,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 7;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = App/Resources/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tomyongji.ios;
 				PRODUCT_NAME = ToMyongJi_iOS;
 				SDKROOT = iphoneos;
@@ -1675,22 +1705,22 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 7;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = App/Resources/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tomyongji.ios;
 				PRODUCT_NAME = ToMyongJi_iOS;
 				SDKROOT = iphoneos;
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+					"$(inherited)",
+					DEBUG,
+				);
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -1744,7 +1774,10 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+					"$(inherited)",
+					DEBUG,
+				);
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -1866,7 +1899,10 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+					"$(inherited)",
+					DEBUG,
+				);
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -1920,7 +1956,10 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+					"$(inherited)",
+					DEBUG,
+				);
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -1953,7 +1992,10 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+					"$(inherited)",
+					DEBUG,
+				);
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -2039,7 +2081,10 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+					"$(inherited)",
+					DEBUG,
+				);
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
