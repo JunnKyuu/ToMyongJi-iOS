@@ -44,7 +44,6 @@
 		439B1E0DDAC7DDCFD4661D45 /* MonthPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD6502D342639F99F469DFFD /* MonthPickerView.swift */; };
 		4717D3205BEBECFF15468204 /* SignUpAgreeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 131942CF256661618987D380 /* SignUpAgreeView.swift */; };
 		4768A3DC7C1892F0FA9B49CF /* GmarketSansBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 7F4EE414B972F985522AAC3F /* GmarketSansBold.otf */; };
-		4F96D765313209DD3D524270 /* Core.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E6E6FA698BFDCA48CBC1A58 /* Core.framework */; };
 		4F979A0F9C7493F874BBBA2F /* LoginViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432A6A47ADFAEE9A3AB423B9 /* LoginViewModelTests.swift */; };
 		505C4B116508D151AF3961B0 /* SignUpViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E6902EC00D9051FA198300E /* SignUpViewModelTests.swift */; };
 		50AD9E71978D1F56DB597DF9 /* InputEmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56B5171995BA262DFC700D09 /* InputEmailView.swift */; };
@@ -126,13 +125,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = DCFC6BD53C5504F6AF0FDBDD;
 			remoteInfo = UI;
-		};
-		0B2B3A97FD723658D7A6BC31 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9DE9128F1973497FDC82560F /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 8BFBC7B529ACBD5B074DBED3;
-			remoteInfo = Core;
 		};
 		0F86034092DCB4C7B801293B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -392,7 +384,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4F96D765313209DD3D524270 /* Core.framework in Frameworks */,
 				78BCFD39761E82405618839B /* Feature.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1255,7 +1246,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				4E4D993D9CB5E09B99C21EE4 /* PBXTargetDependency */,
 				FE229448DA43E935D6573061 /* PBXTargetDependency */,
 			);
 			name = FeatureTests;
@@ -1580,12 +1570,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		4E4D993D9CB5E09B99C21EE4 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = Core;
-			target = 8BFBC7B529ACBD5B074DBED3 /* Core */;
-			targetProxy = 0B2B3A97FD723658D7A6BC31 /* PBXContainerItemProxy */;
-		};
 		6226B1EE91370DA7FD0C5943 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = UI;
