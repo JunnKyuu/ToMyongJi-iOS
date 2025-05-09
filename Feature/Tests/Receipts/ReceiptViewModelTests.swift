@@ -205,7 +205,7 @@ final class ReceiptViewModelTests: XCTestCase {
     
     func test_WhenDeleteReceiptSuccess_ThenGetDeletedReceipt() {
         // given
-        let testReceiptId: Int = 322
+        let testReceiptId: Int = 325
         let testStudentClubId: Int = 3
         let expectation = XCTestExpectation(description: "영수증 삭제에 성공했습니다.")
         

@@ -36,9 +36,10 @@ final class ProfileViewModelTests: XCTestCase {
     
     override func tearDownWithError() throws {
         try super.tearDownWithError()
+        loginSut.authManager.clearAuthentication()
+        
         profileSut = nil
         loginSut = nil
-        loginSut.authManager.clearAuthentication()
     }
     
     // MARK: - 유저 정보 조회 테스트
@@ -49,9 +50,7 @@ final class ProfileViewModelTests: XCTestCase {
         profileSut.fetchUserProfile()
         
         // then
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self] in
-            guard let self = self else { return }
-            
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
             // 1. 로딩 상태 확인
             XCTAssertFalse(self.profileSut.isLoading)
             
