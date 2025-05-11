@@ -45,6 +45,9 @@ class AdminViewModel {
     var alertTitle: String = ""
     var alertMessage: String = ""
     
+    // 로딩 상태
+    var isLoading: Bool = false
+    
     private var cancellables = Set<AnyCancellable>()
     private var networkingManager = AlamofireNetworkingManager.shared
     
@@ -57,13 +60,21 @@ class AdminViewModel {
     
     // 단과대학 및 소속 정보 가져오기
     func fetchCollegesAndClubs() {
+        isLoading = true
         networkingManager.run(AdminEndpoint.getCollegesAndClubs, type: CollegesAndClubsResponse.self)
             .sink { [weak self] completion in
-                if case .failure(let error) = completion {
-                    self?.showAlert(title: "오류", message: error.localizedDescription)
+                guard let self = self else {return}
+                self.isLoading = false
+                switch completion {
+                case .failure:
+                    self.showAlert(title: "실패", message: "단과대학 및 소속 정보를 가져오는데 실패했습니다.")
+                case .finished:
+                    break
                 }
             } receiveValue: { [weak self] response in
-                self?.colleges = response.data
+                guard let self = self else {return}
+                self.isLoading = false
+                self.colleges = response.data
             }
             .store(in: &cancellables)
     }
@@ -71,53 +82,77 @@ class AdminViewModel {
     /// 회장
     // 소속 회장 정보 조회
     func fetchPresident() {
+        isLoading = true
         networkingManager.run(AdminEndpoint.getPresident(clubId: selectedClubId), type: GetPresidentResponse.self)
             .sink { [weak self] completion in
-                if case .failure(let error) = completion {
-                    print("Fetch President Error: \(error)")
-                    self?.currentPresidentStudentNum = ""
-                    self?.currentPresidentName = ""
+                guard let self = self else {return}
+                self.isLoading = false
+                switch completion {
+                case .failure:
+                    self.showAlert(title: "실패", message: "소속 회장 정보를 조회하는데 실패했습니다.")
+                    self.currentPresidentStudentNum = ""
+                    self.currentPresidentName = ""
+                case .finished:
+                    break
                 }
             } receiveValue: { [weak self] response in
-                self?.currentPresidentStudentNum = response.data.studentNum
-                self?.currentPresidentName = response.data.name
+                guard let self = self else {return}
+                self.isLoading = false
+                self.currentPresidentStudentNum = response.data.studentNum
+                self.currentPresidentName = response.data.name
             }
             .store(in: &cancellables)
     }
     
     // 소속 회장 정보 추가
     func addPresident() {
+        isLoading = true
         networkingManager.run(AdminEndpoint.addPresident(clubId: selectedClubId, studentNum: newPresidentStudentNum, name: newPresidentName), type: AddPresidentResponse.self)
             .sink { [weak self] completion in
-                if case .failure(let error) = completion {
-                    self?.showAlert(title: "실패", message: "회장을 추가하는데 실패했습니다.")
+                guard let self = self else {return}
+                self.isLoading = false
+                switch completion {
+                case .failure:
+                    self.showAlert(title: "실패", message: "소속 회장을 추가하는데 실패했습니다.")
+                case .finished:
+                    break
                 }
             } receiveValue: { [weak self] response in
-                self?.currentPresidentStudentNum = response.data.studentNum
-                self?.currentPresidentName = response.data.name
-                self?.newPresidentStudentNum = ""
-                self?.newPresidentName = ""
-                self?.fetchPresident()
-                self?.showAlert(title: "성공", message: "회장이 정상적으로 추가되었습니다.")
+                guard let self = self else {return}
+                self.isLoading = false
+                self.currentPresidentStudentNum = response.data.studentNum
+                self.currentPresidentName = response.data.name
+                self.newPresidentStudentNum = ""
+                self.newPresidentName = ""
+                self.fetchPresident()
+                self.showAlert(title: "성공", message: "소속 회장이 정상적으로 추가되었습니다.")
             }
             .store(in: &cancellables)
     }
     
     // 소속 회장 정보 변경
     func updatePresident() {
+        isLoading = true
         networkingManager.run(AdminEndpoint.updatePresident(clubId: selectedClubId, studentNum: newPresidentStudentNum, name: newPresidentName), type: UpdatePresidentResponse.self)
             .sink { [weak self] completion in
-                if case .failure(let error) = completion {
-                    self?.showAlert(title: "실패", message: "회원가입이 되어있지 않은 회장은 변경할 수 없습니다.")
+                guard let self = self else {return}
+                self.isLoading = false
+                switch completion {
+                case .failure:
+                    self.showAlert(title: "실패", message: "회원가입이 되어있지 않은 회장은 변경할 수 없습니다.")
+                case .finished:
+                    break
                 }
             } receiveValue: { [weak self] response in
-                self?.currentPresidentStudentNum = response.data.studentNum
-                self?.currentPresidentName = response.data.name
-                self?.newPresidentStudentNum = ""
-                self?.newPresidentName = ""
-                self?.fetchPresident()
-                self?.fetchMember()
-                self?.showAlert(title: "성공", message: "회장이 정상적으로 변경되었습니다.")
+                guard let self = self else {return}
+                self.isLoading = false
+                self.currentPresidentStudentNum = response.data.studentNum
+                self.currentPresidentName = response.data.name
+                self.newPresidentStudentNum = ""
+                self.newPresidentName = ""
+                self.fetchPresident()
+                self.fetchMember()
+                self.showAlert(title: "성공", message: "소속 회장이 정상적으로 변경되었습니다.")
             }
             .store(in: &cancellables)
     }
@@ -125,54 +160,68 @@ class AdminViewModel {
     /// 소속부원
     // 소속부원 정보 조회
     func fetchMember() {
-        print("Fetching members for clubId: \(selectedClubId)")
+        isLoading = true
         networkingManager.run(AdminEndpoint.getMember(clubId: selectedClubId), type: GetMemberResponse.self)
             .sink { [weak self] completion in
-                if case .failure(let error) = completion {
-                    print("Fetch Members Error: \(error)")
-                    print("Error Details: \(String(describing: error))")
-                    self?.members = []
+                guard let self = self else {return}
+                self.isLoading = false
+                switch completion {
+                case .failure:
+                    self.showAlert(title: "실패", message: "소속부원 정보를 조회하는데 실패했습니다.")
+                    self.members = []
+                case .finished:
+                    break
                 }
             } receiveValue: { [weak self] response in
-                print("Received Member Response - statusCode: \(response.statusCode), message: \(response.statusMessage)")
-                print("Members count: \(response.data.count)")
-                self?.members = response.data
+                guard let self = self else {return}
+                self.isLoading = false
+                self.members = response.data
             }
             .store(in: &cancellables)
     }
     
     // 소속부원 정보 추가
     func addMember() {
-        print("Adding member - studentNum: \(newMemberStudentNum), name: \(newMemberName)")
+        isLoading = true
         networkingManager.run(AdminEndpoint.addMember(clubId: selectedClubId, studentNum: newMemberStudentNum, name: newMemberName), type: AddMemberResponse.self)
             .sink { [weak self] completion in
-                if case .failure(let error) = completion {
-                    print("Add Member Error: \(error)")
-                    self?.showAlert(title: "실패", message: "소속부원을 추가하는데 실패했습니다.")
+                guard let self = self else {return}
+                self.isLoading = false
+                switch completion {
+                case .failure:
+                    self.showAlert(title: "실패", message: "소속부원을 추가하는데 실패했습니다.")
+                case .finished:
+                    break
                 }
             } receiveValue: { [weak self] response in
-                print("Add Member Success - statusCode: \(response.statusCode), message: \(response.statusMessage)")
-                self?.newMemberStudentNum = ""
-                self?.newMemberName = ""
-                self?.fetchMember()
-                self?.showAlert(title: "성공", message: "소속부원이 정상적으로 추가되었습니다.")
+                guard let self = self else {return}
+                self.isLoading = false
+                self.newMemberStudentNum = ""
+                self.newMemberName = ""
+                self.fetchMember()
+                self.showAlert(title: "성공", message: "소속부원이 정상적으로 추가되었습니다.")
             }
             .store(in: &cancellables)
     }
     
     // 소속부원 삭제
     func deleteMember(memberId: Int) {
-        print("Deleting member with ID: \(memberId)")
+        isLoading = true
         networkingManager.run(AdminEndpoint.deleteMember(memberId: memberId), type: DeleteMemberResponse.self)
             .sink { [weak self] completion in
-                if case .failure(let error) = completion {
-                    print("Delete Member Error: \(error)")
-                    self?.showAlert(title: "실패", message: "소속부원 삭제에 실패했습니다.")
+                guard let self = self else {return}
+                self.isLoading = false
+                switch completion {
+                case .failure:
+                    self.showAlert(title: "실패", message: "소속부원 삭제에 실패했습니다.")
+                case .finished:
+                    break
                 }
             } receiveValue: { [weak self] response in
-                print("Delete Member Success - statusCode: \(response.statusCode), message: \(response.statusMessage)")
-                self?.fetchMember()
-                self?.showAlert(title: "성공", message: "소속부원이 정상적으로 삭제되었습니다.")
+                guard let self = self else {return}
+                self.isLoading = false
+                self.fetchMember()
+                self.showAlert(title: "성공", message: "소속부원이 정상적으로 삭제되었습니다.")
             }
             .store(in: &cancellables)
     }
