@@ -20,14 +20,14 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.2'
-          bundler-cache: true
+          ruby-version: '3.1'
       - name: Install tuist
         run: brew install tuist
       - name: Tuist Generate
         run: tuist generate
       - name: Install dependencies
         run: |
+          gem install bundler:2.4.22
           bundle install
           bundle exec pod install
       - name: Create AuthKey.p8
@@ -49,14 +49,14 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.2'
-          bundler-cache: true
+          ruby-version: '3.1'
       - name: Install tuist
         run: brew install tuist
       - name: Tuist Generate
         run: tuist generate
       - name: Install dependencies
         run: |
+          gem install bundler:2.4.22
           bundle install
           bundle exec pod install
       - name: Create AuthKey.p8

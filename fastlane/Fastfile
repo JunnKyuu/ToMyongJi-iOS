@@ -75,6 +75,3 @@ platform :ios do
     )
   end
 end
-
-# CI/CD 환경에서는 반드시 워크플로우에서 tuist generate를 먼저 실행하세요!
-# 인증서 저장소, MATCH_PASSWORD 등은 GitHub Secrets로 관리하세요.
