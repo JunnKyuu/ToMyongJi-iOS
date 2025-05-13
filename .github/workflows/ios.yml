@@ -20,7 +20,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.1'
+          ruby-version: '3.0'
       - name: Install tuist
         run: brew install tuist
       - name: Tuist Generate
@@ -50,7 +50,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.1'
+          ruby-version: '3.0'
       - name: Install tuist
         run: brew install tuist
       - name: Tuist Generate
