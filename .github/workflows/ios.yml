@@ -20,16 +20,15 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.0'
+          ruby-version: '2.3.0'
       - name: Install tuist
         run: brew install tuist
       - name: Tuist Generate
         run: tuist generate
       - name: Install dependencies
         run: |
-          gem uninstall bundler -v 1.17.2 -a -x || true
-          gem install bundler:2.4.22
-          bundle _2.4.22_ install
+          gem install bundler:1.17.3
+          bundle _1.17.3_ install
           pod install
       - name: Create AuthKey.p8
         run: echo "${{ secrets.APP_STORE_CONNECT_API_KEY_CONTENT }}" > ./AuthKey.p8
@@ -50,16 +49,15 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.0'
+          ruby-version: '2.3.0'
       - name: Install tuist
         run: brew install tuist
       - name: Tuist Generate
         run: tuist generate
       - name: Install dependencies
         run: |
-          gem uninstall bundler -v 1.17.2 -a -x || true
-          gem install bundler:2.4.22
-          bundle _2.4.22_ install
+          gem install bundler:1.17.3
+          bundle _1.17.3_ install
           pod install
       - name: Create AuthKey.p8
         run: echo "${{ secrets.APP_STORE_CONNECT_API_KEY_CONTENT }}" > ./AuthKey.p8
