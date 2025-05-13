@@ -27,9 +27,7 @@ jobs:
       - name: Tuist Generate
         run: tuist generate
       - name: Install dependencies
-        run: |
-          bundle install
-          pod install
+        run: bundle install
       - name: Create AuthKey.p8
         run: echo "${{ secrets.APP_STORE_CONNECT_API_KEY_CONTENT }}" > ./AuthKey.p8
       - name: Deploy to TestFlight
@@ -56,9 +54,7 @@ jobs:
       - name: Tuist Generate
         run: tuist generate
       - name: Install dependencies
-        run: |
-          bundle install
-          pod install
+        run: bundle install
       - name: Create AuthKey.p8
         run: echo "${{ secrets.APP_STORE_CONNECT_API_KEY_CONTENT }}" > ./AuthKey.p8
       - name: Deploy to App Store
