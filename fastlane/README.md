@@ -37,7 +37,7 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 [bundle exec] fastlane ios sync_certificates
 ```
 
-Sync certificates and provisioning profiles
+인증서와 프로비저닝 프로파일 동기화
 
 ### ios beta
 
@@ -45,7 +45,7 @@ Sync certificates and provisioning profiles
 [bundle exec] fastlane ios beta
 ```
 
-Deploy a new version to TestFlight
+TestFlight에 새 버전 배포
 
 ### ios release
 
@@ -53,7 +53,7 @@ Deploy a new version to TestFlight
 [bundle exec] fastlane ios release
 ```
 
-Deploy a new version to the App Store
+App Store에 새 버전 배포
 
 ----
 
