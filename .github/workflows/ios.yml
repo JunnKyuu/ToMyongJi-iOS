@@ -9,6 +9,7 @@ on:
     branches:
       - develop
       - main
+  workflow_dispatch: # 수동 실행을 위한 이벤트 추가
 
 jobs:
   beta:
@@ -35,6 +36,8 @@ jobs:
           APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
           APP_STORE_CONNECT_API_KEY_CONTENT: ${{ secrets.APP_STORE_CONNECT_API_KEY_CONTENT }}
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+          FASTLANE_HIDE_TIMESTAMP: true
+          FASTLANE_SKIP_UPDATE_CHECK: true
         run: bundle exec fastlane beta
 
   release:
@@ -57,9 +60,10 @@ jobs:
       - name: Deploy to App Store
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-          MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
           APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
           APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
           APP_STORE_CONNECT_API_KEY_CONTENT: ${{ secrets.APP_STORE_CONNECT_API_KEY_CONTENT }}
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+          FASTLANE_HIDE_TIMESTAMP: true
+          FASTLANE_SKIP_UPDATE_CHECK: true
         run: bundle exec fastlane release

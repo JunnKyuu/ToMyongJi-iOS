@@ -39,14 +39,15 @@ platform :ios do
       default_keychain: true,
       unlock: true,
       timeout: 3600,
-      lock_when_sleeps: false
+      lock_when_sleeps: false,
+      add_to_search_list: true
     )
 
-    set_keychain_settings(
-      timeout: 3600,
-      lock_when_sleeps: false,
-      keychain_path: keychain_name
-    )
+    # 키체인 잠금 해제
+    sh("security unlock-keychain -p #{keychain_password} #{keychain_name}")
+
+    # 키체인 설정
+    sh("security set-keychain-settings -t 3600 -u #{keychain_name}")
 
     # 인증 로그 (디버깅용)
     sh("security list-keychains")
@@ -65,7 +66,7 @@ platform :ios do
       app_identifier: "com.tomyongji.ios",
       keychain_name: keychain_name,
       keychain_password: keychain_password,
-      readonly: false,
+      readonly: true,
       force: true
     )
   end
@@ -97,7 +98,7 @@ platform :ios do
         signingStyle: "manual",
         signingCertificate: "Apple Distribution"
       },
-      xcargs: "-skipPackageUpdates -skipPackagePluginValidation -skipMacroValidation -skip-testing EXCLUDED_SOURCE_FILE_NAMES='*Tests.*' CODE_SIGN_IDENTITY='Apple Distribution' DEVELOPMENT_TEAM='FN67GXC5GH'"
+      xcargs: "-skipPackageUpdates -skipPackagePluginValidation -skipMacroValidation -skip-testing EXCLUDED_SOURCE_FILE_NAMES='*Tests.*' CODE_SIGN_IDENTITY='Apple Distribution' DEVELOPMENT_TEAM='FN67GXC5GH' CODE_SIGN_STYLE='Manual'"
     )
     upload_to_testflight(
       skip_waiting_for_build_processing: true
@@ -119,7 +120,7 @@ platform :ios do
         signingStyle: "manual",
         signingCertificate: "Apple Distribution"
       },
-      xcargs: "-skipPackageUpdates -skipPackagePluginValidation -skipMacroValidation -skip-testing EXCLUDED_SOURCE_FILE_NAMES='*Tests.*' CODE_SIGN_IDENTITY='Apple Distribution' DEVELOPMENT_TEAM='FN67GXC5GH'"
+      xcargs: "-skipPackageUpdates -skipPackagePluginValidation -skipMacroValidation -skip-testing EXCLUDED_SOURCE_FILE_NAMES='*Tests.*' CODE_SIGN_IDENTITY='Apple Distribution' DEVELOPMENT_TEAM='FN67GXC5GH' CODE_SIGN_STYLE='Manual'"
     )
     upload_to_app_store(
       skip_screenshots: true,
