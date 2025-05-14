@@ -51,19 +51,22 @@ platform :ios do
   desc "인증서와 프로비저닝 프로파일 동기화"
   lane :sync_certificates do
     # 키체인 설정 추가
-    create_keychain(
-      name: "login.keychain",
-      password: ENV["KEYCHAIN_PASSWORD"],
-      default_keychain: true,
-      unlock: true,
-      timeout: 3600,
-      lock_when_sleeps: false,
-      force: true
-    )
+    begin
+      create_keychain(
+        name: "login.keychain",
+        password: ENV["KEYCHAIN_PASSWORD"],
+        default_keychain: true,
+        unlock: true,
+        timeout: 3600,
+        lock_when_sleeps: false
+      )
+    rescue => ex
+      UI.message("키체인이 이미 존재합니다: #{ex.message}")
+    end
 
     # 인증서 확인
     sh("security find-identity -v -p codesigning")
-    
+
     app_store_connect_api_key(
       key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
       issuer_id: ENV["APP_STORE_CONNECT_API_KEY_ISSUER_ID"],
