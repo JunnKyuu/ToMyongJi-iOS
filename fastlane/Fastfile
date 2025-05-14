@@ -1,18 +1,3 @@
-# This file contains the fastlane.tools configuration
-# You can find the documentation at https://docs.fastlane.tools
-#
-# For a list of all available actions, check out
-#
-#     https://docs.fastlane.tools/actions
-#
-# For a list of all available plugins, check out
-#
-#     https://docs.fastlane.tools/plugins/available-plugins
-#
-
-# Uncomment the line if you want fastlane to automatically update itself
-# update_fastlane
-
 default_platform(:ios)
 
 platform :ios do
@@ -39,32 +24,32 @@ platform :ios do
     )
   end
 
-  # desc "테스트 실행 (모듈별로 추가 가능)"
-  # lane :test do
-  #   run_tests(
-  #     workspace: "ToMyongJi.xcworkspace",
-  #     scheme: "ToMyongJi-iOS",
-  #     device: "iPhone 15 Pro"
-  #   )
-  # end
-
   desc "인증서와 프로비저닝 프로파일 동기화"
   lane :sync_certificates do
-    # 키체인 설정 추가
-    begin
-      create_keychain(
-        name: "login.keychain",
-        password: ENV["KEYCHAIN_PASSWORD"],
-        default_keychain: true,
-        unlock: true,
-        timeout: 3600,
-        lock_when_sleeps: false
-      )
-    rescue => ex
-      UI.message("키체인이 이미 존재합니다: #{ex.message}")
-    end
+    keychain_name = "build.keychain"
+    keychain_password = ENV["KEYCHAIN_PASSWORD"]
 
-    # 인증서 확인
+    # 기존 키체인 삭제 (존재하지 않아도 무시)
+    sh("security delete-keychain #{keychain_name}") rescue nil
+
+    # 새 키체인 생성 및 설정
+    create_keychain(
+      name: keychain_name,
+      password: keychain_password,
+      default_keychain: true,
+      unlock: true,
+      timeout: 3600,
+      lock_when_sleeps: false
+    )
+
+    set_keychain_settings(
+      timeout: 3600,
+      lock_when_sleeps: false,
+      keychain_path: keychain_name
+    )
+
+    # 인증 로그 (디버깅용)
+    sh("security list-keychains")
     sh("security find-identity -v -p codesigning")
 
     app_store_connect_api_key(
@@ -74,12 +59,12 @@ platform :ios do
       duration: 1200,
       in_house: false
     )
-    
+
     match(
       type: "appstore",
       app_identifier: "com.tomyongji.ios",
-      keychain_name: "login.keychain",
-      keychain_password: ENV["KEYCHAIN_PASSWORD"],
+      keychain_name: keychain_name,
+      keychain_password: keychain_password,
       readonly: false,
       force: true
     )
@@ -87,7 +72,6 @@ platform :ios do
 
   desc "TestFlight에 새 버전 배포"
   lane :beta do
-    # 앱 버전 자동 증가
     current_version = get_version_number(
       xcodeproj: "ToMyongJi.xcodeproj",
       target: "ToMyongJi-iOS"
@@ -111,9 +95,9 @@ platform :ios do
           "com.tomyongji.ios" => "match AppStore com.tomyongji.ios"
         },
         signingStyle: "manual",
-        teamID: "FN67GXC5GH"
+        signingCertificate: "Apple Distribution"
       },
-      xcargs: "-skipPackageUpdates -skipPackagePluginValidation -skipMacroValidation -skip-testing EXCLUDED_SOURCE_FILE_NAMES='*Tests.*'"
+      xcargs: "-skipPackageUpdates -skipPackagePluginValidation -skipMacroValidation -skip-testing EXCLUDED_SOURCE_FILE_NAMES='*Tests.*' CODE_SIGN_IDENTITY='Apple Distribution' DEVELOPMENT_TEAM='FN67GXC5GH'"
     )
     upload_to_testflight(
       skip_waiting_for_build_processing: true
@@ -131,9 +115,11 @@ platform :ios do
       export_options: {
         provisioningProfiles: {
           "com.tomyongji.ios" => "match AppStore com.tomyongji.ios"
-        }
+        },
+        signingStyle: "manual",
+        signingCertificate: "Apple Distribution"
       },
-      xcargs: "-skipPackageUpdates -skipPackagePluginValidation -skipMacroValidation -skip-testing EXCLUDED_SOURCE_FILE_NAMES='*Tests.*'"
+      xcargs: "-skipPackageUpdates -skipPackagePluginValidation -skipMacroValidation -skip-testing EXCLUDED_SOURCE_FILE_NAMES='*Tests.*' CODE_SIGN_IDENTITY='Apple Distribution' DEVELOPMENT_TEAM='FN67GXC5GH'"
     )
     upload_to_app_store(
       skip_screenshots: true,
