@@ -25,6 +25,20 @@ platform :ios do
     )
   end
 
+  lane :bump_version_auto do
+    current_version = get_version_number(
+      xcodeproj: "ToMyongJi.xcodeproj",
+      target: "ToMyongJi-iOS"
+    )
+    version_components = current_version.split(".").map(&:to_i)
+    version_components[-1] += 1
+    new_version = version_components.join(".")
+    increment_version_number(
+      version_number: new_version,
+      xcodeproj: "ToMyongJi.xcodeproj"
+    )
+  end
+
   # desc "테스트 실행 (모듈별로 추가 가능)"
   # lane :test do
   #   run_tests(
@@ -52,11 +66,25 @@ platform :ios do
 
   desc "Deploy a new version to TestFlight"
   lane :beta do
+    # 앱 버전 자동 증가
+    current_version = get_version_number(
+      xcodeproj: "ToMyongJi.xcodeproj",
+      target: "ToMyongJi-iOS"
+    )
+    version_components = current_version.split(".").map(&:to_i)
+    version_components[-1] += 1
+    new_version = version_components.join(".")
+    increment_version_number(
+      version_number: new_version,
+      xcodeproj: "ToMyongJi.xcodeproj"
+    )
+
     sync_certificates
     increment_build_number
     build_ios_app(
       scheme: "ToMyongJi-iOS",
-      export_method: "app-store"
+      export_method: "app-store",
+      xcargs: "-skipPackageUpdates -skipPackagePluginValidation -skipMacroValidation -skip-testing EXCLUDED_SOURCE_FILE_NAMES='*Tests.*'"
     )
     upload_to_testflight(
       skip_waiting_for_build_processing: true
@@ -69,7 +97,8 @@ platform :ios do
     increment_build_number
     build_ios_app(
       scheme: "ToMyongJi-iOS",
-      export_method: "app-store"
+      export_method: "app-store",
+      xcargs: "-skipPackageUpdates -skipPackagePluginValidation -skipMacroValidation -skip-testing EXCLUDED_SOURCE_FILE_NAMES='*Tests.*'"
     )
     upload_to_app_store(
       skip_screenshots: true,
