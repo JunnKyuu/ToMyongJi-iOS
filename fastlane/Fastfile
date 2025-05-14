@@ -58,7 +58,7 @@ platform :ios do
       unlock: true,
       timeout: 3600,
       lock_when_sleeps: false,
-      require_create: true
+      force: true
     )
 
     # 인증서 확인
