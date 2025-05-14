@@ -48,8 +48,18 @@ platform :ios do
   #   )
   # end
 
-  desc "Sync certificates and provisioning profiles"
+  desc "인증서와 프로비저닝 프로파일 동기화"
   lane :sync_certificates do
+    # 키체인 설정 추가
+    create_keychain(
+      name: "login.keychain",
+      password: ENV["KEYCHAIN_PASSWORD"],
+      default_keychain: true,
+      unlock: true,
+      timeout: 3600,
+      lock_when_sleeps: false
+    )
+
     app_store_connect_api_key(
       key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
       issuer_id: ENV["APP_STORE_CONNECT_API_KEY_ISSUER_ID"],
@@ -64,7 +74,7 @@ platform :ios do
     )
   end
 
-  desc "Deploy a new version to TestFlight"
+  desc "TestFlight에 새 버전 배포"
   lane :beta do
     # 앱 버전 자동 증가
     current_version = get_version_number(
@@ -91,7 +101,7 @@ platform :ios do
     )
   end
 
-  desc "Deploy a new version to the App Store"
+  desc "App Store에 새 버전 배포"
   lane :release do
     sync_certificates
     increment_build_number
