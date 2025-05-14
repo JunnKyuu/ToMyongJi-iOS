@@ -8,5 +8,5 @@ ruby '3.2.3'
 
 # gem "rails"
 
-gem "fastlane", "~> 2.212.2"
-gem "xcodeproj", "~> 1.21.0"
+gem "fastlane"
+gem "xcodeproj"
