@@ -94,7 +94,7 @@ platform :ios do
     build_ios_app(
       scheme: "ToMyongJi-iOS",
       export_method: "app-store",
-      team_id: "FN67GXC5GH",
+      export_team_id: "FN67GXC5GH",
       xcargs: "-skipPackageUpdates -skipPackagePluginValidation -skipMacroValidation -skip-testing EXCLUDED_SOURCE_FILE_NAMES='*Tests.*'"
     )
     upload_to_testflight(
@@ -109,7 +109,7 @@ platform :ios do
     build_ios_app(
       scheme: "ToMyongJi-iOS",
       export_method: "app-store",
-      team_id: "FN67GXC5GH",
+      export_team_id: "FN67GXC5GH",
       xcargs: "-skipPackageUpdates -skipPackagePluginValidation -skipMacroValidation -skip-testing EXCLUDED_SOURCE_FILE_NAMES='*Tests.*'"
     )
     upload_to_app_store(
