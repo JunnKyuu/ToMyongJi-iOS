@@ -57,7 +57,8 @@ platform :ios do
       default_keychain: true,
       unlock: true,
       timeout: 3600,
-      lock_when_sleeps: false
+      lock_when_sleeps: false,
+      require_create: true
     )
 
     # 인증서 확인
@@ -77,7 +78,7 @@ platform :ios do
       keychain_name: "login.keychain",
       keychain_password: ENV["KEYCHAIN_PASSWORD"],
       readonly: false,
-      force_for_new_devices: true
+      force: true
     )
   end
 
@@ -105,7 +106,9 @@ platform :ios do
       export_options: {
         provisioningProfiles: {
           "com.tomyongji.ios" => "match AppStore com.tomyongji.ios"
-        }
+        },
+        signingStyle: "manual",
+        teamID: "FN67GXC5GH"
       },
       xcargs: "-skipPackageUpdates -skipPackagePluginValidation -skipMacroValidation -skip-testing EXCLUDED_SOURCE_FILE_NAMES='*Tests.*'"
     )
