@@ -60,6 +60,9 @@ platform :ios do
       lock_when_sleeps: false
     )
 
+    # 인증서 확인
+    sh("security find-identity -v -p codesigning")
+    
     app_store_connect_api_key(
       key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
       issuer_id: ENV["APP_STORE_CONNECT_API_KEY_ISSUER_ID"],
@@ -70,7 +73,11 @@ platform :ios do
     
     match(
       type: "appstore",
-      app_identifier: "com.tomyongji.ios"
+      app_identifier: "com.tomyongji.ios",
+      keychain_name: "login.keychain",
+      keychain_password: ENV["KEYCHAIN_PASSWORD"],
+      readonly: false,
+      force_for_new_devices: true
     )
   end
 
@@ -94,7 +101,12 @@ platform :ios do
     build_ios_app(
       scheme: "ToMyongJi-iOS",
       export_method: "app-store",
-      development_team: "FN67GXC5GH",
+      export_team_id: "FN67GXC5GH",
+      export_options: {
+        provisioningProfiles: {
+          "com.tomyongji.ios" => "match AppStore com.tomyongji.ios"
+        }
+      },
       xcargs: "-skipPackageUpdates -skipPackagePluginValidation -skipMacroValidation -skip-testing EXCLUDED_SOURCE_FILE_NAMES='*Tests.*'"
     )
     upload_to_testflight(
@@ -109,7 +121,12 @@ platform :ios do
     build_ios_app(
       scheme: "ToMyongJi-iOS",
       export_method: "app-store",
-      development_team: "FN67GXC5GH",
+      export_team_id: "FN67GXC5GH",
+      export_options: {
+        provisioningProfiles: {
+          "com.tomyongji.ios" => "match AppStore com.tomyongji.ios"
+        }
+      },
       xcargs: "-skipPackageUpdates -skipPackagePluginValidation -skipMacroValidation -skip-testing EXCLUDED_SOURCE_FILE_NAMES='*Tests.*'"
     )
     upload_to_app_store(
