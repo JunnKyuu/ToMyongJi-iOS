@@ -11,4 +11,4 @@ username("junnkyuu22@gmail.com")
 
 # CI 환경에서 키체인 관련 설정 추가
 keychain_name("build.keychain")
-keychain_password(ENV["KEYCHAIN_PASSWORD"])
+keychain_password(ENV["MATCH_KEYCHAIN_PASSWORD"])
