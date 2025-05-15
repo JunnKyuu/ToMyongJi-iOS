@@ -92,7 +92,7 @@ platform :ios do
       export_team_id: "FN67GXC5GH",
       export_options: {
         provisioningProfiles: {
-          "com.tomyongji.ios" => ENV["PROVISIONING_PROFILE"]
+          "com.tomyongji.ios" => "match AppStore com.tomyongji.ios"
         },
         signingStyle: "manual",
         signingCertificate: "Apple Distribution"
@@ -114,7 +114,7 @@ platform :ios do
       export_team_id: "FN67GXC5GH",
       export_options: {
         provisioningProfiles: {
-          "com.tomyongji.ios" => ENV["PROVISIONING_PROFILE"]
+          "com.tomyongji.ios" => "match AppStore com.tomyongji.ios"
         },
         signingStyle: "manual",
         signingCertificate: "Apple Distribution"
