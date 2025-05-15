@@ -18,6 +18,8 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
@@ -37,9 +39,8 @@ jobs:
           security set-keychain-settings -t 3600 -u build.keychain
       - name: Install Provisioning Profile
         run: |
-          echo "${{ secrets.PROVISIONING_PROFILE }}" | base64 --decode > profile.mobileprovision
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          cp profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
+          cp "$(find . -name '*.mobileprovision' | head -n 1)" ~/Library/MobileDevice/Provisioning\ Profiles/
       - name: Deploy to TestFlight
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
@@ -57,6 +58,8 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
@@ -76,9 +79,8 @@ jobs:
           security set-keychain-settings -t 3600 -u build.keychain
       - name: Install Provisioning Profile
         run: |
-          echo "${{ secrets.PROVISIONING_PROFILE }}" | base64 --decode > profile.mobileprovision
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          cp profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
+          cp "$(find . -name '*.mobileprovision' | head -n 1)" ~/Library/MobileDevice/Provisioning\ Profiles/
       - name: Deploy to App Store
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
