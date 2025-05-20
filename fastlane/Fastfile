@@ -142,7 +142,8 @@ platform :ios do
           "com.tomyongji.ios" => "match AppStore com.tomyongji.ios"
         },
         signingStyle: "manual",
-        signingCertificate: "Apple Distribution"
+        signingCertificate: "Apple Distribution",
+        teamID: "FN67GXC5GH"
       }
     )
 
