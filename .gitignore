@@ -15,3 +15,6 @@ Pods/
 
 # 기타 macOS 시스템 파일
 .DS_Store
+
+# 리드미
+README.md

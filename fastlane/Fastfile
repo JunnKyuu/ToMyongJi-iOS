@@ -3,10 +3,17 @@ default_platform(:ios)
 platform :ios do
   desc "버전과 빌드 번호 증가 (TestFlight 배포용)"
   lane :bump_version do
+    begin
+      latest_build = app_store_build_number(
+        live: false
+      )
+    rescue
+      latest_build = 0
+    end
+
     increment_build_number(
-      build_number: latest_testflight_build_number + 1,
-      workspace: "ToMyongJi.xcworkspace",
-      scheme: "ToMyongJi-iOS"
+      build_number: latest_build + 1,
+      xcodeproj: "ToMyongJi.xcodeproj"
     )
   end
 
@@ -66,10 +73,28 @@ platform :ios do
     )
   end
 
-  desc "Deploy a new version to the TestFlight"
+  desc "Deploy a new version to TestFlight"
   lane :beta do
     sync_certificates
-    increment_build_number
+
+    current_version = get_version_number(
+      xcodeproj: "ToMyongJi.xcodeproj",
+      target: "ToMyongJi-iOS"
+    )
+
+    # 전체 버전에서 가장 큰 빌드 번호를 가져옴
+    begin
+      latest_build = app_store_build_number(
+        live: false
+      )
+    rescue
+      latest_build = 0
+    end
+
+    increment_build_number(
+      build_number: latest_build + 1,
+      xcodeproj: "ToMyongJi.xcodeproj"
+    )
 
     build_ios_app(
       workspace: "ToMyongJi.xcworkspace",
@@ -77,10 +102,12 @@ platform :ios do
       export_method: "app-store",
       output_directory: "./build",
       output_name: "ToMyongJi.ipa",
-      xcargs: {
-        PROVISIONING_PROFILE_SPECIFIER: "match AppStore com.tomyongji.ios",
-        OTHER_CODE_SIGN_FLAGS: "--keychain build.keychain-db",
-        CODE_SIGN_IDENTITY: "Apple Distribution"
+      export_options: {
+        provisioningProfiles: {
+          "com.tomyongji.ios" => "match AppStore com.tomyongji.ios"
+        },
+        signingStyle: "manual",
+        signingCertificate: "Apple Distribution"
       }
     )
     upload_to_testflight
@@ -89,8 +116,21 @@ platform :ios do
   desc "App Store에 새 버전 배포"
   lane :release do
     sync_certificates
-    increment_build_number
-    
+
+    # 전체 버전에서 가장 큰 빌드 번호를 가져옴
+    begin
+      latest_build = app_store_build_number(
+        live: false
+      )
+    rescue
+      latest_build = 0
+    end
+
+    increment_build_number(
+      build_number: latest_build + 1,
+      xcodeproj: "ToMyongJi.xcodeproj"
+    )
+
     build_ios_app(
       scheme: "ToMyongJi-iOS",
       workspace: "ToMyongJi.xcworkspace",
@@ -104,6 +144,7 @@ platform :ios do
         signingCertificate: "Apple Distribution"
       }
     )
+
     upload_to_app_store(
       skip_screenshots: true,
       skip_metadata: true

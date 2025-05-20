@@ -45,7 +45,7 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 [bundle exec] fastlane ios beta
 ```
 
-Deploy a new version to the TestFlight
+Deploy a new version to TestFlight
 
 ### ios release
 
