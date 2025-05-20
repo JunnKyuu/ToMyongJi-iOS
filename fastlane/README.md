@@ -21,7 +21,7 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 [bundle exec] fastlane ios bump_version
 ```
 
-버전과 빌드 번호 증가 (TestFlight 배포용)
+버전과 빌드 번호 증가
 
 ### ios bump_version_auto
 
@@ -45,7 +45,7 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 [bundle exec] fastlane ios beta
 ```
 
-Deploy a new version to TestFlight
+TestFlight 배포
 
 ### ios release
 
@@ -53,7 +53,7 @@ Deploy a new version to TestFlight
 [bundle exec] fastlane ios release
 ```
 
-App Store에 새 버전 배포
+App Store에 배포
 
 ----
 

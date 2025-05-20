@@ -1,7 +1,7 @@
 default_platform(:ios)
 
 platform :ios do
-  desc "버전과 빌드 번호 증가 (TestFlight 배포용)"
+  desc "버전과 빌드 번호 증가"
   lane :bump_version do
     begin
       latest_build = app_store_build_number(
@@ -73,47 +73,48 @@ platform :ios do
     )
   end
 
-  desc "Deploy a new version to TestFlight"
+  desc "TestFlight 배포"
   lane :beta do
+    # (1) 큰 업데이트 시 원하는 버전으로 직접 지정
+    # increment_version_number(
+    #   version_number: "2.0.0",
+    #   xcodeproj: "ToMyongJi.xcodeproj"
+    # )
+
+    # (2) 이후 자동 증가 로직(패치버전 +1)은 주석 처리하거나 삭제
+    # current_version = get_version_number(
+    #   xcodeproj: "ToMyongJi.xcodeproj",
+    #   target: "ToMyongJi-iOS"
+    # )
+    # version_components = current_version.split(".").map(&:to_i)
+    # version_components[-1] += 1
+    # new_version = version_components.join(".")
+    # increment_version_number(
+    #   version_number: new_version,
+    #   xcodeproj: "ToMyongJi.xcodeproj"
+    # )
+
     sync_certificates
-
-    current_version = get_version_number(
-      xcodeproj: "ToMyongJi.xcodeproj",
-      target: "ToMyongJi-iOS"
-    )
-
-    # 전체 버전에서 가장 큰 빌드 번호를 가져옴
-    begin
-      latest_build = app_store_build_number(
-        live: false
-      )
-    rescue
-      latest_build = 0
-    end
-
-    increment_build_number(
-      build_number: latest_build + 1,
-      xcodeproj: "ToMyongJi.xcodeproj"
-    )
-
+    increment_build_number
     build_ios_app(
-      workspace: "ToMyongJi.xcworkspace",
       scheme: "ToMyongJi-iOS",
+      workspace: "ToMyongJi.xcworkspace",
       export_method: "app-store",
-      output_directory: "./build",
-      output_name: "ToMyongJi.ipa",
       export_options: {
         provisioningProfiles: {
           "com.tomyongji.ios" => "match AppStore com.tomyongji.ios"
         },
         signingStyle: "manual",
         signingCertificate: "Apple Distribution"
-      }
+      },
+      xcargs: "-skipPackageUpdates -skipPackagePluginValidation -skipMacroValidation -skip-testing EXCLUDED_SOURCE_FILE_NAMES='*Tests.*'"
     )
-    upload_to_testflight
+    upload_to_testflight(
+      skip_waiting_for_build_processing: true
+    )
   end
 
-  desc "App Store에 새 버전 배포"
+  desc "App Store에 배포"
   lane :release do
     sync_certificates
 
