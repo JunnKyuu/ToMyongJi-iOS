@@ -14,7 +14,7 @@ on:
 jobs:
   beta:
     name: Deploy to TestFlight
-    if: github.ref == 'refs/heads/develop'
+    if: github.ref == 'refs/heads/develop' && !startsWith(github.event.head_commit.message, '[fastlane]')
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
@@ -52,7 +52,7 @@ jobs:
 
   release:
     name: Deploy to App Store
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' && !startsWith(github.event.head_commit.message, '[fastlane]')
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3

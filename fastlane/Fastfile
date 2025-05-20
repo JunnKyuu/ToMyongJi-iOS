@@ -59,7 +59,8 @@ platform :ios do
       type: "appstore",
       app_identifier: "com.tomyongji.ios",
       keychain_name: keychain_name,
-      keychain_password: keychain_password
+      keychain_password: keychain_password,
+      force: true
     )
 
     # 개발용 인증서
@@ -67,7 +68,8 @@ platform :ios do
       type: "development",
       app_identifier: "com.tomyongji.ios",
       keychain_name: keychain_name,
-      keychain_password: keychain_password
+      keychain_password: keychain_password,
+      force: true
     )
   end
 
