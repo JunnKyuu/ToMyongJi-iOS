@@ -26,13 +26,9 @@ platform :ios do
 
   desc "인증서와 프로비저닝 프로파일 동기화"
   lane :sync_certificates do
-    keychain_name = "build.keychain"
+    keychain_name = "build.keychain-db"
     keychain_password = ENV["KEYCHAIN_PASSWORD"]
 
-    # 기존 키체인 삭제 (존재하지 않아도 무시)
-    sh("security delete-keychain #{keychain_name}") rescue nil
-
-    # 새 키체인 생성 및 설정
     create_keychain(
       name: keychain_name,
       password: keychain_password,
@@ -43,16 +39,6 @@ platform :ios do
       add_to_search_list: true
     )
 
-    # 키체인 잠금 해제
-    sh("security unlock-keychain -p #{keychain_password} #{keychain_name}")
-
-    # 키체인 설정
-    sh("security set-keychain-settings -t 3600 -u #{keychain_name}")
-
-    # 인증 로그 (디버깅용)
-    sh("security list-keychains")
-    sh("security find-identity -v -p codesigning")
-
     app_store_connect_api_key(
       key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
       issuer_id: ENV["APP_STORE_CONNECT_API_KEY_ISSUER_ID"],
@@ -61,6 +47,7 @@ platform :ios do
       in_house: false
     )
 
+    # App Store 배포용 인증서
     match(
       type: "appstore",
       app_identifier: "com.tomyongji.ios",
@@ -68,47 +55,42 @@ platform :ios do
       keychain_password: keychain_password,
       force: true
     )
+
+    # 개발용 인증서
+    match(
+      type: "development",
+      app_identifier: "com.tomyongji.ios",
+      keychain_name: keychain_name,
+      keychain_password: keychain_password,
+      force: true
+    )
   end
 
-  desc "TestFlight에 새 버전 배포"
+  desc "Deploy a new version to the TestFlight"
   lane :beta do
-    current_version = get_version_number(
-      xcodeproj: "ToMyongJi.xcodeproj",
-      target: "ToMyongJi-iOS"
-    )
-    version_components = current_version.split(".").map(&:to_i)
-    version_components[-1] += 1
-    new_version = version_components.join(".")
-    increment_version_number(
-      version_number: new_version,
-      xcodeproj: "ToMyongJi.xcodeproj"
-    )
-
     sync_certificates
     increment_build_number
+
     build_ios_app(
-      scheme: "ToMyongJi-iOS",
       workspace: "ToMyongJi.xcworkspace",
+      scheme: "ToMyongJi-iOS",
       export_method: "app-store",
-      export_team_id: "FN67GXC5GH",
-      export_options: {
-        provisioningProfiles: {
-          "com.tomyongji.ios" => "match AppStore com.tomyongji.ios"
-        },
-        signingStyle: "manual",
-        signingCertificate: "Apple Distribution"
-      },
-      xcargs: "-skipPackageUpdates -skipPackagePluginValidation -skipMacroValidation -skip-testing EXCLUDED_SOURCE_FILE_NAMES='*Tests.*' CODE_SIGN_IDENTITY='Apple Distribution' DEVELOPMENT_TEAM='FN67GXC5GH' CODE_SIGN_STYLE='Manual' PROVISIONING_PROFILE_SPECIFIER='match AppStore com.tomyongji.ios'"
+      output_directory: "./build",
+      output_name: "ToMyongJi.ipa",
+      xcargs: {
+        PROVISIONING_PROFILE_SPECIFIER: "match AppStore com.tomyongji.ios",
+        OTHER_CODE_SIGN_FLAGS: "--keychain build.keychain-db",
+        CODE_SIGN_IDENTITY: "Apple Distribution"
+      }
     )
-    upload_to_testflight(
-      skip_waiting_for_build_processing: true
-    )
+    upload_to_testflight
   end
 
   desc "App Store에 새 버전 배포"
   lane :release do
     sync_certificates
     increment_build_number
+    
     build_ios_app(
       scheme: "ToMyongJi-iOS",
       workspace: "ToMyongJi.xcworkspace",
@@ -120,8 +102,7 @@ platform :ios do
         },
         signingStyle: "manual",
         signingCertificate: "Apple Distribution"
-      },
-      xcargs: "-skipPackageUpdates -skipPackagePluginValidation -skipMacroValidation -skip-testing EXCLUDED_SOURCE_FILE_NAMES='*Tests.*' CODE_SIGN_IDENTITY='Apple Distribution' DEVELOPMENT_TEAM='FN67GXC5GH' CODE_SIGN_STYLE='Manual' PROVISIONING_PROFILE_SPECIFIER='match AppStore com.tomyongji.ios'"
+      }
     )
     upload_to_app_store(
       skip_screenshots: true,
