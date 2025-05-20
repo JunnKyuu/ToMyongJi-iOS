@@ -1,5 +1,5 @@
 # 인증서 및 프로비저닝 프로파일 관리 설정
-git_url("git@github.com:ToMyongJi/ToMyongJi-iOS.git")  # 인증서 저장 Git repo
+git_url("https://github.com/ToMyongJi/ToMyongJi-iOS")  # 인증서 저장 Git repo
 
 type("appstore")                                      # 앱스토어 배포용 인증서
 storage_mode("git")                                   # Git 저장 방식 사용
