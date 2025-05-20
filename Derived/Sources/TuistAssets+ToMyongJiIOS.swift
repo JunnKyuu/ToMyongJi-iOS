@@ -1,3 +1,4 @@
+// swiftlint:disable:this file_name
 // swiftlint:disable all
 // swift-format-ignore-file
 // swiftformat:disable all
@@ -14,12 +15,9 @@
   import SwiftUI
 #endif
 
-// swiftlint:disable superfluous_disable_command file_length implicit_return
-
 // MARK: - Asset Catalogs
 
-// swiftlint:disable identifier_name line_length nesting type_body_length type_name
-public enum ToMyongJiIOSAsset {
+public enum ToMyongJiIOSAsset: Sendable {
   public static let accentColor = ToMyongJiIOSColors(name: "AccentColor")
   public static let darkNavy = ToMyongJiIOSColors(name: "darkNavy")
   public static let deposit = ToMyongJiIOSColors(name: "deposit")
@@ -27,12 +25,11 @@ public enum ToMyongJiIOSAsset {
   public static let softBlue = ToMyongJiIOSColors(name: "softBlue")
   public static let withdrawal = ToMyongJiIOSColors(name: "withdrawal")
 }
-// swiftlint:enable identifier_name line_length nesting type_body_length type_name
 
 // MARK: - Implementation Details
 
-public final class ToMyongJiIOSColors {
-  public fileprivate(set) var name: String
+public final class ToMyongJiIOSColors: Sendable {
+  public let name: String
 
   #if os(macOS)
   public typealias Color = NSColor
@@ -41,27 +38,17 @@ public final class ToMyongJiIOSColors {
   #endif
 
   @available(iOS 11.0, tvOS 11.0, watchOS 4.0, macOS 10.13, visionOS 1.0, *)
-  public private(set) lazy var color: Color = {
+  public var color: Color {
     guard let color = Color(asset: self) else {
       fatalError("Unable to load color asset named \(name).")
     }
     return color
-  }()
+  }
 
   #if canImport(SwiftUI)
-  private var _swiftUIColor: Any? = nil
   @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, visionOS 1.0, *)
-  public private(set) var swiftUIColor: SwiftUI.Color {
-    get {
-      if self._swiftUIColor == nil {
-        self._swiftUIColor = SwiftUI.Color(asset: self)
-      }
-
-      return self._swiftUIColor as! SwiftUI.Color
-    }
-    set {
-      self._swiftUIColor = newValue
-    }
+  public var swiftUIColor: SwiftUI.Color {
+      return SwiftUI.Color(asset: self)
   }
   #endif
 
@@ -73,7 +60,7 @@ public final class ToMyongJiIOSColors {
 public extension ToMyongJiIOSColors.Color {
   @available(iOS 11.0, tvOS 11.0, watchOS 4.0, macOS 10.13, visionOS 1.0, *)
   convenience init?(asset: ToMyongJiIOSColors) {
-    let bundle = ToMyongJiIOSResources.bundle
+    let bundle = Bundle.module
     #if os(iOS) || os(tvOS) || os(visionOS)
     self.init(named: asset.name, in: bundle, compatibleWith: nil)
     #elseif os(macOS)
@@ -88,14 +75,14 @@ public extension ToMyongJiIOSColors.Color {
 @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, visionOS 1.0, *)
 public extension SwiftUI.Color {
   init(asset: ToMyongJiIOSColors) {
-    let bundle = ToMyongJiIOSResources.bundle
+    let bundle = Bundle.module
     self.init(asset.name, bundle: bundle)
   }
 }
 #endif
 
-public struct ToMyongJiIOSImages {
-  public fileprivate(set) var name: String
+public struct ToMyongJiIOSImages: Sendable {
+  public let name: String
 
   #if os(macOS)
   public typealias Image = NSImage
@@ -104,7 +91,7 @@ public struct ToMyongJiIOSImages {
   #endif
 
   public var image: Image {
-    let bundle = ToMyongJiIOSResources.bundle
+    let bundle = Bundle.module
     #if os(iOS) || os(tvOS) || os(visionOS)
     let image = Image(named: name, in: bundle, compatibleWith: nil)
     #elseif os(macOS)
@@ -130,21 +117,21 @@ public struct ToMyongJiIOSImages {
 @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, visionOS 1.0, *)
 public extension SwiftUI.Image {
   init(asset: ToMyongJiIOSImages) {
-    let bundle = ToMyongJiIOSResources.bundle
+    let bundle = Bundle.module
     self.init(asset.name, bundle: bundle)
   }
 
   init(asset: ToMyongJiIOSImages, label: Text) {
-    let bundle = ToMyongJiIOSResources.bundle
+    let bundle = Bundle.module
     self.init(asset.name, bundle: bundle, label: label)
   }
 
   init(decorative asset: ToMyongJiIOSImages) {
-    let bundle = ToMyongJiIOSResources.bundle
+    let bundle = Bundle.module
     self.init(decorative: asset.name, bundle: bundle)
   }
 }
 #endif
 
-// swiftlint:enable all
 // swiftformat:enable all
+// swiftlint:enable all

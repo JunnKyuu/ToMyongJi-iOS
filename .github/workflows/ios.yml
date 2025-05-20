@@ -9,7 +9,7 @@ on:
     branches:
       - develop
       - main
-  workflow_dispatch: # 수동 실행을 위한 이벤트 추가
+  workflow_dispatch:
 
 jobs:
   beta:
@@ -37,10 +37,6 @@ jobs:
           security default-keychain -s build.keychain
           security unlock-keychain -p "${{ secrets.KEYCHAIN_PASSWORD }}" build.keychain
           security set-keychain-settings -t 3600 -u build.keychain
-      - name: Install Provisioning Profile
-        run: |
-          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          cp "$(find . -name '*.mobileprovision' | head -n 1)" ~/Library/MobileDevice/Provisioning\ Profiles/
       - name: Deploy to TestFlight
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
@@ -79,10 +75,6 @@ jobs:
           security default-keychain -s build.keychain
           security unlock-keychain -p "${{ secrets.KEYCHAIN_PASSWORD }}" build.keychain
           security set-keychain-settings -t 3600 -u build.keychain
-      - name: Install Provisioning Profile
-        run: |
-          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          cp "$(find . -name '*.mobileprovision' | head -n 1)" ~/Library/MobileDevice/Provisioning\ Profiles/
       - name: Deploy to App Store
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}

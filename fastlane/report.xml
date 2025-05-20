@@ -5,77 +5,42 @@
     
     
       
-      <testcase classname="fastlane.lanes" name="00: default_platform" time="0.000241">
+      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.000285">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="01: get_version_number" time="0.032048">
+      <testcase classname="fastlane.lanes" name="1: Switch to ios sync_certificates lane" time="8.3e-05">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="02: increment_version_number" time="0.224377">
+      <testcase classname="fastlane.lanes" name="2: create_keychain" time="0.063771">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="03: Switch to ios sync_certificates lane" time="0.00011">
+      <testcase classname="fastlane.lanes" name="3: app_store_connect_api_key" time="0.00308">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="04: security delete-keychain build.keychain" time="0.012774">
+      <testcase classname="fastlane.lanes" name="4: match" time="27.438105">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="05: create_keychain" time="3.913754">
+      <testcase classname="fastlane.lanes" name="5: match" time="29.34285">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="06: security unlock-keychain -p  build.keychain" time="0.014645">
+      <testcase classname="fastlane.lanes" name="6: increment_build_number" time="0.314023">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="07: security set-keychain-settings -t 3600 -u build.keychain" time="0.014801">
-        
-      </testcase>
-    
-      
-      <testcase classname="fastlane.lanes" name="08: security list-keychains" time="0.0122">
-        
-      </testcase>
-    
-      
-      <testcase classname="fastlane.lanes" name="09: security find-identity -v -p codesigning" time="0.045114">
-        
-      </testcase>
-    
-      
-      <testcase classname="fastlane.lanes" name="10: app_store_connect_api_key" time="0.002302">
-        
-      </testcase>
-    
-      
-      <testcase classname="fastlane.lanes" name="11: match" time="46.008283">
-        
-      </testcase>
-    
-      
-      <testcase classname="fastlane.lanes" name="12: increment_build_number" time="0.321369">
-        
-      </testcase>
-    
-      
-      <testcase classname="fastlane.lanes" name="13: build_ios_app" time="84.888769">
-        
-      </testcase>
-    
-      
-      <testcase classname="fastlane.lanes" name="14: upload_to_testflight" time="39.57329">
+      <testcase classname="fastlane.lanes" name="7: build_ios_app" time="2.143838">
         
       </testcase>
     
