@@ -10,6 +10,7 @@ import SwiftUI
 struct InputEmailView: View {
     @Binding var email: String
     @Binding var verificationCode: String
+    var viewModel: SignUpViewModel
     var onBack: () -> Void
     var onNext: () -> Void
     var onSendCode: () -> Void
@@ -72,10 +73,10 @@ struct InputEmailView: View {
                             .foregroundStyle(.white)
                             .padding(.horizontal, 15)
                             .padding(.vertical, 15)
-                            .background(email.isEmpty ? Color.gray.opacity(0.3) : Color.darkNavy)
+                            .background(email.isEmpty || !isValidEmail(email) || viewModel.isSendingEmail || isVerificationSent ? Color.gray.opacity(0.3) : Color.darkNavy)
                             .clipShape(RoundedRectangle(cornerRadius: 10))
                     }
-                    .disabled(email.isEmpty || !isValidEmail(email))
+                    .disabled(email.isEmpty || !isValidEmail(email) || viewModel.isSendingEmail || isVerificationSent)
                 }
             }
             
@@ -97,10 +98,10 @@ struct InputEmailView: View {
                                 .foregroundStyle(.white)
                                 .padding(.horizontal, 15)
                                 .padding(.vertical, 15)
-                                .background(verificationCode.count != 8 ? Color.gray.opacity(0.3) : Color.darkNavy)
+                                .background(verificationCode.count != 8 || viewModel.isVerifyingEmail ? Color.gray.opacity(0.3) : Color.darkNavy)
                                 .clipShape(RoundedRectangle(cornerRadius: 10))
                         }
-                        .disabled(verificationCode.count != 8)
+                        .disabled(verificationCode.count != 8 || viewModel.isVerifyingEmail)
                     }
                 }
             }
@@ -130,5 +131,13 @@ struct InputEmailView: View {
 }
 
 #Preview {
-    InputEmailView(email: .constant(""), verificationCode: .constant(""), onBack: {}, onNext: {}, onSendCode: {}, onVerifyCode: {})
+    InputEmailView(
+        email: .constant(""),
+        verificationCode: .constant(""),
+        viewModel: SignUpViewModel(),
+        onBack: {},
+        onNext: {},
+        onSendCode: {},
+        onVerifyCode: {}
+    )
 }

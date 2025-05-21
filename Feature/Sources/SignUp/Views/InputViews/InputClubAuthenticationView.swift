@@ -134,9 +134,9 @@ struct InputClubAuthenticationView: View {
             }
             .frame(maxWidth: .infinity, alignment: .center)
             .padding(.vertical, 15)
-            .background(isFormValid ? Color.darkNavy : Color.gray.opacity(0.3))
+            .background(isFormValid && !viewModel.isVerifyingClub && !viewModel.isClubVerified ? Color.darkNavy : Color.gray.opacity(0.3))
             .clipShape(RoundedRectangle(cornerRadius: 10))
-            .disabled(!isFormValid)
+            .disabled(!isFormValid || viewModel.isVerifyingClub || viewModel.isClubVerified)
             
             // 회원가입 버튼
             Button {
@@ -149,9 +149,9 @@ struct InputClubAuthenticationView: View {
             }
             .frame(maxWidth: .infinity, alignment: .center)
             .padding(.vertical, 15)
-            .background(viewModel.isClubVerified ? Color.darkNavy : Color.gray.opacity(0.3))
+            .background(viewModel.isClubVerified && !viewModel.isSigningUp ? Color.darkNavy : Color.gray.opacity(0.3))
             .clipShape(RoundedRectangle(cornerRadius: 10))
-            .disabled(!viewModel.isClubVerified)
+            .disabled(!viewModel.isClubVerified || viewModel.isSigningUp)
         }
         .padding()
         .onAppear {

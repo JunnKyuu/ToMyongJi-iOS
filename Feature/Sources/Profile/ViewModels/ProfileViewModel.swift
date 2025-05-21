@@ -110,7 +110,8 @@ public class ProfileViewModel {
             self.isLoading = false
             switch completion {
             case .failure:
-                self.showAlert(title: "오류", message: "소속부원 목록을 가져오는데 실패했습니다.")
+//                 self.showAlert(title: "오류", message: "소속부원 목록을 가져오는데 실패했습니다.")
+                print("소속부원 목록을 가져오는데 실패했습니다.")
             case .finished:
                 break
             }
