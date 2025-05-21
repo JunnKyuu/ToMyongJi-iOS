@@ -79,6 +79,7 @@ struct SignUpView: View {
                 InputEmailView(
                     email: $viewModel.email,
                     verificationCode: $viewModel.verificationCode,
+                    viewModel: viewModel,
                     onBack: {
                         withAnimation {
                             currentPage = .password
