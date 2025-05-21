@@ -83,8 +83,10 @@
 		A8FFD092A2FE7D3EDECF345B /* InputIDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E546E5157879AFE739DA333 /* InputIDView.swift */; };
 		AC76142CA39EADAEA1CC6C91 /* TuistBundle+ToMyongJiIOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19EB8B72124B9B11439FE3FB /* TuistBundle+ToMyongJiIOS.swift */; };
 		B1A81BC8B44860D29B1EFC4B /* GradientButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9496419038EE7CD9CF6E9F4 /* GradientButton.swift */; };
+		B23C9BF8301723D980424E83 /* ProfileViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CECA24A68B0ADDB963522FA /* ProfileViewModelTests.swift */; };
 		B6D2189864C9172D31536E66 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 9EA400C9487153F5D15F0843 /* Alamofire */; };
 		B90A7255CC05B1147500AA73 /* ProfileMyInfoRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABE866F14C89078EF98DBE63 /* ProfileMyInfoRow.swift */; };
+		BD8BA11EB5264A0B8CC05BB3 /* AdminViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFF5437721D76161D8B0CEF /* AdminViewModelTests.swift */; };
 		BFA320E678B0CB02C556B15D /* AgreementDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91F90D7DF4BAC24F0FE20E25 /* AgreementDetailView.swift */; };
 		C1936260BEF8953FB42AC6AD /* ClubMemberInfoRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB7EF258DEC112A8B4311E06 /* ClubMemberInfoRow.swift */; };
 		C31D9DA437298E4BFEC1589A /* IntroViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5297ADE6F65CF8664EC4D05 /* IntroViewItem.swift */; };
@@ -287,6 +289,7 @@
 		2789C497FD47EE83841F5912 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		29452F0FF0CF6C327447CFB0 /* InputPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputPasswordView.swift; sourceTree = "<group>"; };
 		2B14476FFBA7E4A7E3574445 /* AdminPresidentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminPresidentView.swift; sourceTree = "<group>"; };
+		2CECA24A68B0ADDB963522FA /* ProfileViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModelTests.swift; sourceTree = "<group>"; };
 		31BC02550B7EE4F52E59EB67 /* AdminViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminViewModel.swift; sourceTree = "<group>"; };
 		323C6862B40AB698B53CB061 /* CreateReceiptFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateReceiptFormView.swift; sourceTree = "<group>"; };
 		32D2E0AB107A9C0689AA58B0 /* AddClubMemberRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddClubMemberRow.swift; sourceTree = "<group>"; };
@@ -346,6 +349,7 @@
 		C75794C819AB809AEF458B7A /* ReceiptViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptViewModel.swift; sourceTree = "<group>"; };
 		CB199665032EC73F88149783 /* TuistFonts+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TuistFonts+UI.swift"; sourceTree = "<group>"; };
 		CBEFE4CBD3A375C18679F105 /* GmarketSansMedium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GmarketSansMedium.otf; sourceTree = "<group>"; };
+		CDFF5437721D76161D8B0CEF /* AdminViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminViewModelTests.swift; sourceTree = "<group>"; };
 		D38CA0F364AB7F50917E4963 /* InputClubAuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputClubAuthenticationView.swift; sourceTree = "<group>"; };
 		D6D8D61F6E3827989FE019A7 /* FeatureTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FeatureTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA14A78FB6114C0700674FA4 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
@@ -445,7 +449,6 @@
 			isa = PBXGroup;
 			children = (
 				420E0AA574051E2B565564D4 /* Project */,
-				48714EEFC6D34D57B15FB28E /* Frameworks */,
 				D355859041F044F808E802DE /* Products */,
 			);
 			sourceTree = "<group>";
@@ -515,6 +518,14 @@
 			path = App;
 			sourceTree = "<group>";
 		};
+		0EF61E3524435AE46A68EFF7 /* Admin */ = {
+			isa = PBXGroup;
+			children = (
+				CDFF5437721D76161D8B0CEF /* AdminViewModelTests.swift */,
+			);
+			path = Admin;
+			sourceTree = "<group>";
+		};
 		1C7F3B56E0DC31E5175C62C9 /* Services */ = {
 			isa = PBXGroup;
 			children = (
@@ -578,8 +589,10 @@
 		30E92F57802149B8CF434BA5 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				0EF61E3524435AE46A68EFF7 /* Admin */,
 				53B204D93E007CC627C19F1D /* FindID */,
 				9679F70AFD6E1ECFC50B0049 /* Login */,
+				522882930965DC0E79DC8CF1 /* Profile */,
 				6A5782EF9A2595DD394E4812 /* Receipts */,
 				CD3584CFF033BE6A180A3804 /* SignUp */,
 			);
@@ -652,13 +665,6 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		48714EEFC6D34D57B15FB28E /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		4B31D0B5B683C5EEFA28B8FF /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
@@ -705,6 +711,14 @@
 				4B5E06D46FC963AEDBFB9B20 /* Views */,
 			);
 			path = Admin;
+			sourceTree = "<group>";
+		};
+		522882930965DC0E79DC8CF1 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				2CECA24A68B0ADDB963522FA /* ProfileViewModelTests.swift */,
+			);
+			path = Profile;
 			sourceTree = "<group>";
 		};
 		53B204D93E007CC627C19F1D /* FindID */ = {
@@ -1188,8 +1202,8 @@
 			buildPhases = (
 				20F004B0474EB223125C7759 /* Sources */,
 				BE7807152F39386F8990FA89 /* Resources */,
-				C4BFA44B177CBB7453D3C6C9 /* Embed Frameworks */,
 				FE7C521AC087B5B4CB236AF5 /* Frameworks */,
+				C4BFA44B177CBB7453D3C6C9 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1198,6 +1212,8 @@
 				94EA7000270DD73477E09493 /* PBXTargetDependency */,
 			);
 			name = Feature;
+			packageProductDependencies = (
+			);
 			productName = Feature;
 			productReference = 79E57EC36E48D72F62A7553D /* Feature.framework */;
 			productType = "com.apple.product-type.framework";
@@ -1208,8 +1224,8 @@
 			buildPhases = (
 				9840DB2671758E2780EE961C /* Sources */,
 				E4F8276DA9E56EF22F2D0AC5 /* Resources */,
-				D4C747B9BD882EBE1D799294 /* Embed Frameworks */,
 				D87BBBB7D633F044FED785F5 /* Frameworks */,
+				D4C747B9BD882EBE1D799294 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1219,6 +1235,8 @@
 				9EDDCBE1B9668B1FE712DB65 /* PBXTargetDependency */,
 			);
 			name = App;
+			packageProductDependencies = (
+			);
 			productName = App;
 			productReference = 04FFD79F3BD12493D40B9FA8 /* App.framework */;
 			productType = "com.apple.product-type.framework";
@@ -1229,8 +1247,8 @@
 			buildPhases = (
 				16F16B8C0AC25D59EAEF409A /* Sources */,
 				BE86F340536A560DC07F8831 /* Resources */,
-				C1C341E7E2B976AC3A688188 /* Embed Frameworks */,
 				4EFDF47C3EDE6C13EB17DCAF /* Frameworks */,
+				C1C341E7E2B976AC3A688188 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1238,6 +1256,8 @@
 				FE229448DA43E935D6573061 /* PBXTargetDependency */,
 			);
 			name = FeatureTests;
+			packageProductDependencies = (
+			);
 			productName = FeatureTests;
 			productReference = D6D8D61F6E3827989FE019A7 /* FeatureTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -1248,8 +1268,8 @@
 			buildPhases = (
 				0F45EA8482796284D78CEE53 /* Sources */,
 				F5A8AC4A2ADA07071B7D918D /* Resources */,
-				C06803E636F352DF0B729708 /* Embed Frameworks */,
 				4D4ED60ED788A95753FBFA84 /* Frameworks */,
+				C06803E636F352DF0B729708 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1257,6 +1277,8 @@
 				EAE2659F444FEA4AD9B511FE /* PBXTargetDependency */,
 			);
 			name = CoreTests;
+			packageProductDependencies = (
+			);
 			productName = CoreTests;
 			productReference = 44ED7F91622732D9D7BB4A23 /* CoreTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -1267,8 +1289,8 @@
 			buildPhases = (
 				ADB0169D3B50C0126EFFFEBB /* Sources */,
 				DC632DE6B8A2DD4ED67ADCA8 /* Resources */,
-				68D8ECE9D6EEF20086215366 /* Embed Frameworks */,
 				A7517DEBECE2F4A4B83FF194 /* Frameworks */,
+				68D8ECE9D6EEF20086215366 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1288,14 +1310,16 @@
 			buildPhases = (
 				0E629803E2D5E804CBCF1D45 /* Sources */,
 				3E595F161C1A648E3A1F7A37 /* Resources */,
-				0EBAA53FCDA50B2FDC30ABBB /* Embed Frameworks */,
 				59740E1383A96BE84517ED22 /* Frameworks */,
+				0EBAA53FCDA50B2FDC30ABBB /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = UI;
+			packageProductDependencies = (
+			);
 			productName = UI;
 			productReference = 26515D53170FF30DD2863442 /* UI.framework */;
 			productType = "com.apple.product-type.framework";
@@ -1306,8 +1330,8 @@
 			buildPhases = (
 				6C91BF053A6FD195F39C417C /* Sources */,
 				5375E2582C5547B2360C45E7 /* Resources */,
-				105941DD03EA625A1559C02D /* Embed Frameworks */,
 				7F968E797893F2BC4E9AA252 /* Frameworks */,
+				105941DD03EA625A1559C02D /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1317,6 +1341,8 @@
 				6226B1EE91370DA7FD0C5943 /* PBXTargetDependency */,
 			);
 			name = "ToMyongJi-iOS";
+			packageProductDependencies = (
+			);
 			productName = ToMyongJi_iOS;
 			productReference = 9E0208492746ACB4D68A285C /* ToMyongJi_iOS.app */;
 			productType = "com.apple.product-type.application";
@@ -1346,13 +1372,13 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				DE41B31E49415D6F9F1E4580 /* ToMyongJi-iOS */,
 				18B1DB1E00162CFE246889C0 /* App */,
-				0B89B129FD7D90DE26960F7E /* Feature */,
 				8BFBC7B529ACBD5B074DBED3 /* Core */,
-				DCFC6BD53C5504F6AF0FDBDD /* UI */,
 				6931F4368E771245D2A9E17D /* CoreTests */,
+				0B89B129FD7D90DE26960F7E /* Feature */,
 				447F7D514FB4DCC020301883 /* FeatureTests */,
+				DE41B31E49415D6F9F1E4580 /* ToMyongJi-iOS */,
+				DCFC6BD53C5504F6AF0FDBDD /* UI */,
 			);
 		};
 /* End PBXProject section */
@@ -1446,8 +1472,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BD8BA11EB5264A0B8CC05BB3 /* AdminViewModelTests.swift in Sources */,
 				D962BBE272EFF7572F2F4DE7 /* FindIDViewModelTests.swift in Sources */,
 				4F979A0F9C7493F874BBBA2F /* LoginViewModelTests.swift in Sources */,
+				B23C9BF8301723D980424E83 /* ProfileViewModelTests.swift in Sources */,
 				090BC95C2E939D90B1235265 /* ReceiptViewModelTests.swift in Sources */,
 				505C4B116508D151AF3961B0 /* SignUpViewModelTests.swift in Sources */,
 			);
@@ -1623,6 +1651,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = FN67GXC5GH;
 				INFOPLIST_FILE = "Derived/InfoPlists/FeatureTests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1631,6 +1663,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.tomyongji.featureTests;
 				PRODUCT_NAME = FeatureTests;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -1647,19 +1681,22 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 7;
-				DEVELOPMENT_TEAM = FN67GXC5GH;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = FN67GXC5GH;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = App/Resources/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tomyongji.ios;
 				PRODUCT_NAME = ToMyongJi_iOS;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match AppStore com.tomyongji.ios";
 				SDKROOT = iphoneos;
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -1675,19 +1712,22 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 7;
-				DEVELOPMENT_TEAM = FN67GXC5GH;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = FN67GXC5GH;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = App/Resources/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tomyongji.ios;
 				PRODUCT_NAME = ToMyongJi_iOS;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match AppStore com.tomyongji.ios";
 				SDKROOT = iphoneos;
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -1704,6 +1744,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = FN67GXC5GH;
 				INFOPLIST_FILE = "Derived/InfoPlists/FeatureTests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1712,6 +1756,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.tomyongji.featureTests;
 				PRODUCT_NAME = FeatureTests;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -1726,11 +1772,15 @@
 		783028E0A748106EB42FFFA9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				CURRENT_PROJECT_VERSION = 1;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 22;
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = FN67GXC5GH;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 22;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "Derived/InfoPlists/App-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1742,6 +1792,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.tomyongji.app;
 				PRODUCT_NAME = App;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = NO;
@@ -1760,11 +1811,15 @@
 		9F71BD0873DA39AFB0860084 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				CURRENT_PROJECT_VERSION = 1;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 22;
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = FN67GXC5GH;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 22;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "Derived/InfoPlists/UI-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1776,6 +1831,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.tomyongji.ui;
 				PRODUCT_NAME = UI;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = NO;
@@ -1793,11 +1849,15 @@
 		A3D7B7B93C00178B34CB32A5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				CURRENT_PROJECT_VERSION = 1;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 22;
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = FN67GXC5GH;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 22;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "Derived/InfoPlists/Feature-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1809,6 +1869,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.tomyongji.feature;
 				PRODUCT_NAME = Feature;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = NO;
@@ -1826,11 +1887,15 @@
 		ABB646D3D39C96445E0B96D9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				CURRENT_PROJECT_VERSION = 1;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 22;
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = FN67GXC5GH;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 22;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "Derived/InfoPlists/App-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1842,6 +1907,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.tomyongji.app;
 				PRODUCT_NAME = App;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = NO;
@@ -1860,6 +1926,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = FN67GXC5GH;
 				INFOPLIST_FILE = "Derived/InfoPlists/CoreTests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1868,6 +1938,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.tomyongji.coreTests;
 				PRODUCT_NAME = CoreTests;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -1884,6 +1956,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = FN67GXC5GH;
 				INFOPLIST_FILE = "Derived/InfoPlists/CoreTests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1892,6 +1968,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.tomyongji.coreTests;
 				PRODUCT_NAME = CoreTests;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -1906,11 +1984,15 @@
 		C4416EAB574F6E7836693073 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				CURRENT_PROJECT_VERSION = 1;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 22;
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = FN67GXC5GH;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 22;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "Derived/InfoPlists/Feature-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1922,6 +2004,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.tomyongji.feature;
 				PRODUCT_NAME = Feature;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = NO;
@@ -1940,11 +2023,15 @@
 		DCAB14937E321F3CB52A001E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				CURRENT_PROJECT_VERSION = 1;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 22;
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = FN67GXC5GH;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 22;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "Derived/InfoPlists/Core-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1956,6 +2043,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.tomyongji.core;
 				PRODUCT_NAME = Core;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = NO;
@@ -2027,11 +2115,15 @@
 		F596F7916EEB4BE989DDA141 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				CURRENT_PROJECT_VERSION = 1;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 22;
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = FN67GXC5GH;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 22;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "Derived/InfoPlists/UI-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -2043,6 +2135,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.tomyongji.ui;
 				PRODUCT_NAME = UI;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = NO;
@@ -2120,11 +2213,15 @@
 		FF4611586E302DE985683FC3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				CURRENT_PROJECT_VERSION = 1;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 22;
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = FN67GXC5GH;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 22;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "Derived/InfoPlists/Core-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -2136,6 +2233,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.tomyongji.core;
 				PRODUCT_NAME = Core;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = NO;

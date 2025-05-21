@@ -1,0 +1,8 @@
+git_url("git@github.com:ToMyongJi/ToMyongJi-iOS.git")
+type("appstore", "development")
+storage_mode("git")
+app_identifier(["com.tomyongji.ios"])
+git_branch("develop")
+username("junnkyuu22@gmail.com")
+keychain_name("build.keychain-db")
+keychain_password(ENV["MATCH_KEYCHAIN_PASSWORD"])

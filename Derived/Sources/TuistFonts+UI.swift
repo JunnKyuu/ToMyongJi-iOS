@@ -1,3 +1,4 @@
+// swiftlint:disable:this file_name
 // swiftlint:disable all
 // swift-format-ignore-file
 // swiftformat:disable all
@@ -18,8 +19,8 @@
 // MARK: - Fonts
 
 // swiftlint:disable identifier_name line_length type_body_length
-public enum UIFontFamily {
-  public enum GmarketSans {
+public enum UIFontFamily: Sendable {
+  public enum GmarketSans: Sendable {
     public static let bold = UIFontConvertible(name: "GmarketSansBold", family: "Gmarket Sans", path: "GmarketSansBold.otf")
     public static let light = UIFontConvertible(name: "GmarketSansLight", family: "Gmarket Sans", path: "GmarketSansLight.otf")
     public static let medium = UIFontConvertible(name: "GmarketSansMedium", family: "Gmarket Sans", path: "GmarketSansMedium.otf")
@@ -34,7 +35,7 @@ public enum UIFontFamily {
 
 // MARK: - Implementation Details
 
-public struct UIFontConvertible {
+public struct UIFontConvertible: Sendable {
   public let name: String
   public let family: String
   public let path: String
@@ -93,5 +94,5 @@ public extension UIFontConvertible.Font {
     self.init(name: font.name, size: size)
   }
 }
-// swiftlint:enable all
 // swiftformat:enable all
+// swiftlint:enable all
