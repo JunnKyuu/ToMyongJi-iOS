@@ -34,6 +34,12 @@ class SignUpViewModel {
     var isUserIdAvailable: Bool = false
     var isSignUpCompleted: Bool = false
     
+    // 버튼 상태
+    var isSendingEmail: Bool = false
+    var isVerifyingEmail: Bool = false
+    var isVerifyingClub: Bool = false
+    var isSigningUp: Bool = false
+    
     // 데이터
     var colleges: [College] = []
     
@@ -67,10 +73,14 @@ class SignUpViewModel {
     
     // 이메일 인증코드 발송
     func sendVerificationEmail() {
+        guard !isSendingEmail else { return }
+        isSendingEmail = true
+        
         let request = EmailRequest(email: email)
         networkingManager.runWithStringResponse(SignUpEndpoint.sendEmail(request))
             .sink { [weak self] completion in
                 guard let self = self else { return }
+                self.isSendingEmail = false
                 switch completion {
                 case .failure:
                     self.showAlert(title: "오류", message: "인증코드 발송에 실패하였습니다.")
@@ -79,7 +89,6 @@ class SignUpViewModel {
                 }
             } receiveValue: { [weak self] response in
                 guard let self = self else { return }
-//                self.verificationCode = response
                 self.showAlert(title: "알림", message: "인증코드가 발송되었습니다.")
             }
             .store(in: &cancellables)
@@ -87,10 +96,14 @@ class SignUpViewModel {
     
     // 이메일 인증코드 확인
     func verifyEmailCode() {
+        guard !isVerifyingEmail else { return }
+        isVerifyingEmail = true
+        
         let request = VerifyCodeRequest(email: email, code: verificationCode)
         networkingManager.run(SignUpEndpoint.verifyCode(request), type: VerifyCodeResponse.self)
             .sink { [weak self] completion in
                 guard let self = self else { return }
+                self.isVerifyingEmail = false
                 switch completion {
                 case .failure:
                     return self.showAlert(title: "오류", message: "이메일 인증에 실패하였습니다.")
@@ -125,7 +138,6 @@ class SignUpViewModel {
             } receiveValue: { [weak self]
                 response in
                 guard let self = self else { return }
-                self.showAlert(title: "알림", message: "단과대학 정보를 가져오는 데 성공했습니다.")
                 self.colleges = response.data
             }
             .store(in: &cancellables)
@@ -133,12 +145,15 @@ class SignUpViewModel {
     
     // 소속 인증
     func verifyClub() {
+        guard !isVerifyingClub else { return }
         guard let cludId = selectedClub?.studentClubId else { return }
         
+        isVerifyingClub = true
         let request = ClubVerifyRequest(clubId: cludId, studentNum: studentNum, role: selectedRole)
         networkingManager.run(SignUpEndpoint.verifyClub(request), type: ClubVerifyResponse.self)
             .sink { [weak self] completion in
                 guard let self = self else { return }
+                self.isVerifyingClub = false
                 switch completion {
                 case .failure:
                     self.showAlert(title: "오류", message: "소속 인증에 실패했습니다.")
@@ -159,8 +174,10 @@ class SignUpViewModel {
     
     // 회원가입
     func signUp(completion: @escaping (Bool) -> Void) {
+        guard !isSigningUp else { return }
         guard isEmailVerified && isClubVerified else { return }
         
+        isSigningUp = true
         let request = SignUpRequest(
             userId: userId,
             name: name,
@@ -175,6 +192,7 @@ class SignUpViewModel {
         networkingManager.run(SignUpEndpoint.signUp(request), type: SignUpResponse.self)
             .sink { [weak self] completion in
                 guard let self = self else { return }
+                self.isSigningUp = false
                 switch completion {
                 case .failure:
                     self.showAlert(title: "오류", message: "회원가입에 실패했습니다.")
