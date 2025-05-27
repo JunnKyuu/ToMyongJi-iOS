@@ -1,5 +1,7 @@
 default_platform(:ios)
 
+skip_docs
+
 platform :ios do
   desc "인증서와 프로비저닝 프로파일 동기화"
   lane :sync_certificates do
