@@ -1,36 +1,6 @@
 default_platform(:ios)
 
 platform :ios do
-  desc "버전과 빌드 번호 증가"
-  lane :bump_version do
-    begin
-      latest_build = app_store_build_number(
-        live: false
-      )
-    rescue
-      latest_build = 0
-    end
-
-    increment_build_number(
-      build_number: latest_build + 1,
-      xcodeproj: "ToMyongJi.xcodeproj"
-    )
-  end
-
-  lane :bump_version_auto do
-    current_version = get_version_number(
-      xcodeproj: "ToMyongJi.xcodeproj",
-      target: "ToMyongJi-iOS"
-    )
-    version_components = current_version.split(".").map(&:to_i)
-    version_components[-1] += 1
-    new_version = version_components.join(".")
-    increment_version_number(
-      version_number: new_version,
-      xcodeproj: "ToMyongJi.xcodeproj"
-    )
-  end
-
   desc "인증서와 프로비저닝 프로파일 동기화"
   lane :sync_certificates do
     keychain_name = "build.keychain-db"
@@ -75,13 +45,13 @@ platform :ios do
 
   desc "TestFlight 배포"
   lane :beta do
-    # (1) 큰 업데이트 시 원하는 버전으로 직접 지정
+    # 큰 업데이트 시 원하는 버전으로 직접 지정(필요할 때 사용)
     # increment_version_number(
     #   version_number: "2.0.0",
     #   xcodeproj: "ToMyongJi.xcodeproj"
     # )
 
-    # (2) 이후 자동 증가 로직(패치버전 +1)은 주석 처리하거나 삭제
+    # # 버전 번호 증가(필요할 때 사용)
     # current_version = get_version_number(
     #   xcodeproj: "ToMyongJi.xcodeproj",
     #   target: "ToMyongJi-iOS"
@@ -94,8 +64,13 @@ platform :ios do
     #   xcodeproj: "ToMyongJi.xcodeproj"
     # )
 
+    # 빌드 번호 증가
+    increment_build_number(
+      xcodeproj: "ToMyongJi.xcodeproj",
+    )
+
+    # 인증서 동기화 및 빌드/업로드
     sync_certificates
-    increment_build_number
     build_ios_app(
       scheme: "ToMyongJi-iOS",
       workspace: "ToMyongJi.xcworkspace",
@@ -129,7 +104,8 @@ platform :ios do
 
     increment_build_number(
       build_number: latest_build + 1,
-      xcodeproj: "ToMyongJi.xcodeproj"
+      xcodeproj: "ToMyongJi.xcodeproj",
+      target: "ToMyongJi-iOS"
     )
 
     build_ios_app(
