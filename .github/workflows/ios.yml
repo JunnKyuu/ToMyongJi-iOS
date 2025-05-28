@@ -38,6 +38,10 @@ jobs:
       - name: Install FastLane
         run: brew install fastlane
 
+      - name: Copy App Store Connect API Key
+        run: |
+          cp fastlane/AuthKey_8L63PR5VMY.p8 .
+
       - name: Tuist Generate
         run: tuist generate
 
@@ -45,9 +49,6 @@ jobs:
         if: github.event.pull_request.merged == true && !startsWith(github.event.head_commit.message, '[fastlane]')
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
-          APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
-          APP_STORE_CONNECT_API_KEY_CONTENT: ${{ secrets.APP_STORE_CONNECT_API_KEY_CONTENT }}
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
           FASTLANE_HIDE_TIMESTAMP: true
           FASTLANE_SKIP_UPDATE_CHECK: true
