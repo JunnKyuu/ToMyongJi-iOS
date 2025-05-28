@@ -47,6 +47,11 @@ platform :ios do
 
   desc "TestFlight 배포"
   lane :beta do
+    # 빌드 번호 가져오기
+    build_number = get_build_number(
+      xcodeproj: "ToMyongJi.xcodeproj"
+    )
+
     # 큰 업데이트 시 원하는 버전으로 직접 지정(필요할 때 사용)
     # increment_version_number(
     #   version_number: "2.0.0",
@@ -68,7 +73,9 @@ platform :ios do
 
     # 빌드 번호 증가
     increment_build_number(
+      build_number: build_number + 1,
       xcodeproj: "ToMyongJi.xcodeproj",
+      target: "ToMyongJi-iOS"
     )
 
     # 인증서 동기화 및 빌드/업로드
