@@ -20,11 +20,11 @@ platform :ios do
 
     # App Store Connect API 키 설정
     app_store_connect_api_key(
-      key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
-      issuer_id: ENV["APP_STORE_CONNECT_API_KEY_ISSUER_ID"],
-      key_content: ENV["APP_STORE_CONNECT_API_KEY_CONTENT"],
+      key_id: "8L63PR5VMY",
+      issuer_id: "1938b5bc-4d44-4546-8960-204d5b167b20",
+      key_filepath: "fastlane/AuthKey_8L63PR5VMY.p8",
       duration: 1200,
-      in_house: false,
+      in_house: false
     )
 
     # App Store 배포용 인증서
