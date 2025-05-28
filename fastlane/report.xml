@@ -5,57 +5,52 @@
     
     
       
-      <testcase classname="fastlane.lanes" name="00: default_platform" time="0.000243">
+      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.00056">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="01: get_version_number" time="0.039035">
+      <testcase classname="fastlane.lanes" name="1: get_build_number" time="0.07057">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="02: increment_version_number" time="0.224243">
+      <testcase classname="fastlane.lanes" name="2: increment_build_number" time="0.238044">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="03: increment_build_number" time="0.303133">
+      <testcase classname="fastlane.lanes" name="3: Switch to ios sync_certificates lane" time="0.000162">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="04: Switch to ios sync_certificates lane" time="0.000188">
+      <testcase classname="fastlane.lanes" name="4: create_keychain" time="0.065597">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="05: create_keychain" time="0.062242">
+      <testcase classname="fastlane.lanes" name="5: app_store_connect_api_key" time="0.002454">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="06: app_store_connect_api_key" time="0.002005">
+      <testcase classname="fastlane.lanes" name="6: match" time="99.121196">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="07: match" time="21.960014">
+      <testcase classname="fastlane.lanes" name="7: match" time="18.124685">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="08: match" time="26.126906">
+      <testcase classname="fastlane.lanes" name="8: build_ios_app" time="47.087094">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="09: build_ios_app" time="54.242026">
-        
-      </testcase>
-    
-      
-      <testcase classname="fastlane.lanes" name="10: upload_to_testflight" time="43.675402">
+      <testcase classname="fastlane.lanes" name="9: upload_to_testflight" time="78.954949">
         
       </testcase>
     
