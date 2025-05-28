@@ -50,7 +50,7 @@ platform :ios do
     # 빌드 번호 가져오기
     build_number = get_build_number(
       xcodeproj: "ToMyongJi.xcodeproj"
-    )
+    ).to_i
 
     # 큰 업데이트 시 원하는 버전으로 직접 지정(필요할 때 사용)
     # increment_version_number(
@@ -73,9 +73,8 @@ platform :ios do
 
     # 빌드 번호 증가
     increment_build_number(
-      build_number: build_number + 1,
-      xcodeproj: "ToMyongJi.xcodeproj",
-      target: "ToMyongJi-iOS"
+      build_number: (build_number + 1).to_s,
+      xcodeproj: "ToMyongJi.xcodeproj"
     )
 
     # 인증서 동기화 및 빌드/업로드
@@ -113,8 +112,7 @@ platform :ios do
 
     increment_build_number(
       build_number: latest_build + 1,
-      xcodeproj: "ToMyongJi.xcodeproj",
-      target: "ToMyongJi-iOS"
+      xcodeproj: "ToMyongJi.xcodeproj"
     )
 
     build_ios_app(
