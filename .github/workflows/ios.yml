@@ -38,7 +38,7 @@ jobs:
         run: brew install fastlane
 
       - name: Tuist Generate
-        run: tuist clean && tuist fetch && tuist generate
+        run: tuist clean && tuist generate
 
       - name: Deploy to TestFlight
         if: github.event.pull_request.base.ref == 'develop' && github.event.action == 'closed' && github.event.pull_request.merged == true && !startsWith(github.event.head_commit.message, '[fastlane]')
