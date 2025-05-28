@@ -41,10 +41,10 @@ jobs:
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.MATCH_SSH_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
+          echo "${{ secrets.MATCH_SSH_KEY }}" > ~/.ssh/tomyongji_match
+          chmod 600 ~/.ssh/tomyongji_match
           eval "$(ssh-agent -s)"
-          ssh-add ~/.ssh/id_ed25519
+          ssh-add ~/.ssh/tomyongji_match
           ssh-keyscan -t ed25519 github.com >> ~/.ssh/known_hosts
 
       - name: Copy App Store Connect API Key
