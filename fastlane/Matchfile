@@ -1,4 +1,4 @@
-git_url("https://github.com/ToMyongJi/ToMyongJi-iOS.git")
+git_url("git@github.com:ToMyongJi/ToMyongJi-iOS.git")
 storage_mode("git")
 type("appstore")
 app_identifier(["com.tomyongji.ios"])
