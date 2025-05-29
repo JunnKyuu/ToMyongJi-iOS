@@ -27,26 +27,25 @@ platform :ios do
       in_house: false
     )
 
-    # 배포용 .cer 파일 가져오기
+    # 배포용 인증서 가져오기
     import_certificate(
       certificate_path: "certs/distribution/XBF9C972PH.cer",
-      keychain_name: keychain_name,
-      keychain_password: keychain_password
+      keychain_password: ENV["KEYCHAIN_PASSWORD"],
+      keychain_path: "~/Library/Keychains/build.keychain-db"
     )
 
-    # 배포용 .p12 파일 가져오기
     import_certificate(
       certificate_path: "certs/distribution/XBF9C972PH.p12",
-      keychain_name: keychain_name,
-      keychain_password: keychain_password,
-      certificate_password: ENV["MATCH_PASSWORD"]
+      keychain_password: ENV["KEYCHAIN_PASSWORD"],
+      certificate_password: ENV["MATCH_PASSWORD"],
+      keychain_path: "~/Library/Keychains/build.keychain-db"
     )
 
     # 배포용 프로비저닝 프로파일 가져오기
-    import_profile(
-      profile_path: "profiles/appstore/AppStore_com.tomyongji.ios.mobileprovision",
-      keychain_name: keychain_name,
-      keychain_password: keychain_password
+    sigh(
+      app_identifier: "com.tomyongji.ios",
+      force: true,
+      output_path: "profiles/appstore"
     )
 
     # 개발용 인증서
