@@ -33,7 +33,10 @@ platform :ios do
       app_identifier: "com.tomyongji.ios",
       keychain_name: keychain_name,
       keychain_password: keychain_password,
-      force: true
+      force: true,
+      readonly: true,
+      storage_mode: "local",
+      git_url: nil
     )
 
     # 개발용 인증서

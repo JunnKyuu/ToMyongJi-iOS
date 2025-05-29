@@ -45,15 +45,6 @@ jobs:
       - name: Tuist Generate
         run: tuist generate
 
-      - name: Setup Repo Public Key
-        run: |
-          mkdir -p ~/.ssh
-          echo -e "${{ secrets.MATCH_SSH_KEY }}" > ~/.ssh/tomyongji_match
-          chmod 600 ~/.ssh/tomyongji_match
-          eval "$(ssh-agent -s)"
-          ssh-add ~/.ssh/tomyongji_match
-          ssh-keyscan -t ed25519 github.com >> ~/.ssh/known_hosts
-
       - name: Deploy to TestFlight
         if: github.event.pull_request.merged == true && !startsWith(github.event.head_commit.message, '[fastlane]')
         env:
