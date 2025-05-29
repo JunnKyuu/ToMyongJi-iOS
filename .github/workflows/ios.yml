@@ -48,7 +48,7 @@ jobs:
       - name: Setup Repo Public Key
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.MATCH_SSH_KEY }}" > ~/.ssh/tomyongji_match
+          echo -e "${{ secrets.MATCH_SSH_KEY }}" > ~/.ssh/tomyongji_match
           chmod 600 ~/.ssh/tomyongji_match
           eval "$(ssh-agent -s)"
           ssh-add ~/.ssh/tomyongji_match
