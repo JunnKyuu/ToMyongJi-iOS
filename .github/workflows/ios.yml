@@ -35,21 +35,17 @@ jobs:
       - name: Install Tuist CLI
         run: bash <(curl -Ls https://install.tuist.io)
 
-      - name: Setup SSH
+      - name: Install Dependencies
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          eval "$(ssh-agent -s)"
-          ssh-add ~/.ssh/id_ed25519
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
-
-      - name: Install FastLane
-        run: brew install fastlane
-
-      - name: Copy App Store Connect API Key
+          gem install bundler
+          bundle install
+          
+      - name: Setup Match
+        env:
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
         run: |
-          cp fastlane/AuthKey_8L63PR5VMY.p8 .
+          bundle exec fastlane match appstore --readonly
 
       - name: Tuist Generate
         run: tuist generate
