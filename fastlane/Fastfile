@@ -30,15 +30,17 @@ platform :ios do
     # 배포용 인증서 가져오기
     import_certificate(
       certificate_path: "certs/distribution/XBF9C972PH.cer",
+      keychain_name: "build.keychain-db",
       keychain_password: ENV["KEYCHAIN_PASSWORD"],
-      keychain_path: "~/Library/Keychains/build.keychain-db"
+      keychain_path: "/Users/runner/Library/Keychains/build.keychain-db"
     )
 
     import_certificate(
       certificate_path: "certs/distribution/XBF9C972PH.p12",
+      keychain_name: "build.keychain-db",
       keychain_password: ENV["KEYCHAIN_PASSWORD"],
       certificate_password: ENV["MATCH_PASSWORD"],
-      keychain_path: "~/Library/Keychains/build.keychain-db"
+      keychain_path: "/Users/runner/Library/Keychains/build.keychain-db"
     )
 
     # 배포용 프로비저닝 프로파일 가져오기
