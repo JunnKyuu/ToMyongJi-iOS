@@ -15,6 +15,7 @@ public enum ReceiptEndpoint {
     case receiptForStudentClub(userId: Int)
     case createReceipt(CreateReceiptRequest)
     case deleteReceipt(receiptId: Int)
+    case updateReceipt(UpdateReceiptRequest)
 }
 
 extension ReceiptEndpoint: Endpoint {
@@ -28,6 +29,8 @@ extension ReceiptEndpoint: Endpoint {
             return "/api/receipt"
         case .deleteReceipt(let receiptId):
             return "/api/receipt/\(receiptId)"
+        case .updateReceipt:
+            return "/api/receipt"
         }
     }
     
@@ -51,6 +54,14 @@ extension ReceiptEndpoint: Endpoint {
                 "deposit": request.deposit,
                 "withdrawal": request.withdrawal
             ]
+        case .updateReceipt(let request):
+            return [
+                "receiptId": request.receiptId,
+                "date": request.date,
+                "content": request.content,
+                "deposit": request.deposit,
+                "withdrawal": request.withdrawal
+            ]
         default:
             return [:]
         }
@@ -68,6 +79,8 @@ extension ReceiptEndpoint: Endpoint {
             return .post
         case .deleteReceipt:
             return .delete
+        case .updateReceipt:
+            return .put
         }
     }
     
@@ -75,7 +88,7 @@ extension ReceiptEndpoint: Endpoint {
         switch self {
         case .receipt, .receiptForStudentClub, .deleteReceipt:
             return URLEncoding.default
-        case .createReceipt:
+        case .createReceipt, .updateReceipt:
             return JSONEncoding.default
         }
     }
