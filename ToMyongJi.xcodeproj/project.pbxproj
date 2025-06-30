@@ -13,6 +13,7 @@
 		0837F86D652FB69BF24DDDFA /* TuistAssets+ToMyongJiIOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4007B3111D84601BEF7F198F /* TuistAssets+ToMyongJiIOS.swift */; };
 		090BC95C2E939D90B1235265 /* ReceiptViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D9520AF5D1EAD72883699C0 /* ReceiptViewModelTests.swift */; };
 		0AF567CE918C4EF6271CFF3A /* AuthenticationManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB662513BB59FD2768462EAE /* AuthenticationManagerTests.swift */; };
+		0CA1F9A82E1261F700BB5056 /* EditReceiptFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CA1F9A72E1261F700BB5056 /* EditReceiptFormView.swift */; };
 		11BB9F7835F838BBCB96EEAB /* InputPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29452F0FF0CF6C327447CFB0 /* InputPasswordView.swift */; };
 		126E493559D72CC2C15F357A /* Receipt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7484C47FE8D12F7E95F24DC6 /* Receipt.swift */; };
 		15AC8737B62235755ED0D214 /* SignUpEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = E04969DDCC77A17FF2EE0EBC /* SignUpEndpoint.swift */; };
@@ -274,6 +275,7 @@
 		04FFD79F3BD12493D40B9FA8 /* App.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = App.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		088C270FEB0EF9F0D1AEF376 /* AlamofireNetworkingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlamofireNetworkingManager.swift; sourceTree = "<group>"; };
 		0BAD61A4B69A7EEF15E6F691 /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
+		0CA1F9A72E1261F700BB5056 /* EditReceiptFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditReceiptFormView.swift; sourceTree = "<group>"; };
 		0D8F38D566B41009DB0E68B4 /* AdminView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminView.swift; sourceTree = "<group>"; };
 		0E546E5157879AFE739DA333 /* InputIDView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputIDView.swift; sourceTree = "<group>"; };
 		0F128A6926E433DE37C8314F /* SignUpTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpTextField.swift; sourceTree = "<group>"; };
@@ -855,6 +857,7 @@
 				C1A02CCA8D41FCB58C3FA231 /* CreateReceiptView.swift */,
 				FD6502D342639F99F469DFFD /* MonthPickerView.swift */,
 				90530BC5F3252C5B62824160 /* ReceiptListView.swift */,
+				0CA1F9A72E1261F700BB5056 /* EditReceiptFormView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1524,6 +1527,7 @@
 				84134D8C0DA9D1ACDAAD0FF4 /* ProfileView.swift in Sources */,
 				126E493559D72CC2C15F357A /* Receipt.swift in Sources */,
 				969F43E035DFEC3A3394D35B /* ReceiptEndpoint.swift in Sources */,
+				0CA1F9A82E1261F700BB5056 /* EditReceiptFormView.swift in Sources */,
 				18F54CC16B367014FF4733A2 /* ReceiptViewModel.swift in Sources */,
 				FDB8C991ABD9B952EBC45B45 /* CreateReceiptFormView.swift in Sources */,
 				FDDF8D2E806619E818A6AECA /* CreateReceiptView.swift in Sources */,

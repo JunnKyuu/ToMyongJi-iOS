@@ -132,4 +132,31 @@ public struct DeleteReceiptResponse: Codable {
     }
 }
 
+// MARK: - 영수증 수정
+public struct UpdateReceiptRequest: Codable {
+    let receiptId: Int
+    let date: String
+    let content: String
+    let deposit: Int
+    let withdrawal: Int
+    
+    public init(receiptId: Int, date: String, content: String, deposit: Int, withdrawal: Int) {
+        self.receiptId = receiptId
+        self.date = date
+        self.content = content
+        self.deposit = deposit
+        self.withdrawal = withdrawal
+    }
+}
 
+public struct UpdateReceiptResponse: Codable {
+    let statusCode: Int
+    let statusMessage: String
+    let data: SingleReceiptData
+    
+    public init(statusCode: Int, statusMessage: String, data: SingleReceiptData) {
+        self.statusCode = statusCode
+        self.statusMessage = statusMessage
+        self.data = data
+    }
+}
