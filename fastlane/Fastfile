@@ -43,19 +43,23 @@ platform :ios do
 
   desc "TestFlight 배포 (develop 브랜치용)"
   lane :beta do
-    # 빌드 번호 가져오기
-    build_number = get_build_number(
-      xcodeproj: "ToMyongJi.xcodeproj"
-    ).to_i
-
-    # 빌드 번호 증가
+    
+    # App Store Connect 인증을 위해 먼저 호출
+    sync_certificates
+    
+    # TestFlight에 올라가 있는 최신 빌드 번호를 가져옴
+    latest_build_number = latest_testflight_build_number(
+      app_identifier: "com.tomyongji.ios",
+      version: get_version_number(xcodeproj: "ToMyongJi.xcodeproj")
+    )
+    
+    # 가져온 최신 빌드 번호에 1을 더해 새로운 빌드 번호를 설정
+    new_build_number = latest_build_number + 1
+    
     increment_build_number(
-      build_number: (build_number + 1).to_s,
+      build_number: new_build_number,
       xcodeproj: "ToMyongJi.xcodeproj"
     )
-
-    # 인증서 동기화
-    sync_certificates
 
     # 앱 빌드 (Project.swift에 서명 정보가 있으므로 단순화)
     build_ios_app(
@@ -89,10 +93,7 @@ platform :ios do
       submit_for_review: true,
       
       # 심사 제출 시 자동으로 앱을 출시하지 않도록 설정
-      automatic_release: false,
-      
-      # 빌드 처리가 완료될 때까지 대기
-      skip_waiting_for_build_processing: false
+      automatic_release: false
     )
   end
 end
