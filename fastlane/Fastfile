@@ -54,22 +54,16 @@ platform :ios do
       xcodeproj: "ToMyongJi.xcodeproj"
     )
 
-    # 인증서 동기화 및 빌드/업로드
+    # 인증서 동기화
     sync_certificates
+
+    # Tuist 프로젝트에 서명 정보가 모두 포함되었으므로, build_ios_app 단순화
     build_ios_app(
       scheme: "ToMyongJi-iOS",
-      workspace: "ToMyongJi.xcworkspace",
-      export_method: "app-store",
-      export_options: {
-        provisioningProfiles: {
-          "com.tomyongji.ios" => "match AppStore com.tomyongji.ios"
-        },
-        signingStyle: "manual",
-        signingCertificate: "Apple Distribution"
-      },
-      xcargs: "DEVELOPMENT_TEAM='FN67GXC5GH' " +
-              "-skipPackageUpdates -skipPackagePluginValidation -skipMacroValidation -skip-testing EXCLUDED_SOURCE_FILE_NAMES='*Tests.*'"
+      workspace: "ToMyongJi.xcworkspace"
     )
+
+    # TestFlight에 업로드
     upload_to_testflight(
       skip_waiting_for_build_processing: true
     )
