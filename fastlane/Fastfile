@@ -1,36 +1,8 @@
 default_platform(:ios)
 
+skip_docs
+
 platform :ios do
-  desc "버전과 빌드 번호 증가"
-  lane :bump_version do
-    begin
-      latest_build = app_store_build_number(
-        live: false
-      )
-    rescue
-      latest_build = 0
-    end
-
-    increment_build_number(
-      build_number: latest_build + 1,
-      xcodeproj: "ToMyongJi.xcodeproj"
-    )
-  end
-
-  lane :bump_version_auto do
-    current_version = get_version_number(
-      xcodeproj: "ToMyongJi.xcodeproj",
-      target: "ToMyongJi-iOS"
-    )
-    version_components = current_version.split(".").map(&:to_i)
-    version_components[-1] += 1
-    new_version = version_components.join(".")
-    increment_version_number(
-      version_number: new_version,
-      xcodeproj: "ToMyongJi.xcodeproj"
-    )
-  end
-
   desc "인증서와 프로비저닝 프로파일 동기화"
   lane :sync_certificates do
     keychain_name = "build.keychain-db"
@@ -46,109 +18,81 @@ platform :ios do
       add_to_search_list: true
     )
 
-    app_store_connect_api_key(
-      key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
-      issuer_id: ENV["APP_STORE_CONNECT_API_KEY_ISSUER_ID"],
-      key_content: ENV["APP_STORE_CONNECT_API_KEY_CONTENT"],
-      duration: 1200,
-      in_house: false
-    )
+    # App Store Connect API 키 설정
+    if ENV["APP_STORE_CONNECT_API_KEY_KEY"]
+      app_store_connect_api_key(
+        key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
+        issuer_id: ENV["APP_STORE_CONNECT_API_KEY_ISSUER_ID"],
+        key_content: Base64.decode64(ENV["APP_STORE_CONNECT_API_KEY_KEY"]),
+        duration: 1200,
+        in_house: false
+      )
+    end
 
-    # App Store 배포용 인증서
+    # 인증서와 프로비저닝 프로파일 동기화
     match(
       type: "appstore",
       app_identifier: "com.tomyongji.ios",
       keychain_name: keychain_name,
       keychain_password: keychain_password,
-      force: true
-    )
-
-    # 개발용 인증서
-    match(
-      type: "development",
-      app_identifier: "com.tomyongji.ios",
-      keychain_name: keychain_name,
-      keychain_password: keychain_password,
-      force: true
+      force: true,
+      readonly: false,
+      generate_apple_certs: true
     )
   end
 
-  desc "TestFlight 배포"
+  desc "TestFlight 배포 (develop 브랜치용)"
   lane :beta do
-    # (1) 큰 업데이트 시 원하는 버전으로 직접 지정
-    # increment_version_number(
-    #   version_number: "2.0.0",
-    #   xcodeproj: "ToMyongJi.xcodeproj"
-    # )
+    # 빌드 번호 가져오기
+    build_number = get_build_number(
+      xcodeproj: "ToMyongJi.xcodeproj"
+    ).to_i
 
-    # (2) 이후 자동 증가 로직(패치버전 +1)은 주석 처리하거나 삭제
-    # current_version = get_version_number(
-    #   xcodeproj: "ToMyongJi.xcodeproj",
-    #   target: "ToMyongJi-iOS"
-    # )
-    # version_components = current_version.split(".").map(&:to_i)
-    # version_components[-1] += 1
-    # new_version = version_components.join(".")
-    # increment_version_number(
-    #   version_number: new_version,
-    #   xcodeproj: "ToMyongJi.xcodeproj"
-    # )
+    # 빌드 번호 증가
+    increment_build_number(
+      build_number: (build_number + 1).to_s,
+      xcodeproj: "ToMyongJi.xcodeproj"
+    )
 
+    # 인증서 동기화
     sync_certificates
-    increment_build_number
+
+    # 앱 빌드 (Project.swift에 서명 정보가 있으므로 단순화)
     build_ios_app(
       scheme: "ToMyongJi-iOS",
-      workspace: "ToMyongJi.xcworkspace",
-      export_method: "app-store",
-      export_options: {
-        provisioningProfiles: {
-          "com.tomyongji.ios" => "match AppStore com.tomyongji.ios"
-        },
-        signingStyle: "manual",
-        signingCertificate: "Apple Distribution"
-      },
-      xcargs: "-skipPackageUpdates -skipPackagePluginValidation -skipMacroValidation -skip-testing EXCLUDED_SOURCE_FILE_NAMES='*Tests.*'"
+      workspace: "ToMyongJi.xcworkspace"
     )
+
+    # TestFlight에 업로드
     upload_to_testflight(
       skip_waiting_for_build_processing: true
     )
   end
 
-  desc "App Store에 배포"
+  desc "App Store 배포 (main 브랜치용)"
   lane :release do
+    # App Store 배포 시에는 버전 및 빌드 번호를 자동으로 올리지 않음
+    # 버전 관리는 develop -> main 브랜치로 머지하기 전에 수동으로 관리
+
+    # 인증서 동기화
     sync_certificates
 
-    # 전체 버전에서 가장 큰 빌드 번호를 가져옴
-    begin
-      latest_build = app_store_build_number(
-        live: false
-      )
-    rescue
-      latest_build = 0
-    end
-
-    increment_build_number(
-      build_number: latest_build + 1,
-      xcodeproj: "ToMyongJi.xcodeproj"
-    )
-
+    # 앱 빌드 (Project.swift에 서명 정보가 있으므로 단순화)
     build_ios_app(
       scheme: "ToMyongJi-iOS",
-      workspace: "ToMyongJi.xcworkspace",
-      export_method: "app-store",
-      export_team_id: "FN67GXC5GH",
-      export_options: {
-        provisioningProfiles: {
-          "com.tomyongji.ios" => "match AppStore com.tomyongji.ios"
-        },
-        signingStyle: "manual",
-        signingCertificate: "Apple Distribution"
-      }
+      workspace: "ToMyongJi.xcworkspace"
     )
 
+    # App Store에 업로드하고 심사 제출
     upload_to_app_store(
-      skip_screenshots: true,
-      skip_metadata: true
+      # metadata 폴더의 release_notes.txt 내용을 자동으로 제출
+      submit_for_review: true,
+      
+      # 심사 제출 시 자동으로 앱을 출시하지 않도록 설정
+      automatic_release: false,
+      
+      # 빌드 처리가 완료될 때까지 대기
+      skip_waiting_for_build_processing: false
     )
   end
 end

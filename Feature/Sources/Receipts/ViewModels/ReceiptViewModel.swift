@@ -23,6 +23,9 @@ class ReceiptViewModel {
     var deposit: Int = 0
     var withdrawal: Int = 0
     
+    // 영수증 수정 데이터
+    var receiptId: Int = 0
+    
     // UI 상태
     var errorMessage: String? = nil
     var isLoading = false
@@ -196,6 +199,56 @@ class ReceiptViewModel {
             self.showAlert(title: "성공", message: "영수증 삭제에 성공했습니다.")
         }
         .store(in: &cancellables)
+    }
+    
+    // 영수증 수정
+    func updateReceipt() {
+        isLoading = true
+        
+        let request = UpdateReceiptRequest(
+            receiptId: receiptId,
+            date: date,
+            content: content,
+            deposit: deposit,
+            withdrawal: withdrawal
+        )
+        
+        networkingManager.run(ReceiptEndpoint.updateReceipt(request), type: UpdateReceiptResponse.self)
+            .sink { [weak self] completion in
+                guard let self = self else {return}
+                self.isLoading = false
+                
+                switch completion {
+                case .failure:
+                    self.showAlert(title: "실패", message: "영수증 수정에 실패했습니다")
+                case .finished:
+                    break
+                }
+            } receiveValue: { [weak self] response in
+                guard let self = self else { return }
+                self.isLoading = false
+                
+                // 영수증 목록 새로고침
+                self.getStudentClubReceipts(userId: authManager.userId ?? 0)
+                self.showAlert(title: "성공", message: "영수증 수정에 성공했습니다.")
+                
+                // 입력 필드 초기화
+                self.receiptId = 0
+                self.date = ""
+                self.content = ""
+                self.deposit = 0
+                self.withdrawal = 0
+            }
+            .store(in: &cancellables)
+    }
+    
+    // 영수증 수정을 위한 데이터 설정
+    func setReceiptForUpdate(_ receipt: Receipt) {
+        self.receiptId = receipt.receiptId
+        self.date = receipt.date
+        self.content = receipt.content
+        self.deposit = receipt.deposit
+        self.withdrawal = receipt.withdrawal
     }
     
     private func showAlert(title: String, message: String) {

@@ -1,5 +1,21 @@
 import ProjectDescription
 
+// 서명 설정을 위한 Settings 객체
+let settings: Settings = .settings(
+    base: [:],
+    configurations: [
+        .release(name: "Release", settings: [
+            "DEVELOPMENT_TEAM": "FN67GXC5GH", // 개발팀 ID
+            "CODE_SIGN_STYLE": "Manual",
+            "PROVISIONING_PROFILE_SPECIFIER": "match AppStore com.tomyongji.ios",
+            "CODE_SIGN_IDENTITY": "Apple Distribution"
+        ]),
+        .debug(name: "Debug", settings: [:])
+    ],
+    defaultSettings: .recommended
+)
+
+
 let project = Project(
     name: "ToMyongJi",
     organizationName: "ToMyongJi",
@@ -23,10 +39,9 @@ let project = Project(
                 .target(name: "Core"),
                 .target(name: "Feature"),
                 .target(name: "UI")
-            ]
-        ),
-        
-        // MARK: - Framework Targets
+            ],
+            settings: settings
+        ),        
         .target(
             name: "App",
             destinations: [.iPhone],

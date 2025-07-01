@@ -1,89 +1,91 @@
-name: iOS CI/CD
+name: build-tomyongji-ios-app
 
 on:
   push:
     branches:
-      - develop
       - main
-  pull_request:
-    branches:
       - develop
-      - main
-  workflow_dispatch:
 
 jobs:
+  # develop 브랜치 전용 TestFlight 배포 작업
   beta:
-    name: Deploy to TestFlight
-    if: github.ref == 'refs/heads/develop'
-    runs-on: macos-latest
+    name: TestFlight Deploy
+    runs-on: macos-14
+    # develop 브랜치에 push될 때만 실행되도록 조건을 설정
+    if: github.ref == 'refs/heads/develop' && !startsWith(github.event.head_commit.message, '[fastlane]')
     steps:
       - uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
+      - uses: jdx/mise-action@v2
+      - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.2.3'
           bundler-cache: true
-      - name: Install tuist
+
+      - name: Setup Xcode Version
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '16.2.0'
+
+      - name: Install Tuist CLI
         run: brew install tuist
+
+      - name: Install Dependencies
+        run: |
+          gem install bundler
+          bundle install
+
       - name: Tuist Generate
         run: tuist generate
-      - name: Install dependencies
-        run: bundle install
-      - name: Create Keychain
-        run: |
-          security create-keychain -p "${{ secrets.KEYCHAIN_PASSWORD }}" build.keychain
-          security default-keychain -s build.keychain
-          security unlock-keychain -p "${{ secrets.KEYCHAIN_PASSWORD }}" build.keychain
-          security set-keychain-settings -t 3600 -u build.keychain
+
       - name: Deploy to TestFlight
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
-          APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
-          APP_STORE_CONNECT_API_KEY_CONTENT: ${{ secrets.APP_STORE_CONNECT_API_KEY_CONTENT }}
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
-          FASTLANE_HIDE_TIMESTAMP: true
-          FASTLANE_SKIP_UPDATE_CHECK: true
           MATCH_KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
           MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
-        run: bundle exec fastlane beta
+          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
+          APP_STORE_CONNECT_API_KEY_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY }}
+        run: bundle exec fastlane ios beta
 
+  # main 브랜치 전용 App Store 배포 작업
   release:
-    name: Deploy to App Store
-    if: github.ref == 'refs/heads/main'
-    runs-on: macos-latest
+    name: App Store Deploy
+    runs-on: macos-14
+    # main 브랜치에 push될 때만 실행되도록 조건을 설정
+    if: github.ref == 'refs/heads/main' && !startsWith(github.event.head_commit.message, '[fastlane]')
     steps:
       - uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
+      - uses: jdx/mise-action@v2
+      - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.2.3'
           bundler-cache: true
-      - name: Install tuist
+
+      - name: Setup Xcode Version
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '16.2.0'
+
+      - name: Install Tuist CLI
         run: brew install tuist
+
+      - name: Install Dependencies
+        run: |
+          gem install bundler
+          bundle install
+
       - name: Tuist Generate
         run: tuist generate
-      - name: Install dependencies
-        run: bundle install
-      - name: Create Keychain
-        run: |
-          security create-keychain -p "${{ secrets.KEYCHAIN_PASSWORD }}" build.keychain
-          security default-keychain -s build.keychain
-          security unlock-keychain -p "${{ secrets.KEYCHAIN_PASSWORD }}" build.keychain
-          security set-keychain-settings -t 3600 -u build.keychain
+
       - name: Deploy to App Store
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
-          APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
-          APP_STORE_CONNECT_API_KEY_CONTENT: ${{ secrets.APP_STORE_CONNECT_API_KEY_CONTENT }}
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
-          FASTLANE_HIDE_TIMESTAMP: true
-          FASTLANE_SKIP_UPDATE_CHECK: true
           MATCH_KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
           MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
-        run: bundle exec fastlane release
+          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
+          APP_STORE_CONNECT_API_KEY_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY }}
+        # 'beta' lane 대신 'release' lane을 호출
+        run: bundle exec fastlane ios release

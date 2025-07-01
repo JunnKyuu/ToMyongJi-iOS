@@ -15,14 +15,11 @@ struct CreateReceiptView: View {
     @State private var showingMonthPicker = false
     
     @State private var showCreateForm: Bool = false
+    @State private var showEditForm: Bool = false
     @State private var viewModel = ReceiptViewModel()
     
     // 영수증
     @State private var balance: Int = 0
-    @State private var date: String = ""
-    @State private var content: String = ""
-    @State private var deposit: Int = 0
-    @State private var withdrawal: Int = 0
     
     private let club: Club
     
@@ -109,12 +106,24 @@ struct CreateReceiptView: View {
                 List {
                     ForEach(viewModel.filteredReceipts) { receipt in
                         ClubReceiptView(receipt: receipt, viewModel: viewModel, club: club)
-                    }
-                    .onDelete { indexSet in
-                        for index in indexSet {
-                            let receipt = viewModel.filteredReceipts[index]
-                            viewModel.deleteReceipt(receiptId: receipt.receiptId, studentClubId: club.studentClubId)
-                        }
+                            .onTapGesture {
+                                showEditForm = true
+                            }
+                            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                Button(role: .destructive) {
+                                    viewModel.deleteReceipt(receiptId: receipt.receiptId, studentClubId: club.studentClubId)
+                                } label: {
+                                    Label("삭제", systemImage: "trash")
+                                }
+                                
+                                Button {
+                                    viewModel.setReceiptForUpdate(receipt)
+                                    showEditForm = true
+                                } label: {
+                                    Label("수정", systemImage: "pencil")
+                                }
+                                .tint(.blue)
+                            }
                     }
                 }
                 .listStyle(.plain)
@@ -127,11 +136,19 @@ struct CreateReceiptView: View {
         }
         .sheet(isPresented: $showCreateForm) {
             CreateReceiptFormView(
-                date: $date,
-                content: $content,
-                deposit: $deposit,
-                withdrawal: $withdrawal,
+                date: $viewModel.date,
+                content: $viewModel.content,
+                deposit: $viewModel.deposit,
+                withdrawal: $viewModel.withdrawal,
                 onSave: createReceipt
+            )
+            .presentationDetents([.height(400)])
+            .presentationCornerRadius(30)
+        }
+        .sheet(isPresented: $showEditForm) {
+            EditReceiptFormView(
+                viewModel: viewModel,
+                onSave: updateReceipt
             )
             .presentationDetents([.height(400)])
             .presentationCornerRadius(30)
@@ -152,7 +169,12 @@ struct CreateReceiptView: View {
         .alert(viewModel.alertTitle, isPresented: $viewModel.showAlert) {
             Button("확인") {
                 if viewModel.alertTitle == "성공" {
-                    showCreateForm = false
+                    if showCreateForm {
+                        showCreateForm = false
+                    }
+                    if showEditForm {
+                        showEditForm = false
+                    }
                     resetForm()
                 }
             }
@@ -179,14 +201,14 @@ struct CreateReceiptView: View {
         }
         
         // 입력값 검증
-        if content.isEmpty {
+        if viewModel.content.isEmpty {
             viewModel.alertTitle = "오류"
             viewModel.alertMessage = "내용을 입력해주세요."
             viewModel.showAlert = true
             return
         }
         
-        if deposit == 0 && withdrawal == 0 {
+        if viewModel.deposit == 0 && viewModel.withdrawal == 0 {
             viewModel.alertTitle = "오류"
             viewModel.alertMessage = "입금 또는 출금 금액을 입력해주세요."
             viewModel.showAlert = true
@@ -195,20 +217,36 @@ struct CreateReceiptView: View {
         
         // ViewModel에 데이터 설정
         viewModel.userLoginId = userLoginId
-        viewModel.date = date
-        viewModel.content = content
-        viewModel.deposit = deposit
-        viewModel.withdrawal = withdrawal
         
         // 영수증 생성 요청
         viewModel.createReceipt()
     }
     
     private func resetForm() {
-        date = ""
-        content = ""
-        deposit = 0
-        withdrawal = 0
+        viewModel.date = ""
+        viewModel.content = ""
+        viewModel.deposit = 0
+        viewModel.withdrawal = 0
+    }
+    
+    private func updateReceipt() {
+        // 입력값 검증
+        if viewModel.content.isEmpty {
+            viewModel.alertTitle = "오류"
+            viewModel.alertMessage = "내용을 입력해주세요."
+            viewModel.showAlert = true
+            return
+        }
+        
+        if viewModel.deposit == 0 && viewModel.withdrawal == 0 {
+            viewModel.alertTitle = "오류"
+            viewModel.alertMessage = "입금 또는 출금 금액을 입력해주세요."
+            viewModel.showAlert = true
+            return
+        }
+        
+        // 영수증 수정 요청
+        viewModel.updateReceipt()
     }
     
     @ViewBuilder

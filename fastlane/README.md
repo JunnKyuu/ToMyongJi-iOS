@@ -15,22 +15,6 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 ## iOS
 
-### ios bump_version
-
-```sh
-[bundle exec] fastlane ios bump_version
-```
-
-버전과 빌드 번호 증가
-
-### ios bump_version_auto
-
-```sh
-[bundle exec] fastlane ios bump_version_auto
-```
-
-
-
 ### ios sync_certificates
 
 ```sh
