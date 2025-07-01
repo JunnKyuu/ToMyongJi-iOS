@@ -5,6 +5,7 @@ skip_docs
 platform :ios do
   desc "인증서와 프로비저닝 프로파일 동기화"
   lane :sync_certificates do
+    # ... (기존과 동일)
     keychain_name = "build.keychain-db"
     keychain_password = ENV["KEYCHAIN_PASSWORD"]
 
@@ -18,18 +19,14 @@ platform :ios do
       add_to_search_list: true
     )
 
-    # App Store Connect API 키 설정
-    if ENV["APP_STORE_CONNECT_API_KEY_KEY"]
-      app_store_connect_api_key(
-        key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
-        issuer_id: ENV["APP_STORE_CONNECT_API_KEY_ISSUER_ID"],
-        key_content: Base64.decode64(ENV["APP_STORE_CONNECT_API_KEY_KEY"]),
-        duration: 1200,
-        in_house: false
-      )
-    end
+    app_store_connect_api_key(
+      key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
+      issuer_id: ENV["APP_STORE_CONNECT_API_KEY_ISSUER_ID"],
+      key_content: Base64.decode64(ENV["APP_STORE_CONNECT_API_KEY_KEY"]),
+      duration: 1200,
+      in_house: false
+    )
 
-    # 인증서와 프로비저닝 프로파일 동기화
     match(
       type: "appstore",
       app_identifier: "com.tomyongji.ios",
@@ -43,8 +40,6 @@ platform :ios do
 
   desc "TestFlight 배포 (develop 브랜치용)"
   lane :beta do
-    
-    # App Store Connect API 인증을 명시적으로 가장 먼저 실행
     app_store_connect_api_key(
       key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
       issuer_id: ENV["APP_STORE_CONNECT_API_KEY_ISSUER_ID"],
@@ -53,41 +48,33 @@ platform :ios do
       in_house: false
     )
     
-    # 프로젝트의 현재 앱 버전을 가져옴 (어떤 타겟인지 명시)
     app_version = get_version_number(
       xcodeproj: "ToMyongJi.xcodeproj",
       target: "ToMyongJi-iOS"
     )
 
-    # TestFlight에 올라가 있는 해당 버전의 최신 빌드 번호를 가져옴.
     latest_build = latest_testflight_build_number(
       app_identifier: "com.tomyongji.ios",
       version: app_version
     )
 
-    # 가져온 최신 빌드 번호에 1을 더해 새 빌드 번호를 계산
     new_build_number = latest_build + 1
     
-    # 로그에 계산된 빌드 번호를 명확히 출력
     UI.message("Latest build on TestFlight for version #{app_version} is: #{latest_build}")
     UI.success("Next build number will be: #{new_build_number}")
 
-    # 프로젝트에 새로운 빌드 번호를 적용
     increment_build_number(
       build_number: new_build_number,
       xcodeproj: "ToMyongJi.xcodeproj"
     )
 
-    # 인증서 동기화
     sync_certificates
 
-    # 앱 빌드
     build_ios_app(
       scheme: "ToMyongJi-iOS",
       workspace: "ToMyongJi.xcworkspace"
     )
 
-    # TestFlight에 업로드
     upload_to_testflight(
       skip_waiting_for_build_processing: true
     )
@@ -95,13 +82,8 @@ platform :ios do
 
   desc "App Store 배포 (main 브랜치용)"
   lane :release do
-    # App Store 배포 시에는 버전 및 빌드 번호를 자동으로 올리지 않음
-    # 버전 관리는 develop -> main 브랜치로 머지하기 전에 수동으로 관리
-
-    # 인증서 동기화
     sync_certificates
 
-    # 앱 빌드 (Project.swift에 서명 정보가 있으므로 단순화)
     build_ios_app(
       scheme: "ToMyongJi-iOS",
       workspace: "ToMyongJi.xcworkspace"
@@ -109,10 +91,9 @@ platform :ios do
 
     # App Store에 업로드하고 심사 제출
     upload_to_app_store(
-      # metadata 폴더의 release_notes.txt 내용을 자동으로 제출
-      submit_for_review: true,
+      force: true,
       
-      # 심사 제출 시 자동으로 앱을 출시하지 않도록 설정
+      submit_for_review: true,
       automatic_release: false
     )
   end
