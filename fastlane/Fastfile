@@ -5,7 +5,6 @@ skip_docs
 platform :ios do
   desc "인증서와 프로비저닝 프로파일 동기화"
   lane :sync_certificates do
-    # ... (기존과 동일)
     keychain_name = "build.keychain-db"
     keychain_password = ENV["KEYCHAIN_PASSWORD"]
 
@@ -80,6 +79,7 @@ platform :ios do
     )
   end
 
+
   desc "App Store 배포 (main 브랜치용)"
   lane :release do
     sync_certificates
@@ -92,9 +92,8 @@ platform :ios do
     # App Store에 업로드하고 심사 제출
     upload_to_app_store(
       force: true,
-      
       submit_for_review: true,
-      automatic_release: false
+      automatic_release: false, 
       precheck_include_in_app_purchases: false
     )
   end
