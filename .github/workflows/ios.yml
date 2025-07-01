@@ -26,7 +26,7 @@ jobs:
           xcode-version: '16.2.0'
 
       - name: Install Tuist CLI
-        run: bash <(curl -Ls https://install.tuist.io)
+        run: brew install tuist
 
       - name: Install Dependencies
         run: |
@@ -72,7 +72,7 @@ jobs:
   #         xcode-version: '16.2.0'
 
   #     - name: Install Tuist CLI
-  #       run: bash <(curl -Ls https://install.tuist.io)
+  #       run: brew install tuist
 
   #     - name: Install Dependencies
   #       run: |
