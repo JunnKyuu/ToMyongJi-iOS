@@ -95,6 +95,7 @@ platform :ios do
       
       submit_for_review: true,
       automatic_release: false
+      precheck_include_in_app_purchases: false
     )
   end
 end
