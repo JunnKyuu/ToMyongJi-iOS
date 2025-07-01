@@ -10,7 +10,7 @@ jobs:
   beta:
     name: testflight deploy
     runs-on: macos-14
-    if: github.event.pull_request.merged == true && !startsWith(github.event.head_commit.message, '[fastlane]')
+    if: "!startsWith(github.event.head_commit.message, '[fastlane]')"
     steps:
       - uses: actions/checkout@v3
       - uses: jdx/mise-action@v2
