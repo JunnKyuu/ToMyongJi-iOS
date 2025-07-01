@@ -67,7 +67,11 @@ platform :ios do
         signingStyle: "manual",
         signingCertificate: "Apple Distribution"
       },
-      xcargs: "-skipPackageUpdates -skipPackagePluginValidation -skipMacroValidation -skip-testing EXCLUDED_SOURCE_FILE_NAMES='*Tests.*'"
+      xcargs: "DEVELOPMENT_TEAM='FN67GXC5GH' " +
+              "CODE_SIGN_STYLE='Manual' " +
+              "PROVISIONING_PROFILE_SPECIFIER='match AppStore com.tomyongji.ios' " +
+              "CODE_SIGN_IDENTITY='Apple Distribution: JunKyu Lee (FN67GXC5GH)' " +
+              "-skipPackageUpdates -skipPackagePluginValidation -skipMacroValidation -skip-testing EXCLUDED_SOURCE_FILE_NAMES='*Tests.*'"
     )
     upload_to_testflight(
       skip_waiting_for_build_processing: true
