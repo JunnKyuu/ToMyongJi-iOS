@@ -32,13 +32,6 @@ jobs:
         run: |
           gem install bundler
           bundle install
-          
-      - name: Setup Match
-        env:
-          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-          MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
-        run: |
-          bundle exec fastlane match appstore --readonly
 
       - name: Tuist Generate
         run: tuist generate
