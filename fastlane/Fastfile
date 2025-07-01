@@ -44,8 +44,7 @@ platform :ios do
   desc "TestFlight 배포 (develop 브랜치용)"
   lane :beta do
     
-    # 1. App Store Connect API 인증을 명시적으로 가장 먼저 실행
-    #    (이후의 액션들이 서버와 통신해야 하므로 세션을 미리 확보)
+    # App Store Connect API 인증을 명시적으로 가장 먼저 실행
     app_store_connect_api_key(
       key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
       issuer_id: ENV["APP_STORE_CONNECT_API_KEY_ISSUER_ID"],
@@ -54,39 +53,41 @@ platform :ios do
       in_house: false
     )
     
-    # 2. 프로젝트의 현재 앱 버전을 가져옴 (예: "1.0.5")
-    app_version = get_version_number(xcodeproj: "ToMyongJi.xcodeproj")
+    # 프로젝트의 현재 앱 버전을 가져옴 (어떤 타겟인지 명시)
+    app_version = get_version_number(
+      xcodeproj: "ToMyongJi.xcodeproj",
+      target: "ToMyongJi-iOS"
+    )
 
-    # 3. TestFlight에 올라가 있는 해당 버전의 최신 빌드 번호를 가져옴.
-    #    (만약 해당 버전에 대한 빌드가 없으면 0을 반환)
+    # TestFlight에 올라가 있는 해당 버전의 최신 빌드 번호를 가져옴.
     latest_build = latest_testflight_build_number(
       app_identifier: "com.tomyongji.ios",
       version: app_version
     )
 
-    # 4. 가져온 최신 빌드 번호에 1을 더해 새 빌드 번호를 계산
+    # 가져온 최신 빌드 번호에 1을 더해 새 빌드 번호를 계산
     new_build_number = latest_build + 1
     
-    # 로그에 계산된 빌드 번호를 명확히 출력하여 디버깅
+    # 로그에 계산된 빌드 번호를 명확히 출력
     UI.message("Latest build on TestFlight for version #{app_version} is: #{latest_build}")
     UI.success("Next build number will be: #{new_build_number}")
 
-    # 5. 프로젝트에 새로운 빌드 번호를 적용
+    # 프로젝트에 새로운 빌드 번호를 적용
     increment_build_number(
       build_number: new_build_number,
       xcodeproj: "ToMyongJi.xcodeproj"
     )
 
-    # 6. 인증서 동기화
+    # 인증서 동기화
     sync_certificates
 
-    # 7. 앱 빌드
+    # 앱 빌드
     build_ios_app(
       scheme: "ToMyongJi-iOS",
       workspace: "ToMyongJi.xcworkspace"
     )
 
-    # 8. TestFlight에 업로드
+    # TestFlight에 업로드
     upload_to_testflight(
       skip_waiting_for_build_processing: true
     )
