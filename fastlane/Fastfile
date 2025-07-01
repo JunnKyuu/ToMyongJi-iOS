@@ -18,22 +18,12 @@ platform :ios do
       add_to_search_list: true
     )
 
-    # App Store Connect API 키 설정 (로컬 또는 CI 환경)
+    # App Store Connect API 키 설정
     if ENV["APP_STORE_CONNECT_API_KEY_KEY"]
-      # CI 환경에서 환경변수로 키 사용
       app_store_connect_api_key(
-        key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"] || "8L63PR5VMY",
-        issuer_id: ENV["APP_STORE_CONNECT_API_KEY_ISSUER_ID"] || "1938b5bc-4d44-4546-8960-204d5b167b20",
-        key_content: ENV["APP_STORE_CONNECT_API_KEY_KEY"],
-        duration: 1200,
-        in_house: false
-      )
-    else
-      # 로컬 환경에서 파일로 키 사용
-      app_store_connect_api_key(
-        key_id: "8L63PR5VMY",
-        issuer_id: "1938b5bc-4d44-4546-8960-204d5b167b20",
-        key_filepath: "fastlane/AuthKey_8L63PR5VMY.p8",
+        key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
+        issuer_id: ENV["APP_STORE_CONNECT_API_KEY_ISSUER_ID"],
+        key_content: Base64.decode64(ENV["APP_STORE_CONNECT_API_KEY_KEY"]),
         duration: 1200,
         in_house: false
       )
