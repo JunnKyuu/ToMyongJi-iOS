@@ -30,12 +30,14 @@ class CollegesAndClubsViewModel {
         
         networkingManager.run(endpoint, type: CollegesAndClubsResponse.self)
             .sink { [weak self] completion in
-                self?.isLoading = false
+                guard let self = self else { return }
+                self.isLoading = false
                 if case .failure(let error) = completion {
-                    self?.errorMessage = error.localizedDescription
+                    self.errorMessage = error.localizedDescription
                 }
             } receiveValue: { [weak self] response in
-                self?.colleges = response.data
+                guard let self = self else { return }
+                self.colleges = response.data
             }
             .store(in: &cancellables)
     }
