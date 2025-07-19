@@ -14,8 +14,8 @@ struct LoginView: View {
     @Bindable private var authManager = AuthenticationManager.shared
     @Binding var showSignup: Bool
     @State private var showFindIdView: Bool = false
-    @FocusState private var focusField: Field?
     @State private var keyboardHeight: CGFloat = 0
+    @FocusState private var focusField: Field?
     
     enum Field {
         case id
@@ -55,6 +55,8 @@ struct LoginView: View {
                         .font(.custom("GmarketSansLight", size: 15))
                         .padding()
                         .focused($focusField, equals: .id)
+                        .autocorrectionDisabled(true)
+                        .textInputAutocapitalization(.never)
                         .submitLabel(.next)
                         .onSubmit {
                             focusField = .password
