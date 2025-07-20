@@ -72,7 +72,7 @@ public class ProfileViewModel {
                 ProfileEndpoint.clubs,
                 type: ClubResponse.self
             )
-            .map { clubResponse -> ClubResponse in
+            .map { [weak self] clubResponse -> ClubResponse in
                 if let self = self,
                    let club = clubResponse.data.first(where: { $0.studentClubId == self.studentClubId }) {
                     self.studentClub = club.studentClubName
@@ -132,7 +132,8 @@ public class ProfileViewModel {
             ProfileEndpoint.addMember(studentNum: studentNum, name: name),
             type: AddClubMemberResponse.self
         )
-        .sink { completion in
+        .sink { [weak self] completion in
+            guard let self = self else { return }
             self.isLoading = false
             switch completion {
             case .failure:
@@ -157,7 +158,8 @@ public class ProfileViewModel {
             ProfileEndpoint.deleteMember(studentNum: studentNum),
             type: DeleteClubMemberResponse.self
         )
-        .sink { completion in
+        .sink { [weak self ] completion in
+            guard let self = self else { return }
             self.isLoading = false
             switch completion {
             case .failure:

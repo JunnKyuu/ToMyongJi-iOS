@@ -234,4 +234,57 @@ final class ReceiptViewModelTests: XCTestCase {
         
         wait(for: [expectation], timeout: 5)
     }
+    
+    // MARK: - 영수증 수정 테스트
+    
+    func test_WhenUpdateReceiptSuccess_ThenGetUpdatedReceipt() {
+        // given
+        let expectation = XCTestExpectation(description: "영수증 수정 완료")
+        
+        receiptSut.receiptId = 590
+        receiptSut.date = "2025-07-09"
+        receiptSut.content = "환불수정"
+        receiptSut.deposit = 200000
+        receiptSut.withdrawal = 0
+        
+        // when
+        receiptSut.updateReceipt()
+        
+        // then
+        DispatchQueue.main.asyncAfter(deadline: .now()+3) {
+            [weak self] in
+            guard let self = self else { return }
+            
+            // 1. 로딩 상태 확인
+            XCTAssertFalse(self.receiptSut.isLoading)
+            
+            // 2. 알림 상태 확인
+            XCTAssertTrue(self.receiptSut.showAlert)
+            
+            // 3. 성공/실패 여부에 따른 검즌
+            if self.receiptSut.alertMessage == "영수증 수정에 성공했습니다." {
+                // 성공 케이스
+                XCTAssertEqual(self.receiptSut.alertTitle, "성공")
+                XCTAssertEqual(self.receiptSut.date, "")
+                XCTAssertEqual(self.receiptSut.content, "")
+                XCTAssertEqual(self.receiptSut.deposit, 0)
+                XCTAssertEqual(self.receiptSut.withdrawal, 0)
+            } else {
+                // 실패 케이스
+                XCTAssertEqual(self.receiptSut.alertTitle, "실패")
+                
+                XCTAssertEqual(self.receiptSut.alertMessage, "영수증 수정에 실패했습니다.")
+                
+                // 입력 필드는 초기화되지 않아야 함
+                XCTAssertEqual(self.receiptSut.date, "2025-07-09")
+                XCTAssertEqual(self.receiptSut.content, "환불수정")
+                XCTAssertEqual(self.receiptSut.deposit, 200000)
+                XCTAssertEqual(self.receiptSut.withdrawal, 0)
+            }
+            
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 3)
+    }
 }
