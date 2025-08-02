@@ -21,6 +21,14 @@ struct CreateReceiptFormView: View {
     @State private var inputDeposit = ""
     @State private var inputWithdrawal = ""
     
+    // DateFormatter를 한 번만 생성해서 재사용하도록 개선
+    private let isoDateFormatter: ISO8601DateFormatter = {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime]
+        formatter.timeZone = TimeZone(identifier: "Asia/Seoul")!
+        return formatter
+    }()
+    
     var onSave: () -> Void
     
     var body: some View {
@@ -51,10 +59,7 @@ struct CreateReceiptFormView: View {
                     .environment(\.locale, Locale(identifier: "ko_KR"))
                     .padding(10)
                     .onChange(of: inputDate) { _, newValue in
-                        let formatter = ISO8601DateFormatter()
-                        formatter.formatOptions = [.withInternetDateTime]
-                        formatter.timeZone = TimeZone(identifier: "Asia/Seoul")!
-                        date = formatter.string(from: newValue)
+                        date = isoDateFormatter.string(from: newValue)
                     }
                 
                 CustomTF(sfIcon: "doc.text", hint: "내용을 입력하세요", value: $content)
@@ -90,10 +95,7 @@ struct CreateReceiptFormView: View {
         .interactiveDismissDisabled()
         .onAppear {
             // 초기 날짜값 설정
-            let formatter = ISO8601DateFormatter()
-            formatter.formatOptions = [.withInternetDateTime]
-            formatter.timeZone = TimeZone(identifier: "Asia/Seoul")!
-            date = formatter.string(from: inputDate)
+            date = isoDateFormatter.string(from: inputDate)
         }
     }
     
