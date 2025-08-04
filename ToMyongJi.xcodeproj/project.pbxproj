@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -374,6 +374,10 @@
 		FD6502D342639F99F469DFFD /* MonthPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthPickerView.swift; sourceTree = "<group>"; };
 		FE47F37DC5E4D08AA9C53989 /* SelectCollegesAndClubsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectCollegesAndClubsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		0C9DC5D92E40906D008B27D7 /* TossVerify */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = TossVerify; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		4D4ED60ED788A95753FBFA84 /* Frameworks */ = {
@@ -1097,6 +1101,7 @@
 		DF1440F8006D5C5CAA0604E2 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				0C9DC5D92E40906D008B27D7 /* TossVerify */,
 				520068490FFA17DE1AACBBEC /* Admin */,
 				BD8A92B5081F912E9E0B61A9 /* Authentication */,
 				F7ED3BF7503E692646476DEE /* CollegeAndClubs */,
@@ -1213,6 +1218,9 @@
 			dependencies = (
 				D37EC570C4C419799DD8FAA9 /* PBXTargetDependency */,
 				94EA7000270DD73477E09493 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				0C9DC5D92E40906D008B27D7 /* TossVerify */,
 			);
 			name = Feature;
 			packageProductDependencies = (
