@@ -8,7 +8,7 @@
 
 import SwiftUI
 import Core
-import UniformTypeIdentifiers // 👈 UTType을 사용하기 위해 import
+import UniformTypeIdentifiers // UTType을 사용
 
 struct TossVerifyView: View {
     @Environment(\.dismiss) var dismiss
@@ -33,23 +33,25 @@ struct TossVerifyView: View {
                 }
                 Spacer()
             }
+            .padding(.top, 40)
             .padding(.horizontal)
 
             Spacer()
             
             // MARK: - 컨텐츠 영역
             VStack(spacing: 20) {
-                Image(systemName: "doc.text.magnifyingglass")
-                    .font(.system(size: 80))
-                    .foregroundStyle(.tint)
-                
+                Image("toss_logo")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 250)
+                    .padding()
                 Text("토스 거래내역서 인증")
-                    .font(.custom("GmarketSansBold", size: 24))
+                    .font(.custom("GmarketSansBold", size: 20))
                 
-                Text("토스 앱에서 발급받은 거래내역서 PDF 파일을 업로드하여 간편하게 내역을 등록하세요.")
+                Text("토스 앱에서 발급받은 거래내역서 PDF 파일을 업로드하여 간편하게 내역을 등록하세요.\n\n인증이 완료되면 toss 인증 마크가 학생회 이름 옆에 표시됩니다.")
                     .font(.custom("GmarketSansMedium", size: 14))
                     .foregroundStyle(.gray)
-                    .multilineTextAlignment(.center)
+                    .multilineTextAlignment(.leading)
                     .padding(.horizontal)
                 
                 // 1. 파일 선택 버튼
@@ -59,6 +61,7 @@ struct TossVerifyView: View {
                     HStack {
                         Image(systemName: "doc.fill")
                         Text(selectedFileName ?? "PDF 파일 선택")
+                            .font(.custom("GmarketSansBold", size: 15))
                             .lineLimit(1)
                     }
                     .padding()
@@ -66,6 +69,7 @@ struct TossVerifyView: View {
                     .background(Color(.systemGray6))
                     .clipShape(.rect(cornerRadius: 10))
                 }
+                .padding(.top, 20)
             }
             .padding(.horizontal)
 
@@ -88,12 +92,12 @@ struct TossVerifyView: View {
                 viewModel.tossVerify()
             } label: {
                 Text("인증 요청하기")
-                    .font(.custom("GmarketSansBold", size: 18))
+                    .font(.custom("GmarketSansBold", size: 15))
                     .foregroundStyle(Color.white)
                     .frame(maxWidth: .infinity)
                     .padding()
                     .background(viewModel.uploadFile == nil ? Color.gray : Color.blue) // 파일이 없으면 비활성화 색상
-                    .clipShape(.capsule)
+                    .clipShape(.rect(cornerRadius: 10))
             }
             .disabled(viewModel.uploadFile == nil) // 파일이 없으면 버튼 비활성화
             .padding(.horizontal)
