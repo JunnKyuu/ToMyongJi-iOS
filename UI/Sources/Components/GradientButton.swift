@@ -32,9 +32,9 @@ public struct GradientButton: View {
             .padding(.vertical, 12)
             .padding(.horizontal, 35)
             .background(
-                isEnabled ? Color.softBlue : Color.gray.opacity(0.3),
-                in: .capsule
+                isEnabled ? Color.softBlue : Color.gray.opacity(0.3)
             )
+            .clipShape(.rect(cornerRadius: 10))
         })
     }
 }
