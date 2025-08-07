@@ -27,7 +27,7 @@ struct LoginView: View {
             VStack(spacing: 20) {
                 Button(action: {
                     dismiss()
-                    if let tabSelection = UserDefaults.standard.value(forKey: "selectedTab") as? Int {
+                    if UserDefaults.standard.value(forKey: "selectedTab") as? Int != nil {
                         UserDefaults.standard.set(1, forKey: "selectedTab")
                     }
                 }) {

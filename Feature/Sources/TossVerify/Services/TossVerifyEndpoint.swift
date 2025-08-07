@@ -24,10 +24,9 @@ extension TossVerifyEndpoint: Endpoint {
     
     public var headers: [String : String] {
         guard let token = AuthenticationManager.shared.accessToken else {
-            return ["Content-Type": "application/json"]
+            return [:] // multipart 요청에서는 Content-Type을 자동으로 설정
         }
         return [
-            "Content-Type": "application/json",
             "Authorization": "Bearer \(token)"
         ]
     }
@@ -35,6 +34,7 @@ extension TossVerifyEndpoint: Endpoint {
     public var parameters: [String : Any] {
         switch self {
         case .tossVerify(let request):
+            // multipart 요청을 위해 파일 데이터와 userId 포함
             return [
                 "file": request.file,
                 "userId": request.userId
@@ -51,6 +51,23 @@ extension TossVerifyEndpoint: Endpoint {
     }
     
     public var encoding: ParameterEncoding {
-        return JSONEncoding.default
+        return URLEncoding.default
+    }
+    
+    // MARK: - Multipart 요청을 위한 추가 메서드
+    public var isMultipart: Bool {
+        switch self {
+        case .tossVerify:
+            return true
+        }
+    }
+    
+    public func getMultipartHeaders() -> [String: String] {
+        guard let token = AuthenticationManager.shared.accessToken else {
+            return [:] // Alamofire가 자동으로 Content-Type 설정
+        }
+        return [
+            "Authorization": "Bearer \(token)"
+        ]
     }
 }

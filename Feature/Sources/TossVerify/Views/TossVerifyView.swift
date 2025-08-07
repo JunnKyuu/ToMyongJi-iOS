@@ -18,6 +18,10 @@ struct TossVerifyView: View {
     // MARK: - 파일 선택 관련 State
     @State private var isFilePickerPresented = false
     @State private var selectedFileName: String?
+    @State private var selectedFileSize: String?
+    
+    // MARK: - 콜백
+    let onSuccess: (() -> Void)?
 
     var body: some View {
         VStack {
@@ -48,7 +52,7 @@ struct TossVerifyView: View {
                 Text("토스 거래내역서 인증")
                     .font(.custom("GmarketSansBold", size: 20))
                 
-                Text("토스 앱에서 발급받은 거래내역서 PDF 파일을 업로드하여 간편하게 내역을 등록하세요.\n\n인증이 완료되면 toss 인증 마크가 학생회 이름 옆에 표시됩니다.")
+                Text("토스 앱에서 발급받은 거래내역서 PDF 파일을 업로드하여 간편하게 내역을 등록하세요.\n\n• 파일 크기: 5MB 이하\n• 지원 형식: PDF\n\n인증이 완료되면 toss 인증 마크가 학생회 이름 옆에 표시됩니다.(차후 업데이트 예정)")
                     .font(.custom("GmarketSansMedium", size: 14))
                     .foregroundStyle(.gray)
                     .multilineTextAlignment(.leading)
@@ -58,18 +62,41 @@ struct TossVerifyView: View {
                 Button {
                     isFilePickerPresented = true
                 } label: {
-                    HStack {
-                        Image(systemName: "doc.fill")
-                        Text(selectedFileName ?? "PDF 파일 선택")
-                            .font(.custom("GmarketSansBold", size: 15))
-                            .lineLimit(1)
+                    VStack(spacing: 8) {
+                        HStack {
+                            Image(systemName: "doc.fill")
+                            Text(selectedFileName ?? "PDF 파일 선택")
+                                .font(.custom("GmarketSansBold", size: 15))
+                                .lineLimit(1)
+                        }
+                        
+                        if let fileSize = selectedFileSize {
+                            Text(fileSize)
+                                .font(.custom("GmarketSansMedium", size: 12))
+                                .foregroundStyle(.gray)
+                        }
                     }
                     .padding()
                     .frame(maxWidth: .infinity)
                     .background(Color(.systemGray6))
                     .clipShape(.rect(cornerRadius: 10))
                 }
+                .disabled(viewModel.isLoading)
                 .padding(.top, 20)
+                
+                // 파일 재선택 버튼
+                if selectedFileName != nil {
+                    Button {
+                        viewModel.clearFile()
+                        selectedFileName = nil
+                        selectedFileSize = nil
+                    } label: {
+                        Text("파일 재선택")
+                            .font(.custom("GmarketSansMedium", size: 14))
+                            .foregroundStyle(.blue)
+                    }
+                    .disabled(viewModel.isLoading)
+                }
             }
             .padding(.horizontal)
 
@@ -87,19 +114,31 @@ struct TossVerifyView: View {
                 
                 // ViewModel에 데이터 설정
                 viewModel.userLoginId = userLoginId
+                viewModel.onSuccess = onSuccess
                 
                 // 토스 거래내역서 인증 요청
                 viewModel.tossVerify()
             } label: {
-                Text("인증 요청하기")
-                    .font(.custom("GmarketSansBold", size: 15))
-                    .foregroundStyle(Color.white)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(viewModel.uploadFile == nil ? Color.gray : Color.blue) // 파일이 없으면 비활성화 색상
-                    .clipShape(.rect(cornerRadius: 10))
+                HStack {
+                    if viewModel.isLoading {
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                            .scaleEffect(0.8)
+                    }
+                    Text(viewModel.isLoading ? "인증 중..." : "인증 요청하기")
+                        .font(.custom("GmarketSansBold", size: 15))
+                        .foregroundStyle(Color.white)
+                }
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(
+                    viewModel.uploadFile == nil || viewModel.isLoading 
+                    ? Color.gray 
+                    : Color.blue
+                )
+                .clipShape(.rect(cornerRadius: 10))
             }
-            .disabled(viewModel.uploadFile == nil) // 파일이 없으면 버튼 비활성화
+            .disabled(viewModel.uploadFile == nil || viewModel.isLoading)
             .padding(.horizontal)
 
         }
@@ -122,8 +161,26 @@ struct TossVerifyView: View {
                 // URL로부터 Data를 읽어 ViewModel에 저장
                 do {
                     let fileData = try Data(contentsOf: url)
+                    
+                    // 파일 크기 체크
+                    let fileSizeInMB = Double(fileData.count) / 1024.0 / 1024.0
+                    if fileSizeInMB > 5.0 {
+                        viewModel.alertTitle = "파일 크기 초과"
+                        viewModel.alertMessage = "파일 크기가 5MB를 초과합니다. 더 작은 파일을 선택해주세요."
+                        viewModel.showAlert = true
+                        return
+                    }
+                    
                     viewModel.uploadFile = fileData
-                    selectedFileName = url.lastPathComponent // UI에 파일 이름 표시
+                    selectedFileName = url.lastPathComponent
+                    
+                    // 파일 크기를 적절한 단위로 표시
+                    if fileSizeInMB >= 1.0 {
+                        selectedFileSize = String(format: "%.1f MB", fileSizeInMB)
+                    } else {
+                        let fileSizeInKB = Double(fileData.count) / 1024.0
+                        selectedFileSize = String(format: "%.0f KB", fileSizeInKB)
+                    }
                 } catch {
                     // 에러 처리
                     viewModel.alertTitle = "파일 오류"
@@ -134,11 +191,21 @@ struct TossVerifyView: View {
             case .failure(let error):
                 // 사용자가 취소했거나 에러 발생 시
                 print("파일 선택 실패: \(error.localizedDescription)")
+                if error.localizedDescription.contains("cancelled") == false {
+                    viewModel.alertTitle = "파일 선택 오류"
+                    viewModel.alertMessage = "파일을 선택하는 중 오류가 발생했습니다."
+                    viewModel.showAlert = true
+                }
             }
         }
         // ViewModel의 Alert을 감지하여 표시
         .alert(viewModel.alertTitle, isPresented: $viewModel.showAlert) {
-            Button("확인") {}
+            Button("확인") {
+                // 성공 시 창 닫기
+                if viewModel.alertTitle == "인증 성공" {
+                    dismiss()
+                }
+            }
         } message: {
             Text(viewModel.alertMessage)
         }
@@ -146,5 +213,5 @@ struct TossVerifyView: View {
 }
 
 #Preview {
-    TossVerifyView()
+    TossVerifyView(onSuccess: {})
 }

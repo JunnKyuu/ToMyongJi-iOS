@@ -42,10 +42,7 @@ struct CreateReceiptView: View {
                 .padding(.horizontal, 15)
                 .padding(.top)
                 
-                GeometryReader {
-                    let rect = $0.frame(in: .global)
-                    let minY = rect.minY.rounded()
-                    
+                GeometryReader { _ in
                     ClubView(club, balance: viewModel.balance)
                 }
                 .frame(height: 125)
@@ -168,9 +165,12 @@ struct CreateReceiptView: View {
             .presentationCornerRadius(30)
         }
         .sheet(isPresented: $showTossVerifyForm) {
-            TossVerifyView()
-                .presentationDetents([.height(450)])
-                .presentationCornerRadius(30)
+            TossVerifyView(onSuccess: {
+                // 토스 인증 성공 시 영수증 목록 새로고침
+                viewModel.getStudentClubReceipts(userId: authManager.userId ?? 0)
+            })
+            .presentationDetents([.height(500)])
+            .presentationCornerRadius(30)
         }
         .sheet(isPresented: $showEditForm) {
             EditReceiptFormView(
