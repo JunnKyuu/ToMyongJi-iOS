@@ -40,6 +40,46 @@ public class AlamofireNetworkingManager {
         .eraseToAnyPublisher()
     }
     
+    // MARK: - Multipart 요청 지원 (파일 업로드)
+    public func runMultipart<T: Decodable>(_ endpoint: Endpoint, type: T.Type) -> AnyPublisher<T, APIError> {
+        let headers = HTTPHeaders(endpoint.getMultipartHeaders().map { HTTPHeader(name: $0, value: $1) })
+        
+        return Future<T, APIError> { promise in
+            AF.upload(multipartFormData: { multipartFormData in
+                // endpoint의 parameters를 multipart로 변환
+                for (key, value) in endpoint.parameters {
+                    if let fileData = value as? Data {
+                        // 파일 데이터인 경우
+                        multipartFormData.append(fileData, withName: key, fileName: "document.pdf", mimeType: "application/pdf")
+                    } else if let stringValue = value as? String,
+                              let data = stringValue.data(using: .utf8) {
+                        // 문자열 데이터인 경우
+                        multipartFormData.append(data, withName: key)
+                    } else if let intValue = value as? Int {
+                        let stringValue = String(intValue)
+                        if let data = stringValue.data(using: .utf8) {
+                            multipartFormData.append(data, withName: key)
+                        }
+                    }
+                }
+            }, to: endpoint.url, headers: headers)
+            .responseDecodable(of: T.self) { response in
+                switch response.result {
+                case .success(let value):
+                    promise(.success(value))
+                case .failure(let error):
+                    print("Multipart 요청 실패: \(error.localizedDescription)")
+                    if let data = response.data {
+                        print("서버 응답 데이터: \(String(data: data, encoding: .utf8) ?? "디코딩 실패")")
+                    }
+                    promise(.failure(APIError.networkingError(error: error)))
+                }
+            }
+        }
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
+    }
+    
     public func runWithStringResponse(_ endpoint: Endpoint) -> AnyPublisher<String, APIError> {
         let headersArray = endpoint.headers.map {
             HTTPHeader(name: $0, value: $1)

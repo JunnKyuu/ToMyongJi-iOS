@@ -15,6 +15,7 @@ struct CreateReceiptView: View {
     @State private var showingMonthPicker = false
     
     @State private var showCreateForm: Bool = false
+    @State private var showTossVerifyForm: Bool = false
     @State private var showEditForm: Bool = false
     @State private var viewModel = ReceiptViewModel()
     
@@ -41,10 +42,7 @@ struct CreateReceiptView: View {
                 .padding(.horizontal, 15)
                 .padding(.top)
                 
-                GeometryReader {
-                    let rect = $0.frame(in: .global)
-                    let minY = rect.minY.rounded()
-                    
+                GeometryReader { _ in
                     ClubView(club, balance: viewModel.balance)
                 }
                 .frame(height: 125)
@@ -52,21 +50,42 @@ struct CreateReceiptView: View {
             .padding(.bottom, 10)
             
             VStack(spacing: 20) {
-                Button {
-                    showCreateForm = true
-                } label: {
-                    HStack {
-                        Image(systemName: "plus.circle.fill")
-                        Text("영수증 작성")
+                HStack(spacing: 15) {
+                    Button {
+                        showCreateForm = true
+                    } label: {
+                        HStack {
+                            Image(systemName: "plus.circle.fill")
+                            Text("영수증 작성")
+                        }
+                        .font(.custom("GmarketSansMedium", size: 16))
+                        .foregroundStyle(Color.darkNavy)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 15)
+                        .background(
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(Color.softBlue)
+                        )
                     }
-                    .font(.custom("GmarketSansMedium", size: 16))
-                    .foregroundStyle(Color.darkNavy)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 15)
-                    .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(Color.softBlue)
-                    )
+                    Button {
+                        showTossVerifyForm = true
+                    } label: {
+                        HStack {
+                            Image("toss_logo")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 93)
+                            Text("인증")
+                        }
+                        .font(.custom("GmarketSansMedium", size: 16))
+                        .foregroundStyle(Color.darkNavy)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 15)
+                        .background(
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(Color.softBlue)
+                        )
+                    }
                 }
                 .padding(.horizontal, 20)
                 
@@ -142,7 +161,15 @@ struct CreateReceiptView: View {
                 withdrawal: $viewModel.withdrawal,
                 onSave: createReceipt
             )
-            .presentationDetents([.height(400)])
+            .presentationDetents([.height(450)])
+            .presentationCornerRadius(30)
+        }
+        .sheet(isPresented: $showTossVerifyForm) {
+            TossVerifyView(onSuccess: {
+                // 토스 인증 성공 시 영수증 목록 새로고침
+                viewModel.getStudentClubReceipts(userId: authManager.userId ?? 0)
+            })
+            .presentationDetents([.height(500)])
             .presentationCornerRadius(30)
         }
         .sheet(isPresented: $showEditForm) {
@@ -331,6 +358,6 @@ func ClubView(_ club: Club, balance: Int) -> some View {
     .padding(.horizontal, 15)
 }
 
-//#Preview {
-//    CreateReceiptView(club: Club(studentClubId: 1, studentClubName: "융합소프트웨어학부 학생회"))
-//}
+#Preview {
+    CreateReceiptView(club: Club(studentClubId: 1, studentClubName: "융합소프트웨어학부 학생회"))
+}
