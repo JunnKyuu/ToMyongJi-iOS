@@ -17,6 +17,10 @@ public protocol Endpoint {
     var parameters: [String: Any] { get }
     var method: HTTPMethod { get }
     var encoding: ParameterEncoding { get }
+    
+    // MARK: - Multipart 요청 지원 (기본값 제공)
+    var isMultipart: Bool { get }
+    func getMultipartHeaders() -> [String: String]
 }
 
 public extension Endpoint {
@@ -39,5 +43,14 @@ public extension Endpoint {
             fatalError("Failed to create URL with components: \(components)")
         }
         return url
+    }
+    
+    // MARK: - Multipart 요청 기본 구현
+    var isMultipart: Bool {
+        return false
+    }
+    
+    func getMultipartHeaders() -> [String: String] {
+        return headers
     }
 }

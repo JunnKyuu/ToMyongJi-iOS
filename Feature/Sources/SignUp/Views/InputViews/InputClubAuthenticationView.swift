@@ -98,7 +98,7 @@ struct InputClubAuthenticationView: View {
                 }
                 
                 // 자격 선택
-                if let club = viewModel.selectedClub {
+                if viewModel.selectedClub != nil {
                     Menu {
                         ForEach(roles) { role in
                             Button(action: {
