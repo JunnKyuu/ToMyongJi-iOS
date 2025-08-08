@@ -169,7 +169,7 @@ struct CreateReceiptView: View {
                 // 토스 인증 성공 시 영수증 목록 새로고침
                 viewModel.getStudentClubReceipts(userId: authManager.userId ?? 0)
             })
-            .presentationDetents([.height(500)])
+            .presentationDetents([.height(700)])
             .presentationCornerRadius(30)
         }
         .sheet(isPresented: $showEditForm) {
