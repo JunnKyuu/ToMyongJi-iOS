@@ -22,7 +22,7 @@ struct TossVerifyView: View {
     
     // MARK: - 콜백
     let onSuccess: (() -> Void)?
-
+    
     var body: some View {
         VStack {
             // MARK: - 상단 네비게이션
@@ -39,7 +39,7 @@ struct TossVerifyView: View {
             }
             .padding(.top, 40)
             .padding(.horizontal)
-
+            
             Spacer()
             
             // MARK: - 컨텐츠 영역
@@ -49,14 +49,40 @@ struct TossVerifyView: View {
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 250)
                     .padding()
-                Text("토스 거래내역서 인증")
-                    .font(.custom("GmarketSansBold", size: 20))
+                Text("토스뱅크 거래내역서 추가")
+                    .font(.custom("GmarketSansBold", size: 14))
                 
-                Text("토스 앱에서 발급받은 거래내역서 PDF 파일을 업로드하여 간편하게 내역을 등록하세요.\n\n• 파일 크기: 5MB 이하\n• 지원 형식: PDF\n\n인증이 완료되면 toss 인증 마크가 학생회 이름 옆에 표시됩니다.(차후 업데이트 예정)")
+                Text("토스 앱에서 발급받은 거래내역서 PDF 파일을 업로드하여 간편하게 내역을 등록하세요.\n\n• 파일 크기: 5MB 이하\n• 지원 형식: PDF")
                     .font(.custom("GmarketSansMedium", size: 14))
                     .foregroundStyle(.gray)
                     .multilineTextAlignment(.leading)
+                
+                Divider()
                     .padding(.horizontal)
+                
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("거래내역서 인증 마크 안내")
+                        .font(.custom("GmarketSansBold", size: 14))
+                    Text("전체 입출금 내역의 30% 이상이 토스뱅크 거래내역서로 인증되면 해당 학생회의 영수증 페이지 조회 시 거래내역서 인증 마크가 추가됩니다.")
+                        .font(.custom("GmarketSansMedium", size: 13))
+                        .foregroundStyle(.gray)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding(.bottom, 4)
+                    
+                    Text("토스뱅크 거래내역서를 발급 방법")
+                        .font(.custom("GmarketSansBold", size: 14))
+                        .padding(.top, 2)
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("1. 통장 탭 → 통장관리를 선택")
+                        Text("2. 문서관리 카테고리에서 거래내역서를 선택")
+                        Text("3. 발급방법을 ‘PDF로 저장하기’로 선택")
+                        Text("4. 언어 한글 선택 후 → 거래내역을 확인할 계좌 선택")
+                        Text("5. 거래내역 기간 선택 → ‘입출금 전체’ 선택 후 발급")
+                    }
+                    .font(.custom("GmarketSansMedium", size: 13))
+                    .foregroundStyle(.gray)
+                }
+                .padding(.horizontal)
                 
                 // 1. 파일 선택 버튼
                 Button {
@@ -99,9 +125,9 @@ struct TossVerifyView: View {
                 }
             }
             .padding(.horizontal)
-
+            
             Spacer()
-
+            
             // MARK: - 인증 요청 버튼
             Button {
                 // 로그인 아이디 확인
@@ -132,15 +158,15 @@ struct TossVerifyView: View {
                 .frame(maxWidth: .infinity)
                 .padding()
                 .background(
-                    viewModel.uploadFile == nil || viewModel.isLoading 
-                    ? Color.gray 
+                    viewModel.uploadFile == nil || viewModel.isLoading
+                    ? Color.gray
                     : Color.blue
                 )
                 .clipShape(.rect(cornerRadius: 10))
             }
             .disabled(viewModel.uploadFile == nil || viewModel.isLoading)
             .padding(.horizontal)
-
+            
         }
         // 2. .fileImporter Modifier 추가
         .fileImporter(
