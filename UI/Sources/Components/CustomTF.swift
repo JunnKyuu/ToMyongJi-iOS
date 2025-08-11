@@ -61,6 +61,8 @@ public struct CustomTF: View {
                                     RoundedRectangle(cornerRadius: 12)
                                         .stroke(isFocused ? Color.softBlue : Color.gray.opacity(0.2), lineWidth: 1.5)
                                 )
+                                .autocorrectionDisabled(true)
+                                .textInputAutocapitalization(.never)
                         } else {
                             SecureField(hint, text: $value)
                                 .font(.custom("GmarketSansLight", size: 14))
@@ -76,6 +78,8 @@ public struct CustomTF: View {
                                     RoundedRectangle(cornerRadius: 12)
                                         .stroke(isFocused ? Color.softBlue : Color.gray.opacity(0.2), lineWidth: 1.5)
                                 )
+                                .autocorrectionDisabled(true)
+                                .textInputAutocapitalization(.never)
                         }
                     }
                 } else {
@@ -92,6 +96,8 @@ public struct CustomTF: View {
                             RoundedRectangle(cornerRadius: 12)
                                 .stroke(isFocused ? Color.softBlue : Color.gray.opacity(0.2), lineWidth: 1.5)
                         )
+                        .autocorrectionDisabled(true)
+                        .textInputAutocapitalization(.never)
                 }
             }
             .animation(.easeInOut(duration: 0.2), value: isFocused)
