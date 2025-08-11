@@ -24,6 +24,14 @@ struct College: Codable, Identifiable {
 struct Club: Codable, Identifiable {
     var studentClubId: Int
     var studentClubName: String
+    var verification: Bool
     
     var id: Int { studentClubId }
+    
+    // CreateReceiptView에서 사용할 초기화 메서드
+    init(studentClubId: Int, studentClubName: String, verification: Bool = false) {
+        self.studentClubId = studentClubId
+        self.studentClubName = studentClubName
+        self.verification = verification
+    }
 }

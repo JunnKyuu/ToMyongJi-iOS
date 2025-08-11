@@ -24,43 +24,68 @@ struct ReceiptListView: View {
         VStack(spacing: 0) {
             // 상단 고정 영역
             VStack(spacing: 15) {
-                Text(club.studentClubName)
-                    .font(.custom("GmarketSansBold", size: 22))
-                    .foregroundStyle(Color.darkNavy)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal, 15)
-                
-                Menu {
-                    Button {
-                        viewModel.updateFilter(isFiltered: false)
-                    } label: {
-                        HStack {
-                            Text("전체 조회")
-                            if !viewModel.isFiltered {
-                                Image(systemName: "checkmark")
-                            }
-                        }
-                    }
+                VStack(spacing: 20) {
+                    Text(club.studentClubName)
+                        .font(.custom("GmarketSansBold", size: 22))
+                        .foregroundStyle(Color.darkNavy)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     
-                    Button {
-                        showingMonthPicker = true
-                    } label: {
-                        HStack {
-                            Text("월 선택")
-                            if viewModel.isFiltered {
-                                Image(systemName: "checkmark")
+                    HStack {
+                        // 토스 인증 마크 표시
+                        if club.verification {
+                            HStack {
+                                Image("toss_logo")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 80)
+                                Text("인증")
+                                    .font(.custom("GmarketSansBold", size: 12))
+                                    .foregroundStyle(Color.darkNavy)
                             }
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 3)
+                            .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color("tossBlue"), lineWidth: 1))
+
                         }
+                        
+                        // 조회 버튼
+                        Menu {
+                            Button {
+                                viewModel.updateFilter(isFiltered: false)
+                            } label: {
+                                HStack {
+                                    Text("전체 조회")
+                                    if !viewModel.isFiltered {
+                                        Image(systemName: "checkmark")
+                                    }
+                                }
+                            }
+                            
+                            Button {
+                                showingMonthPicker = true
+                            } label: {
+                                HStack {
+                                    Text("월 선택")
+                                    if viewModel.isFiltered {
+                                        Image(systemName: "checkmark")
+                                    }
+                                }
+                            }
+                        } label: {
+                            HStack(spacing: 4) {
+                                Text(viewModel.formattedYearMonth)
+                                Image(systemName: "chevron.down")
+                            }
+                            .font(.custom("GmarketSansLight", size: 12))
+                            .foregroundStyle(.gray)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                        .padding(.horizontal, 15)
                     }
-                } label: {
-                    HStack(spacing: 4) {
-                        Text(viewModel.formattedYearMonth)
-                        Image(systemName: "chevron.down")
-                    }
-                    .font(.custom("GmarketSansLight", size: 12))
-                    .foregroundStyle(.gray)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    
                 }
-                .frame(maxWidth: .infinity, alignment: .trailing)
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 15)
             }
             .padding(.vertical, 10)
@@ -107,7 +132,9 @@ struct ReceiptListView: View {
             .presentationDetents([.height(250)])
             .presentationCornerRadius(30)
         }
-        .onAppear {viewModel.getReceipts(studentClubId: club.studentClubId)}
+        .onAppear {
+            viewModel.getReceipts(studentClubId: club.studentClubId)
+        }
     }
     
     
@@ -152,7 +179,8 @@ struct ReceiptListView: View {
     #Preview {
         ReceiptListView(club: Club(
             studentClubId: 1,
-            studentClubName: "융합소프트웨어학부 학생회"
+            studentClubName: "융합소프트웨어학부 학생회",
+            verification: true
         ))
     }
 }
