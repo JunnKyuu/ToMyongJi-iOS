@@ -134,6 +134,7 @@ struct CreateReceiptView: View {
                                 } label: {
                                     Label("삭제", systemImage: "trash")
                                 }
+                                .tint(Color.withdrawal)
                                 
                                 Button {
                                     viewModel.setReceiptForUpdate(receipt)
@@ -141,7 +142,7 @@ struct CreateReceiptView: View {
                                 } label: {
                                     Label("수정", systemImage: "pencil")
                                 }
-                                .tint(.blue)
+                                .tint(Color.deposit)
                             }
                     }
                 }
