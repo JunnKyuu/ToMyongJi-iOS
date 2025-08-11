@@ -134,6 +134,7 @@ struct CreateReceiptView: View {
                                 } label: {
                                     Label("삭제", systemImage: "trash")
                                 }
+                                .tint(Color.withdrawal)
                                 
                                 Button {
                                     viewModel.setReceiptForUpdate(receipt)
@@ -141,7 +142,7 @@ struct CreateReceiptView: View {
                                 } label: {
                                     Label("수정", systemImage: "pencil")
                                 }
-                                .tint(.blue)
+                                .tint(Color.deposit)
                             }
                     }
                 }
@@ -169,7 +170,7 @@ struct CreateReceiptView: View {
                 // 토스 인증 성공 시 영수증 목록 새로고침
                 viewModel.getStudentClubReceipts(userId: authManager.userId ?? 0)
             })
-            .presentationDetents([.height(500)])
+            .presentationDetents([.height(700)])
             .presentationCornerRadius(30)
         }
         .sheet(isPresented: $showEditForm) {

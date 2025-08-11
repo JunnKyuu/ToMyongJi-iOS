@@ -36,7 +36,7 @@ public struct MainTabView: View {
                         if profileViewModel.studentClubId != 0 {
                             CreateReceiptView(club: Club(
                                 studentClubId: profileViewModel.studentClubId,
-                                studentClubName: profileViewModel.studentClub
+                                studentClubName: profileViewModel.studentClub 
                             ))
                         } else {
                             ProgressView()

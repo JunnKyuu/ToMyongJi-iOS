@@ -23,6 +23,8 @@ public enum UIAsset: Sendable {
   public static let deposit = UIColors(name: "deposit")
   public static let logo = UIImages(name: "logo")
   public static let softBlue = UIColors(name: "softBlue")
+  public static let tossBlue = UIColors(name: "tossBlue")
+  public static let tossLogo = UIImages(name: "toss_logo")
   public static let withdrawal = UIColors(name: "withdrawal")
 }
 

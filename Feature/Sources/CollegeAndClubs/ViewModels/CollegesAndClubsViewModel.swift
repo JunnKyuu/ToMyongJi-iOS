@@ -15,6 +15,10 @@ class CollegesAndClubsViewModel {
     var isLoading = false
     var errorMessage: String?
     
+    var showAlert: Bool = false
+    var alertTitle: String = ""
+    var alertMessage: String = ""
+    
     private var cancellables = Set<AnyCancellable>()
     private let networkingManager: AlamofireNetworkingManager
     
@@ -32,13 +36,22 @@ class CollegesAndClubsViewModel {
             .sink { [weak self] completion in
                 guard let self = self else { return }
                 self.isLoading = false
-                if case .failure(let error) = completion {
-                    self.errorMessage = error.localizedDescription
+                switch completion {
+                case .failure:
+                    self.showAlert(title: "실패", message: "학생회 정보를 불러오는데 실패했습니다.")
+                case .finished:
+                    break
                 }
             } receiveValue: { [weak self] response in
                 guard let self = self else { return }
                 self.colleges = response.data
             }
             .store(in: &cancellables)
+    }
+    
+    private func showAlert(title: String, message: String) {
+        alertTitle = title
+        alertMessage = message
+        showAlert = true
     }
 }
