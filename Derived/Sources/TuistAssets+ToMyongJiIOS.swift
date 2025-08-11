@@ -23,6 +23,8 @@ public enum ToMyongJiIOSAsset: Sendable {
   public static let deposit = ToMyongJiIOSColors(name: "deposit")
   public static let logo = ToMyongJiIOSImages(name: "logo")
   public static let softBlue = ToMyongJiIOSColors(name: "softBlue")
+  public static let tossBlue = ToMyongJiIOSColors(name: "tossBlue")
+  public static let tossLogo = ToMyongJiIOSImages(name: "toss_logo")
   public static let withdrawal = ToMyongJiIOSColors(name: "withdrawal")
 }
 
