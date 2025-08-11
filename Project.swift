@@ -110,6 +110,9 @@ let project = Project(
             bundleId: "com.tomyongji.featureTests",
             infoPlist: .extendingDefault(with: [:]),
             sources: ["Feature/Tests/**"],
+            resources: [
+                "Feature/Tests/**/*.pdf"
+            ],
             dependencies: [
                 .target(name: "Feature")
             ]
