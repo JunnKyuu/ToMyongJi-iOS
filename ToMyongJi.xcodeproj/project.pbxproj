@@ -14,6 +14,7 @@
 		0837F86D652FB69BF24DDDFA /* TuistAssets+ToMyongJiIOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4007B3111D84601BEF7F198F /* TuistAssets+ToMyongJiIOS.swift */; };
 		090BC95C2E939D90B1235265 /* ReceiptViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D9520AF5D1EAD72883699C0 /* ReceiptViewModelTests.swift */; };
 		0AF567CE918C4EF6271CFF3A /* AuthenticationManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB662513BB59FD2768462EAE /* AuthenticationManagerTests.swift */; };
+		0C25B2422E51F0AE005E7308 /* OCRReceiptFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C25B2412E51F0AE005E7308 /* OCRReceiptFormView.swift */; };
 		11BB9F7835F838BBCB96EEAB /* InputPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29452F0FF0CF6C327447CFB0 /* InputPasswordView.swift */; };
 		126E493559D72CC2C15F357A /* Receipt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7484C47FE8D12F7E95F24DC6 /* Receipt.swift */; };
 		15AC8737B62235755ED0D214 /* SignUpEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = E04969DDCC77A17FF2EE0EBC /* SignUpEndpoint.swift */; };
@@ -282,6 +283,7 @@
 		04FFD79F3BD12493D40B9FA8 /* App.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = App.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		088C270FEB0EF9F0D1AEF376 /* AlamofireNetworkingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlamofireNetworkingManager.swift; sourceTree = "<group>"; };
 		0BAD61A4B69A7EEF15E6F691 /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
+		0C25B2412E51F0AE005E7308 /* OCRReceiptFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRReceiptFormView.swift; sourceTree = "<group>"; };
 		0D8F38D566B41009DB0E68B4 /* AdminView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminView.swift; sourceTree = "<group>"; };
 		0E546E5157879AFE739DA333 /* InputIDView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputIDView.swift; sourceTree = "<group>"; };
 		0F128A6926E433DE37C8314F /* SignUpTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpTextField.swift; sourceTree = "<group>"; };
@@ -898,6 +900,7 @@
 				B9DAB92D455965C46DA9BFF3 /* EditReceiptFormView.swift */,
 				FD6502D342639F99F469DFFD /* MonthPickerView.swift */,
 				90530BC5F3252C5B62824160 /* ReceiptListView.swift */,
+				0C25B2412E51F0AE005E7308 /* OCRReceiptFormView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1618,6 +1621,7 @@
 				15AC8737B62235755ED0D214 /* SignUpEndpoint.swift in Sources */,
 				ED5F6DFCD9689DA389D955CC /* SignUpViewModel.swift in Sources */,
 				A7CF8A2AE856A1B6E83DF2ED /* InputClubAuthenticationView.swift in Sources */,
+				0C25B2422E51F0AE005E7308 /* OCRReceiptFormView.swift in Sources */,
 				50AD9E71978D1F56DB597DF9 /* InputEmailView.swift in Sources */,
 				A8FFD092A2FE7D3EDECF345B /* InputIDView.swift in Sources */,
 				11BB9F7835F838BBCB96EEAB /* InputPasswordView.swift in Sources */,
@@ -1793,6 +1797,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = FN67GXC5GH;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = App/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1801,6 +1806,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.tomyongji.ios;
 				PRODUCT_NAME = ToMyongJi_iOS;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.tomyongji.ios";
 				SDKROOT = iphoneos;
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;

@@ -16,6 +16,7 @@ public enum ReceiptEndpoint {
     case createReceipt(CreateReceiptRequest)
     case deleteReceipt(receiptId: Int)
     case updateReceipt(UpdateReceiptRequest)
+    case ocrUpload(userLoginId: String, imageData: Data)
 }
 
 extension ReceiptEndpoint: Endpoint {
@@ -31,6 +32,8 @@ extension ReceiptEndpoint: Endpoint {
             return "/api/receipt/\(receiptId)"
         case .updateReceipt:
             return "/api/receipt"
+        case .ocrUpload(let userLoginId, _):
+            return "/api/ocr/upload/\(userLoginId)"
         }
     }
     
@@ -38,10 +41,18 @@ extension ReceiptEndpoint: Endpoint {
         guard let token = AuthenticationManager.shared.accessToken else {
             return ["Content-Type": "application/json"]
         }
-        return [
-            "Content-Type": "application/json",
-            "Authorization": "Bearer \(token)"
-        ]
+        
+        switch self {
+        case .ocrUpload:
+            return [
+                "Authorization": "Bearer \(token)"
+            ]
+        default:
+            return [
+                "Content-Type": "application/json",
+                "Authorization": "Bearer \(token)"
+            ]
+        }
     }
     
     public var parameters: [String: Any] {
@@ -62,6 +73,10 @@ extension ReceiptEndpoint: Endpoint {
                 "deposit": request.deposit,
                 "withdrawal": request.withdrawal
             ]
+        case .ocrUpload(_, let imageData):
+            return [
+                "file": imageData
+            ]
         default:
             return [:]
         }
@@ -75,7 +90,7 @@ extension ReceiptEndpoint: Endpoint {
         switch self {
         case .receipt, .receiptForStudentClub:
             return .get
-        case .createReceipt:
+        case .createReceipt, .ocrUpload:
             return .post
         case .deleteReceipt:
             return .delete
@@ -90,6 +105,32 @@ extension ReceiptEndpoint: Endpoint {
             return URLEncoding.default
         case .createReceipt, .updateReceipt:
             return JSONEncoding.default
+        case .ocrUpload:
+            return URLEncoding.default
+        }
+    }
+    
+    // MARK: - Multipart 요청 지원
+    public var isMultipart: Bool {
+        switch self {
+        case .ocrUpload:
+            return true
+        default:
+            return false
+        }
+    }
+    
+    public func getMultipartHeaders() -> [String: String] {
+        switch self {
+        case .ocrUpload:
+            guard let token = AuthenticationManager.shared.accessToken else {
+                return [:]
+            }
+            return [
+                "Authorization": "Bearer \(token)"
+            ]
+        default:
+            return headers
         }
     }
 }
