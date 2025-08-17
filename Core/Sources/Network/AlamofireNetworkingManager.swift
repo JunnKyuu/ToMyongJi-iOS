@@ -49,8 +49,12 @@ public class AlamofireNetworkingManager {
                 // endpoint의 parameters를 multipart로 변환
                 for (key, value) in endpoint.parameters {
                     if let fileData = value as? Data {
-                        // 파일 데이터인 경우
-                        multipartFormData.append(fileData, withName: key, fileName: "document.pdf", mimeType: "application/pdf")
+                        // 파일 데이터인 경우 - 이미지 파일로 처리
+                        if key == "file" {
+                            multipartFormData.append(fileData, withName: key, fileName: "receipt.jpg", mimeType: "image/jpeg")
+                        } else {
+                            multipartFormData.append(fileData, withName: key, fileName: "document.pdf", mimeType: "application/pdf")
+                        }
                     } else if let stringValue = value as? String,
                               let data = stringValue.data(using: .utf8) {
                         // 문자열 데이터인 경우
