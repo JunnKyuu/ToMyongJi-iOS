@@ -110,3 +110,4 @@ struct CreateReceiptFormView: View {
 #Preview {
     CreateReceiptFormView(date: .constant(""), content: .constant(""), deposit: .constant(0), withdrawal: .constant(0), onSave: {})
 }
+

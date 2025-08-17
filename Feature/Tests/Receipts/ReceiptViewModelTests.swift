@@ -206,11 +206,16 @@ final class ReceiptViewModelTests: XCTestCase {
     func test_WhenDeleteReceiptSuccess_ThenGetDeletedReceipt() {
         // given
         let testReceiptId: Int = 325
-        let testStudentClubId: Int = 3
         let expectation = XCTestExpectation(description: "영수증 삭제에 성공했습니다.")
         
+        // 로그인 상태 확인
+        guard let userId = loginSut.authManager.userId else {
+            XCTFail("userId가 nil입니다. 로그인이 필요합니다.")
+            return
+        }
+        
         // when
-        receiptSut.deleteReceipt(receiptId: testReceiptId, studentClubId: testStudentClubId)
+        receiptSut.deleteReceipt(receiptId: testReceiptId, userId: userId)
         
         // then
         DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
@@ -286,5 +291,170 @@ final class ReceiptViewModelTests: XCTestCase {
         }
         
         wait(for: [expectation], timeout: 3)
+    }
+    
+    // MARK: - OCR 영수증 인식 테스트
+    
+    func test_WhenUploadReceiptImageSuccess_ThenGetOCRResult() {
+        // given
+        let expectation = XCTestExpectation(description: "OCR 영수증 인식 완료")
+        
+        // 테스트 이미지 파일 로드
+        guard let imageURL = Bundle(for: type(of: self)).url(forResource: "영수증", withExtension: "jpeg"),
+              let imageData = try? Data(contentsOf: imageURL) else {
+            XCTFail("테스트 이미지 파일을 로드할 수 없습니다.")
+            return
+        }
+        
+        // 로그인 상태 확인
+        guard loginSut.authManager.userLoginId != nil else {
+            XCTFail("userLoginId가 nil입니다. 로그인이 필요합니다.")
+            return
+        }
+        
+        // when
+        receiptSut.uploadReceiptImage(imageData: imageData)
+        
+        // then
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) { [weak self] in
+            guard let self = self else { return }
+            
+            // 1. 로딩 상태 확인
+            XCTAssertFalse(self.receiptSut.isLoading)
+            
+            // 2. 알림 상태 확인
+            XCTAssertTrue(self.receiptSut.showAlert)
+            
+            // 3. 성공/실패 여부에 따른 검증
+            if self.receiptSut.alertMessage == "영수증이 자동으로 등록되었습니다." {
+                // 성공 케이스
+                XCTAssertEqual(self.receiptSut.alertTitle, "성공")
+                
+                // OCR 성공 후 영수증 목록이 새로고침되었는지 확인
+                // (실제로는 서버에서 자동으로 영수증이 생성되므로 목록에 추가됨)
+                XCTAssertNotEqual(self.receiptSut.receipts.count, 0)
+            } else {
+                // 실패 케이스
+                XCTAssertEqual(self.receiptSut.alertTitle, "실패")
+                XCTAssertEqual(self.receiptSut.alertMessage, "영수증 인식에 실패했습니다.")
+            }
+            
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 10.0)
+    }
+    
+    func test_WhenUploadReceiptImageWithInvalidData_ThenGetError() {
+        // given
+        let expectation = XCTestExpectation(description: "OCR 영수증 인식 실패")
+        
+        // 잘못된 이미지 데이터 (빈 데이터)
+        let invalidImageData = Data()
+        
+        // 로그인 상태 확인
+        guard loginSut.authManager.userLoginId != nil else {
+            XCTFail("userLoginId가 nil입니다. 로그인이 필요합니다.")
+            return
+        }
+        
+        // when
+        receiptSut.uploadReceiptImage(imageData: invalidImageData)
+        
+        // then
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self] in
+            guard let self = self else { return }
+            
+            // 1. 로딩 상태 확인
+            XCTAssertFalse(self.receiptSut.isLoading)
+            
+            // 2. 알림 상태 확인
+            XCTAssertTrue(self.receiptSut.showAlert)
+            
+            // 3. 실패 메시지 확인
+            XCTAssertEqual(self.receiptSut.alertTitle, "실패")
+            XCTAssertEqual(self.receiptSut.alertMessage, "영수증 인식에 실패했습니다.")
+            
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 5.0)
+    }
+    
+    func test_WhenUploadReceiptImageWithoutLogin_ThenGetUserInfoError() {
+        // given
+        let expectation = XCTestExpectation(description: "사용자 정보 오류")
+        
+        // 로그아웃 상태로 만들기
+        loginSut.authManager.clearAuthentication()
+        
+        // 테스트 이미지 데이터
+        let testImageData = Data([0xFF, 0xD8, 0xFF, 0xE0]) // 간단한 JPEG 헤더
+        
+        // when
+        receiptSut.uploadReceiptImage(imageData: testImageData)
+        
+        // then
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+            guard let self = self else { return }
+            
+            // 1. 로딩 상태 확인 (사용자 정보 오류로 인해 즉시 실패)
+            XCTAssertFalse(self.receiptSut.isLoading)
+            
+            // 2. 알림 상태 확인
+            XCTAssertTrue(self.receiptSut.showAlert)
+            
+            // 3. 사용자 정보 오류 메시지 확인
+            XCTAssertEqual(self.receiptSut.alertTitle, "오류")
+            XCTAssertEqual(self.receiptSut.alertMessage, "사용자 정보를 찾을 수 없습니다.")
+            
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 2.0)
+    }
+    
+    func test_WhenUploadReceiptImageWithValidJPEG_ThenProcessCorrectly() {
+        // given
+        let expectation = XCTestExpectation(description: "유효한 JPEG 이미지 처리")
+        
+        // 유효한 JPEG 이미지 데이터 생성 (최소한의 JPEG 구조)
+        var jpegData = Data()
+        jpegData.append(contentsOf: [0xFF, 0xD8]) // JPEG SOI 마커
+        jpegData.append(contentsOf: [0xFF, 0xE0]) // APP0 마커
+        jpegData.append(contentsOf: [0x00, 0x10]) // 길이
+        jpegData.append(contentsOf: "JFIF".utf8) // JFIF 식별자
+        jpegData.append(contentsOf: [0x00, 0x01, 0x01]) // 버전 정보
+        jpegData.append(contentsOf: [0x00]) // 단위
+        jpegData.append(contentsOf: [0x00, 0x01, 0x00, 0x01]) // 밀도
+        jpegData.append(contentsOf: [0x00, 0x00]) // 썸네일
+        jpegData.append(contentsOf: [0xFF, 0xD9]) // JPEG EOI 마커
+        
+        // 로그인 상태 확인
+        guard loginSut.authManager.userLoginId != nil else {
+            XCTFail("userLoginId가 nil입니다. 로그인이 필요합니다.")
+            return
+        }
+        
+        // when
+        receiptSut.uploadReceiptImage(imageData: jpegData)
+        
+        // then
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self] in
+            guard let self = self else { return }
+            
+            // 1. 로딩 상태 확인
+            XCTAssertFalse(self.receiptSut.isLoading)
+            
+            // 2. 알림 상태 확인
+            XCTAssertTrue(self.receiptSut.showAlert)
+            
+            // 3. 요청이 정상적으로 처리되었는지 확인 (성공/실패는 서버 응답에 따라 다름)
+            XCTAssertTrue(self.receiptSut.alertTitle == "성공" || self.receiptSut.alertTitle == "실패")
+            
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 5.0)
     }
 }

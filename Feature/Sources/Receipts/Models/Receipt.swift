@@ -160,3 +160,36 @@ public struct UpdateReceiptResponse: Codable {
         self.data = data
     }
 }
+
+// MARK: - OCR 영수증 인식
+public struct OCRUploadRequest: Codable {
+    let file: Data
+    
+    public init(file: Data) {
+        self.file = file
+    }
+}
+
+public struct OCRUploadResponse: Codable {
+    let statusCode: Int
+    let statusMessage: String
+    let data: OCRData
+    
+    public init(statusCode: Int, statusMessage: String, data: OCRData) {
+        self.statusCode = statusCode
+        self.statusMessage = statusMessage
+        self.data = data
+    }
+}
+
+public struct OCRData: Codable {
+    let date: String
+    let content: String
+    let withdrawal: Int
+    
+    public init(date: String, content: String, withdrawal: Int) {
+        self.date = date
+        self.content = content
+        self.withdrawal = withdrawal
+    }
+}
