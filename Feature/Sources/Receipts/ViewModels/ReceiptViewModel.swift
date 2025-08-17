@@ -174,7 +174,7 @@ class ReceiptViewModel {
     }
     
     // 영수증 삭제
-    func deleteReceipt(receiptId: Int, studentClubId: Int) {
+    func deleteReceipt(receiptId: Int, userId: Int) {
         isLoading = true
         
         networkingManager.run(
@@ -195,7 +195,8 @@ class ReceiptViewModel {
             guard let self = self else { return }
             self.isLoading = false
             
-            self.getReceipts(studentClubId: studentClubId)
+            // 잔액 정보가 포함된 영수증 목록 새로고침
+            self.getStudentClubReceipts(userId: userId)
             self.showAlert(title: "성공", message: "영수증 삭제에 성공했습니다.")
         }
         .store(in: &cancellables)
@@ -249,6 +250,40 @@ class ReceiptViewModel {
         self.content = receipt.content
         self.deposit = receipt.deposit
         self.withdrawal = receipt.withdrawal
+    }
+    
+    // OCR 영수증 인식
+    func uploadReceiptImage(imageData: Data) {
+        isLoading = true
+        
+        guard let userLoginId = authManager.userLoginId else {
+            showAlert(title: "오류", message: "사용자 정보를 찾을 수 없습니다.")
+            return
+        }
+        
+        networkingManager.runMultipart(
+            ReceiptEndpoint.ocrUpload(userLoginId: userLoginId, imageData: imageData),
+            type: OCRUploadResponse.self
+        )
+        .sink { [weak self] completion in
+            guard let self = self else { return }
+            self.isLoading = false
+            
+            switch completion {
+            case .failure:
+                self.showAlert(title: "실패", message: "영수증 인식에 실패했습니다.")
+            case .finished:
+                break
+            }
+        } receiveValue: { [weak self] response in
+            guard let self = self else { return }
+            self.isLoading = false
+            
+            // OCR 성공 시 영수증 목록 새로고침
+            self.getStudentClubReceipts(userId: self.authManager.userId ?? 0)
+            self.showAlert(title: "성공", message: "영수증이 자동으로 등록되었습니다.")
+        }
+        .store(in: &cancellables)
     }
     
     private func showAlert(title: String, message: String) {

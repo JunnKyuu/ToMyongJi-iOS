@@ -17,6 +17,7 @@ struct CreateReceiptView: View {
     @State private var showCreateForm: Bool = false
     @State private var showTossVerifyForm: Bool = false
     @State private var showEditForm: Bool = false
+    @State private var showOCRForm: Bool = false
     @State private var viewModel = ReceiptViewModel()
     
     // 영수증
@@ -89,6 +90,25 @@ struct CreateReceiptView: View {
                 }
                 .padding(.horizontal, 20)
                 
+                // OCR 버튼 추가
+                Button {
+                    showOCRForm = true
+                } label: {
+                    HStack {
+                        Image(systemName: "camera.fill")
+                        Text("영수증 사진으로 자동 입력")
+                    }
+                    .font(.custom("GmarketSansMedium", size: 16))
+                    .foregroundStyle(Color.darkNavy)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 15)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(Color.deposit.opacity(0.1))
+                    )
+                }
+                .padding(.horizontal, 20)
+                
                 Menu {
                     Button {
                         viewModel.updateFilter(isFiltered: false)
@@ -130,7 +150,7 @@ struct CreateReceiptView: View {
                             }
                             .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                                 Button(role: .destructive) {
-                                    viewModel.deleteReceipt(receiptId: receipt.receiptId, studentClubId: club.studentClubId)
+                                    viewModel.deleteReceipt(receiptId: receipt.receiptId, userId: authManager.userId ?? 0)
                                 } label: {
                                     Label("삭제", systemImage: "trash")
                                 }
@@ -180,6 +200,17 @@ struct CreateReceiptView: View {
             )
             .presentationDetents([.height(400)])
             .presentationCornerRadius(30)
+        }
+        .sheet(isPresented: $showOCRForm) {
+            OCRReceiptFormView()
+                .presentationDetents([.height(450)])
+                .presentationCornerRadius(30)
+        }
+        .onChange(of: showOCRForm) { _, isPresented in
+            // OCR 폼이 닫힐 때 새로고침
+            if !isPresented {
+                viewModel.getStudentClubReceipts(userId: authManager.userId ?? 0)
+            }
         }
         .sheet(isPresented: $showingMonthPicker) {
             MonthPickerView(
