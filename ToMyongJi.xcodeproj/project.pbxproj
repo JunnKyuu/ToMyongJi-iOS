@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -390,6 +390,10 @@
 		FD6502D342639F99F469DFFD /* MonthPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthPickerView.swift; sourceTree = "<group>"; };
 		FE47F37DC5E4D08AA9C53989 /* SelectCollegesAndClubsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectCollegesAndClubsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		0C25B2442E51F964005E7308 /* Resources */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Resources; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		4D4ED60ED788A95753FBFA84 /* Frameworks */ = {
@@ -800,6 +804,7 @@
 		6A5782EF9A2595DD394E4812 /* Receipts */ = {
 			isa = PBXGroup;
 			children = (
+				0C25B2442E51F964005E7308 /* Resources */,
 				9D9520AF5D1EAD72883699C0 /* ReceiptViewModelTests.swift */,
 			);
 			path = Receipts;
@@ -1337,6 +1342,9 @@
 			);
 			dependencies = (
 				FE229448DA43E935D6573061 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				0C25B2442E51F964005E7308 /* Resources */,
 			);
 			name = FeatureTests;
 			packageProductDependencies = (
