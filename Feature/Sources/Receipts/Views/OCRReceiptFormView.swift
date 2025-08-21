@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import UIKit
 import UI
 import Core
 import PhotosUI
@@ -15,6 +16,7 @@ import PhotosUI
 struct OCRReceiptFormView: View {
     @Environment(\.dismiss) private var dismiss
     
+    @State private var selectedItem: PhotosPickerItem?
     @State private var selectedImage: UIImage?
     @State private var showingImagePicker = false
     @State private var showingCamera = false
@@ -132,26 +134,34 @@ struct OCRReceiptFormView: View {
         .padding(.vertical, 15)
         .padding(.horizontal, 25)
         .interactiveDismissDisabled()
-        .actionSheet(isPresented: $showingActionSheet) {
-            ActionSheet(
-                title: Text("영수증 사진"),
-                message: Text("사진을 선택하거나 촬영하세요"),
-                buttons: [
-                    .default(Text("카메라로 촬영")) {
-                        showingCamera = true
-                    },
-                    .default(Text("갤러리에서 선택")) {
-                        showingImagePicker = true
-                    },
-                    .cancel(Text("취소"))
-                ]
-            )
+        .confirmationDialog("영수증 사진", isPresented: $showingActionSheet, titleVisibility: .visible) {
+            Button("카메라로 촬영") {
+                showingCamera = true
+            }
+            Button("갤러리에서 선택") {
+                showingImagePicker = true
+            }
+            Button("취소", role: .cancel) { }
         }
-        .sheet(isPresented: $showingImagePicker) {
-            ImagePicker(selectedImage: $selectedImage, sourceType: .photoLibrary)
-        }
+        .photosPicker(
+            isPresented: $showingImagePicker,
+            selection: $selectedItem,
+            matching: .images,
+            photoLibrary: .shared()
+        )
         .sheet(isPresented: $showingCamera) {
-            ImagePicker(selectedImage: $selectedImage, sourceType: .camera)
+            CameraPicker(selectedImage: $selectedImage)
+        }
+        .onChange(of: selectedItem) { _, newItem in
+            Task {
+                if let data = try? await newItem?.loadTransferable(type: Data.self),
+                   let image = UIImage(data: data) {
+                    // 이미지 크기 조정
+                    let maxSize: CGFloat = 1024
+                    let resizedImage = resizeImage(image, targetSize: CGSize(width: maxSize, height: maxSize))
+                    selectedImage = resizedImage
+                }
+            }
         }
         .alert(viewModel.alertTitle, isPresented: $viewModel.showAlert) {
             Button("확인") {
@@ -167,27 +177,65 @@ struct OCRReceiptFormView: View {
     }
     
     private func uploadImage() {
-        guard let image = selectedImage,
-              let imageData = image.jpegData(compressionQuality: 0.8) else {
+        guard let image = selectedImage else { return }
+        
+        // 이미지 크기 조정 및 압축
+        let maxSize: CGFloat = 1024 // 최대 1024px
+        let compressedImage = resizeImage(image, targetSize: CGSize(width: maxSize, height: maxSize))
+        
+        guard let imageData = compressedImage.jpegData(compressionQuality: 0.6) else {
             return
         }
         
         isUploadingImage = true
         viewModel.uploadReceiptImage(imageData: imageData)
     }
+    
+    private func resizeImage(_ image: UIImage, targetSize: CGSize) -> UIImage {
+        let size = image.size
+        
+        let widthRatio  = targetSize.width  / size.width
+        let heightRatio = targetSize.height / size.height
+        
+        let newSize: CGSize
+        if widthRatio > heightRatio {
+            newSize = CGSize(width: size.width * heightRatio, height: size.height * heightRatio)
+        } else {
+            newSize = CGSize(width: size.width * widthRatio, height: size.height * widthRatio)
+        }
+        
+        let rect = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
+        
+        UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
+        image.draw(in: rect)
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return newImage ?? image
+    }
+    
+
 }
 
-// ImagePicker 구조체
-struct ImagePicker: UIViewControllerRepresentable {
+
+//MARK: - UIImagePickerController를 SwiftUI에서 사용하기 위한 래퍼
+struct CameraPicker: UIViewControllerRepresentable {
     @Binding var selectedImage: UIImage?
-    let sourceType: UIImagePickerController.SourceType
     @Environment(\.dismiss) private var dismiss
     
     func makeUIViewController(context: Context) -> UIImagePickerController {
         let picker = UIImagePickerController()
+        picker.sourceType = .camera
         picker.delegate = context.coordinator
-        picker.sourceType = sourceType
-        picker.allowsEditing = true
+        picker.allowsEditing = false
+        picker.cameraCaptureMode = .photo
+        picker.cameraDevice = .rear
+        picker.cameraFlashMode = .auto
+        
+        // 카메라 설정 최적화
+        picker.videoQuality = .typeMedium
+        picker.videoMaximumDuration = 0
+        
         return picker
     }
     
@@ -198,19 +246,42 @@ struct ImagePicker: UIViewControllerRepresentable {
     }
     
     class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-        let parent: ImagePicker
-        
-        init(_ parent: ImagePicker) {
+        let parent: CameraPicker
+        init(_ parent: CameraPicker) {
             self.parent = parent
         }
         
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-            if let editedImage = info[.editedImage] as? UIImage {
-                parent.selectedImage = editedImage
-            } else if let originalImage = info[.originalImage] as? UIImage {
-                parent.selectedImage = originalImage
+            if let image = info[.originalImage] as? UIImage {
+                // 이미지 크기 조정
+                let maxSize: CGFloat = 1024
+                let resizedImage = resizeImage(image, targetSize: CGSize(width: maxSize, height: maxSize))
+                parent.selectedImage = resizedImage
             }
             parent.dismiss()
+        }
+        
+        private func resizeImage(_ image: UIImage, targetSize: CGSize) -> UIImage {
+            let size = image.size
+            
+            let widthRatio  = targetSize.width  / size.width
+            let heightRatio = targetSize.height / size.height
+            
+            let newSize: CGSize
+            if widthRatio > heightRatio {
+                newSize = CGSize(width: size.width * heightRatio, height: size.height * heightRatio)
+            } else {
+                newSize = CGSize(width: size.width * widthRatio, height: size.height * widthRatio)
+            }
+            
+            let rect = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
+            
+            UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
+            image.draw(in: rect)
+            let newImage = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            
+            return newImage ?? image
         }
         
         func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
