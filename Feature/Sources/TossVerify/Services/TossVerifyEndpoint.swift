@@ -34,9 +34,14 @@ extension TossVerifyEndpoint: Endpoint {
     public var parameters: [String : Any] {
         switch self {
         case .tossVerify(let request):
-            // multipart 요청을 위해 파일 데이터와 userId 포함
+            // 정확한 파일 정보를 담은 MultipartFile 객체를 생성
+            let pdfFile = MultipartFile(
+                data: request.file,
+                fileName: "거래내역서.pdf",
+                mimeType: "application/pdf"
+            )
             return [
-                "file": request.file,
+                "file": pdfFile,
                 "userId": request.userId
             ]
         }

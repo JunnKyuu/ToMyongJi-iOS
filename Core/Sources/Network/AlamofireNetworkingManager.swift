@@ -13,6 +13,21 @@ public enum APIError: Error {
     case networkingError(error: Error)
 }
 
+// MARK: - OCR 영수증 사진 첨부 기능과 토스 거래내역서 pdf 첨부를 구분하기 위한 구조체
+public struct MultipartFile {
+    let data: Data
+    let fileName: String
+    let mimeType: String
+    
+    public init(data: Data, fileName: String, mimeType: String) {
+        self.data = data
+        self.fileName = fileName
+        self.mimeType = mimeType
+    }
+}
+
+// MARK: - AlamofireNetworkingManager
+
 public class AlamofireNetworkingManager {
     
     public static let shared = AlamofireNetworkingManager()
@@ -48,8 +63,10 @@ public class AlamofireNetworkingManager {
             AF.upload(multipartFormData: { multipartFormData in
                 // endpoint의 parameters를 multipart로 변환
                 for (key, value) in endpoint.parameters {
-                    if let fileData = value as? Data {
-                        // 파일 데이터인 경우 - 이미지 파일로 처리
+                    // MultipartFile 타입인지 먼저 확인
+                    if let file = value as? MultipartFile {
+                        multipartFormData.append(file.data, withName: key, fileName: file.fileName, mimeType: file.mimeType)
+                    } else if let fileData = value as? Data {
                         if key == "file" {
                             multipartFormData.append(fileData, withName: key, fileName: "receipt.jpg", mimeType: "image/jpeg")
                         } else {
@@ -119,3 +136,4 @@ public class AlamofireNetworkingManager {
         }
     }
 }
+
