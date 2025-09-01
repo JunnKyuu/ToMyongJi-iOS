@@ -32,6 +32,7 @@ public class AuthenticationManager {
         // 초기화 시 현재 인증 상태 설정
         self.isAuthenticated = UserDefaults.standard.string(forKey: accessTokenKey) != nil
         self.userRole = UserDefaults.standard.string(forKey: userRoleKey)
+        self.userId = UserDefaults.standard.integer(forKey: userIdKey)
         self.userLoginId = UserDefaults.standard.string(forKey: userLoginIdKey)
         self.accessToken = UserDefaults.standard.string(forKey: accessTokenKey)
         self.tokenExpiration = UserDefaults.standard.object(forKey: tokenExpirationKey) as? Date
