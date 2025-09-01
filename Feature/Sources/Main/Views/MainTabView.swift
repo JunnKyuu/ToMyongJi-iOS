@@ -96,9 +96,20 @@ public struct MainTabView: View {
             } message: {
                 Text("접속한지 오랜시간이 지났습니다. 다시 로그인해주세요.")
             }
+            .onAppear {
+                if !authManager.isAuthenticated {
+                    selectedTab = 1
+                }
+            }
             .fullScreenCover(isPresented: $showLoginView, content: {
                 AuthenticationView()
             })
+            .onChange(of: selectedTab) { _, newTab in
+                if (newTab == 2 || newTab == 3) && !authManager.isAuthenticated {
+                    self.previousTab = 1
+                    self.showLoginAlert = true
+                }
+            }
             .onChange(of: authManager.isAuthenticated) { _, newValue in
                 if newValue {
                     selectedTab = previousTab
