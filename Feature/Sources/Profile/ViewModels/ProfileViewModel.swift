@@ -37,7 +37,7 @@ public class ProfileViewModel {
         }
     }
     
-    // 유저 자격 한글로 매핑
+    // MARK: - 유저 자격 한글로 매핑
     private func mapRole(_ role: String) -> String {
         switch role {
         case "STU":
@@ -49,55 +49,58 @@ public class ProfileViewModel {
         }
     }
     
-    // 유저 정보 조회
+    // MARK: - 유저 정보 조회
     func fetchUserProfile() {
         isLoading = true
         guard let userId = authManager.userId else {
             self.errorMessage = "사용자 ID를 찾을 수 없습니다"
+            self.isLoading = false
             return
         }
-        
-        networkingManager.run(
+
+        // 첫 번째 요청: 내 프로필 정보 가져오기
+        let myProfilePublisher = networkingManager.run(
             ProfileEndpoint.myProfile(id: userId),
             type: ProfileResponse.self
         )
-        .flatMap { [weak self] response -> AnyPublisher<ClubResponse, APIError> in
-            self?.isLoading = false
-            self?.name = response.data.name
-            self?.studentNum = response.data.studentNum
-            self?.collegeName = response.data.college ?? "소속 없음"
-            self?.studentClubId = response.data.studentClubId ?? 0
-            
-            return self?.networkingManager.run(
-                ProfileEndpoint.clubs,
-                type: ClubResponse.self
-            )
-            .map { [weak self] clubResponse -> ClubResponse in
-                if let self = self,
-                   let club = clubResponse.data.first(where: { $0.studentClubId == self.studentClubId }) {
+
+        // 두 번째 요청: 전체 동아리 목록 가져오기
+        let clubsPublisher = networkingManager.run(
+            ProfileEndpoint.clubs,
+            type: ClubResponse.self
+        )
+
+        // 두 요청을 함께 실행하고, 둘 다 성공했을 때 결과 처리 (Zip)
+        Publishers.Zip(myProfilePublisher, clubsPublisher)
+            .sink(receiveCompletion: { [weak self] completion in
+                guard let self = self else { return }
+                self.isLoading = false
+                
+                if case .failure = completion {
+                    self.showAlert(title: "실패", message: "유저 정보를 조회하는데 실패했습니다.")
+                }
+            }, receiveValue: { [weak self] profileResponse, clubResponse in
+                guard let self = self else { return }
+                
+                // 두 요청이 모두 성공했으므로, 프로퍼티 업데이트
+                self.name = profileResponse.data.name
+                self.studentNum = profileResponse.data.studentNum
+                self.collegeName = profileResponse.data.college ?? "소속 없음"
+                
+                let userClubId = profileResponse.data.studentClubId ?? 0
+                self.studentClubId = userClubId
+                
+                // 동아리 ID로 동아리 이름 찾기
+                if let club = clubResponse.data.first(where: { $0.studentClubId == userClubId }) {
                     self.studentClub = club.studentClubName
                 } else {
-                    self?.studentClub = "소속 없음"
+                    self.studentClub = "소속 없음"
                 }
-                return clubResponse
-            }
-            .eraseToAnyPublisher() ?? Empty().eraseToAnyPublisher()
-        }
-        .sink { [weak self] completion in
-            guard let self = self else { return }
-            self.isLoading = false
-            
-            switch completion {
-            case .failure:
-                self.showAlert(title: "실패", message: "유저 정보를 조회하는데 실패했습니다.")
-            case .finished:
-                break
-            }
-        } receiveValue: { _ in }
+            })
             .store(in: &cancellables)
     }
     
-    // 소속 부원 조회
+    // MARK: - 소속 부원 조회
     func fetchClubMembers() {
         isLoading = true
         guard let userId = authManager.userId else { return }
@@ -125,7 +128,7 @@ public class ProfileViewModel {
         .store(in: &cancellables)
     }
     
-    // 소속 부원 추가
+    // MARK: - 소속 부원 추가
     func addMember(studentNum: String, name: String) {
         isLoading = true
         networkingManager.run(
@@ -151,7 +154,7 @@ public class ProfileViewModel {
         .store(in: &cancellables)
     }
     
-    // 소속 부원 삭제
+    // MARK: - 소속 부원 삭제
     func deleteMember(studentNum: String) {
         isLoading = true
         networkingManager.run(
@@ -177,6 +180,7 @@ public class ProfileViewModel {
         .store(in: &cancellables)
     }
     
+    // MARK: - 알림창 함수
     private func showAlert(title: String, message: String) {
         alertTitle = title
         alertMessage = message
