@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UI
 
 struct FindIDView: View {
     @Environment(\.dismiss) private var dismiss
@@ -14,29 +15,19 @@ struct FindIDView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 15) {
-            Button {
-                dismiss()
-            } label: {
-                Image(systemName: "chevron.left")
-                    .font(.title3.bold())
-                    .foregroundStyle(Color.gray)
-                    .contentShape(.rect)
-            }
-            .padding(.top, 10)
-            
             Text("아이디 찾기")
-                .font(.custom("GmarketSansBold", size: 25))
+                .font(.custom("GmarketSansBold", size: 22))
                 .padding(.top, 5)
             
             Text("회원가입할 때 입력한 이메일 주소를 입력해주세요.")
-                .font(.custom("GmarketSansLight", size: 12))
-                .foregroundStyle(.gray)
+                .font(.custom("GmarketSansLight", size: 14))
+                .foregroundStyle(Color("gray_70"))
                 .padding(.top, -5)
             
             // 입력 필드를 감싸는 카드 뷰
             VStack(spacing: 0) {
                 TextField("이메일 주소", text: $viewModel.email)
-                    .font(.custom("GmarketSansLight", size: 15))
+                    .font(.custom("GmarketSansLight", size: 14))
                     .padding()
                     .focused($isFocused)
                     .submitLabel(.done)
@@ -46,8 +37,12 @@ struct FindIDView: View {
                         viewModel.findID()
                     }
             }
-            .background(Color.gray.opacity(0.1))
+            .background(Color.white)
             .clipShape(RoundedRectangle(cornerRadius: 10))
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                .stroke(Color("gray_20"), lineWidth: 1)
+            )
             .padding(.top, 20)
             
             // 아이디 찾기 버튼
@@ -61,7 +56,7 @@ struct FindIDView: View {
                     .padding(.vertical, 15)
                     .background(
                         RoundedRectangle(cornerRadius: 10)
-                            .fill(Color.darkNavy)
+                            .fill(Color("primary"))
                             .opacity(viewModel.email.isEmpty ? 0.5 : 1)
                     )
             }
@@ -79,7 +74,8 @@ struct FindIDView: View {
         } message: {
             Text(viewModel.isSuccess ? "아이디: \(viewModel.userID)" : viewModel.alertMessage)
         }
-        .interactiveDismissDisabled()
+        // 스와이프로 내릴 수 있게 추가
+        .presentationDragIndicator(.visible)
     }
 }
 

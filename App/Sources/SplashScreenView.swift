@@ -29,7 +29,7 @@ struct SplashScreenView: View {
                 .padding(.vertical, 230)
                 Spacer()
                 Text("To MyongJi - 명지대 학생들에게")
-                    .font(.custom("GmarketSansLight", size: 15))
+                    .font(.custom("GmarketSansLight", size: 14))
                     .foregroundStyle(Color("darkNavy"))
                     .padding(.bottom, 30)
             }
