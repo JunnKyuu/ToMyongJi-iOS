@@ -15,6 +15,7 @@
 		090BC95C2E939D90B1235265 /* ReceiptViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D9520AF5D1EAD72883699C0 /* ReceiptViewModelTests.swift */; };
 		0AF567CE918C4EF6271CFF3A /* AuthenticationManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB662513BB59FD2768462EAE /* AuthenticationManagerTests.swift */; };
 		0C25B2422E51F0AE005E7308 /* OCRReceiptFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C25B2412E51F0AE005E7308 /* OCRReceiptFormView.swift */; };
+		0C3F71342E680C6000403D6E /* DismissButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3F71332E680C6000403D6E /* DismissButton.swift */; };
 		11BB9F7835F838BBCB96EEAB /* InputPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29452F0FF0CF6C327447CFB0 /* InputPasswordView.swift */; };
 		126E493559D72CC2C15F357A /* Receipt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7484C47FE8D12F7E95F24DC6 /* Receipt.swift */; };
 		15AC8737B62235755ED0D214 /* SignUpEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = E04969DDCC77A17FF2EE0EBC /* SignUpEndpoint.swift */; };
@@ -284,6 +285,7 @@
 		088C270FEB0EF9F0D1AEF376 /* AlamofireNetworkingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlamofireNetworkingManager.swift; sourceTree = "<group>"; };
 		0BAD61A4B69A7EEF15E6F691 /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
 		0C25B2412E51F0AE005E7308 /* OCRReceiptFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRReceiptFormView.swift; sourceTree = "<group>"; };
+		0C3F71332E680C6000403D6E /* DismissButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissButton.swift; sourceTree = "<group>"; };
 		0D8F38D566B41009DB0E68B4 /* AdminView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminView.swift; sourceTree = "<group>"; };
 		0E546E5157879AFE739DA333 /* InputIDView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputIDView.swift; sourceTree = "<group>"; };
 		0F128A6926E433DE37C8314F /* SignUpTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpTextField.swift; sourceTree = "<group>"; };
@@ -850,6 +852,7 @@
 			children = (
 				5DBFAD8D70C6358B8A1B957E /* CustomTF.swift */,
 				E9496419038EE7CD9CF6E9F4 /* GradientButton.swift */,
+				0C3F71332E680C6000403D6E /* DismissButton.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -1546,6 +1549,7 @@
 				7136F22987457DAB7B39401D /* CustomTF.swift in Sources */,
 				B1A81BC8B44860D29B1EFC4B /* GradientButton.swift in Sources */,
 				2C4C2FD804A38F1E815CBDE7 /* Color+Extensions.swift in Sources */,
+				0C3F71342E680C6000403D6E /* DismissButton.swift in Sources */,
 				DADCF523967B11CF4130BBB5 /* View+Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
