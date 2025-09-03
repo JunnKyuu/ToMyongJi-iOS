@@ -26,14 +26,7 @@ struct LoginView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
-                Button(action: {
-                    dismiss()
-                    if UserDefaults.standard.value(forKey: "selectedTab") as? Int != nil {
-                        UserDefaults.standard.set(1, forKey: "selectedTab")
-                    }
-                }) {
-                    DismissButton()
-                }
+                DismissButton()
                 .frame(maxWidth: .infinity, alignment: .leading)
                 
                 Spacer()
@@ -50,7 +43,7 @@ struct LoginView: View {
                 VStack(spacing: 10) {
                     // 아이디 입력
                     TextField("아이디", text: $viewModel.userId)
-                        .font(.custom("GmarketSansLight", size: 15))
+                        .font(.custom("GmarketSansLight", size: 14))
                         .padding()
                         .background(Color.white)
                         .clipShape(
@@ -70,7 +63,7 @@ struct LoginView: View {
                         
                     // 비밀번호 입력
                     SecureField("비밀번호", text: $viewModel.password)
-                        .font(.custom("GmarketSansLight", size: 15))
+                        .font(.custom("GmarketSansLight", size: 14))
                         .padding()
                         .background(Color.white)
                         .clipShape(RoundedRectangle(cornerRadius: 10))
@@ -115,7 +108,7 @@ struct LoginView: View {
                         showFindIdView = true
                     }
                 }
-                .font(.custom("GmarketSansLight", size: 13))
+                .font(.custom("GmarketSansLight", size: 12))
                 .tint(Color("darkNavy"))
                 .padding(.top, 15)
                 
