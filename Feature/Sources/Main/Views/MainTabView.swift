@@ -24,19 +24,12 @@ public struct MainTabView: View {
             AdminTabView()
         } else {
             TabView(selection: $selectedTab) {
-                CollegesAndClubsView()
-                    .tabItem {
-                        Image(systemName: "magnifyingglass")
-                        Text("조회")
-                    }
-                    .tag(1)
-                
                 Group {
                     if authManager.isAuthenticated {
                         if profileViewModel.studentClubId != 0 {
                             CreateReceiptView(club: Club(
                                 studentClubId: profileViewModel.studentClubId,
-                                studentClubName: profileViewModel.studentClub 
+                                studentClubName: profileViewModel.studentClub
                             ))
                         } else {
                             ProgressView()
@@ -53,10 +46,17 @@ public struct MainTabView: View {
                     }
                 }
                 .tabItem {
-                    Image(systemName: "pencil")
+                    Image(selectedTab == 2 ? "create-active" : "create-inactive")
                     Text("작성")
                 }
                 .tag(2)
+                
+                CollegesAndClubsView()
+                    .tabItem {
+                        Image(selectedTab == 1 ? "home-active" : "home-inactive")
+                        Text("홈")
+                    }
+                    .tag(1)
                 
                 Group {
                     if authManager.isAuthenticated {
@@ -70,12 +70,12 @@ public struct MainTabView: View {
                     }
                 }
                 .tabItem {
-                    Image(systemName: "person.circle")
-                    Text("프로필")
+                    Image(selectedTab == 3 ? "profile-active" : "profile-inactive")
+                    Text("내 정보")
                 }
                 .tag(3)
             }
-            .tint(Color.darkNavy)
+            .tint(Color("primary"))
             .navigationBarBackButtonHidden()
             .alert("로그인 후 이용 가능합니다.", isPresented: $showLoginAlert) {
                 Button("취소", role: .cancel) {
