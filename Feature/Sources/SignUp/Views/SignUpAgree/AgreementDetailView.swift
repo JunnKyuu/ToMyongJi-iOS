@@ -12,14 +12,13 @@ struct AgreementDetailView: View {
     @Environment(\.dismiss) private var dismiss
     let type: AgreementType
 
-    
     var body: some View {
         NavigationView {
             ScrollView {
                 VStack(alignment: .leading, spacing: 15) {
                     Text(getAgreementContent())
                         .font(.custom("GmarketSansLight", size: 14))
-                        .foregroundStyle(Color.darkNavy)
+                        .foregroundStyle(Color.black)
                 }
                 .padding()
             }
@@ -30,7 +29,7 @@ struct AgreementDetailView: View {
                     Button("닫기") {
                         dismiss()
                     }
-                    .foregroundStyle(Color.darkNavy)
+                    .foregroundStyle(Color.black)
                 }
             }
         }
