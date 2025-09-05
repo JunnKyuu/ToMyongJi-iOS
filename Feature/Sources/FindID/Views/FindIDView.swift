@@ -24,7 +24,7 @@ struct FindIDView: View {
                 .foregroundStyle(Color("gray_70"))
                 .padding(.top, -5)
             
-            // 입력 필드를 감싸는 카드 뷰
+            // MARK: - 입력 필드를 감싸는 카드 뷰
             VStack(spacing: 0) {
                 TextField("이메일 주소", text: $viewModel.email)
                     .font(.custom("GmarketSansLight", size: 14))
@@ -41,11 +41,12 @@ struct FindIDView: View {
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .overlay(
                 RoundedRectangle(cornerRadius: 10)
-                .stroke(Color("gray_20"), lineWidth: 1)
+                    .stroke((isFocused ? Color("primary"): Color("gray_20")), lineWidth: 1)
             )
             .padding(.top, 20)
+            .animation(.easeInOut(duration: 0.2), value: isFocused)
             
-            // 아이디 찾기 버튼
+            // MARK: - 아이디 찾기 버튼
             Button(action: {
                 viewModel.findID()
             }) {
@@ -79,6 +80,7 @@ struct FindIDView: View {
     }
 }
 
+// MARK: - Preview
 #Preview {
     FindIDView()
 }

@@ -16,6 +16,7 @@
 		0AF567CE918C4EF6271CFF3A /* AuthenticationManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB662513BB59FD2768462EAE /* AuthenticationManagerTests.swift */; };
 		0C25B2422E51F0AE005E7308 /* OCRReceiptFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C25B2412E51F0AE005E7308 /* OCRReceiptFormView.swift */; };
 		0C3F71342E680C6000403D6E /* DismissButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3F71332E680C6000403D6E /* DismissButton.swift */; };
+		0CE52E8E2E6A67B70011CD43 /* SignUpTextFieldBottomStroke.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CE52E8D2E6A67B70011CD43 /* SignUpTextFieldBottomStroke.swift */; };
 		11BB9F7835F838BBCB96EEAB /* InputPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29452F0FF0CF6C327447CFB0 /* InputPasswordView.swift */; };
 		126E493559D72CC2C15F357A /* Receipt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7484C47FE8D12F7E95F24DC6 /* Receipt.swift */; };
 		15AC8737B62235755ED0D214 /* SignUpEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = E04969DDCC77A17FF2EE0EBC /* SignUpEndpoint.swift */; };
@@ -286,6 +287,7 @@
 		0BAD61A4B69A7EEF15E6F691 /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
 		0C25B2412E51F0AE005E7308 /* OCRReceiptFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRReceiptFormView.swift; sourceTree = "<group>"; };
 		0C3F71332E680C6000403D6E /* DismissButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissButton.swift; sourceTree = "<group>"; };
+		0CE52E8D2E6A67B70011CD43 /* SignUpTextFieldBottomStroke.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpTextFieldBottomStroke.swift; sourceTree = "<group>"; };
 		0D8F38D566B41009DB0E68B4 /* AdminView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminView.swift; sourceTree = "<group>"; };
 		0E546E5157879AFE739DA333 /* InputIDView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputIDView.swift; sourceTree = "<group>"; };
 		0F128A6926E433DE37C8314F /* SignUpTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpTextField.swift; sourceTree = "<group>"; };
@@ -996,6 +998,7 @@
 				0A310200D511077D1E751A45 /* InputViews */,
 				9A92D3C4E786680005B7E5BB /* SignUpAgree */,
 				0F128A6926E433DE37C8314F /* SignUpTextField.swift */,
+				0CE52E8D2E6A67B70011CD43 /* SignUpTextFieldBottomStroke.swift */,
 				BB9C4E826785FA9794EA7330 /* SignUpView.swift */,
 			);
 			path = Views;
@@ -1618,6 +1621,7 @@
 				2FD8250F6EE5FA730E2B7759 /* ProfileViewModel.swift in Sources */,
 				3D0CCD9D5E3EE45E11478376 /* AddClubMemberRow.swift in Sources */,
 				C1936260BEF8953FB42AC6AD /* ClubMemberInfoRow.swift in Sources */,
+				0CE52E8E2E6A67B70011CD43 /* SignUpTextFieldBottomStroke.swift in Sources */,
 				B90A7255CC05B1147500AA73 /* ProfileMyInfoRow.swift in Sources */,
 				84134D8C0DA9D1ACDAAD0FF4 /* ProfileView.swift in Sources */,
 				126E493559D72CC2C15F357A /* Receipt.swift in Sources */,

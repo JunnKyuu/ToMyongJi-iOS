@@ -11,12 +11,18 @@ import UI
 
 struct LoginView: View {
     @Environment(\.dismiss) private var dismiss
+    
     @Bindable private var viewModel = LoginViewModel()
     @Bindable private var authManager = AuthenticationManager.shared
     @Binding var showSignup: Bool
+    
     @State private var showFindIdView: Bool = false
     @State private var keyboardHeight: CGFloat = 0
+    
     @FocusState private var focusField: Field?
+    @FocusState private var isFocusedID: Bool
+    @FocusState private var isFocusedPW: Bool
+    
     
     enum Field {
         case id
@@ -32,14 +38,14 @@ struct LoginView: View {
                 Spacer()
                     .frame(height: 10)
                 
-                // 로고 이미지 - 크기 유지
+                // MARK: - 로고 이미지 - 크기 유지
                 Image("logo")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 300)
                     .padding(.vertical, 50)
                 
-                // 입력 필드들을 감싸는 카드 뷰
+                // MARK: - 입력 필드들을 감싸는 카드 뷰
                 VStack(spacing: 10) {
                     // 아이디 입력
                     TextField("아이디", text: $viewModel.userId)
@@ -51,8 +57,9 @@ struct LoginView: View {
                         )
                         .overlay(
                             RoundedRectangle(cornerRadius: 10)
-                                .stroke(Color("gray_20"), lineWidth: 1)
+                                .stroke((isFocusedID ? Color("primary") :  Color("gray_20")), lineWidth: 1)
                         )
+                        .focused($isFocusedID)
                         .focused($focusField, equals: .id)
                         .autocorrectionDisabled(true)
                         .textInputAutocapitalization(.never)
@@ -60,6 +67,7 @@ struct LoginView: View {
                         .onSubmit {
                             focusField = .password
                         }
+                        .animation(.easeInOut(duration: 0.2), value: isFocusedID)
                         
                     // 비밀번호 입력
                     SecureField("비밀번호", text: $viewModel.password)
@@ -69,18 +77,18 @@ struct LoginView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 10))
                         .overlay(
                             RoundedRectangle(cornerRadius: 10)
-                                .stroke(Color("gray_20"), lineWidth: 1)
+                                .stroke((isFocusedPW ? Color("primary"): Color("gray_20")), lineWidth: 1)
                         )
+                        .focused($isFocusedPW)
                         .focused($focusField, equals: .password)
                         .submitLabel(.done)
                         .onSubmit {
                             viewModel.login()
                         }
-                        
-                    
+                        .animation(.easeInOut(duration: 0.2), value: isFocusedPW)
                 }
                 
-                // 로그인 버튼
+                // MARK: - 로그인 버튼
                 Button(action: {
                     viewModel.login()
                 }) {
@@ -98,7 +106,7 @@ struct LoginView: View {
                 .disabled(viewModel.userId.isEmpty || viewModel.password.isEmpty || viewModel.isLoading)
                 .padding(.top, 20)
                 
-                // 회원가입 및 아이디 찾기 버튼
+                // MARK: - 회원가입 및 아이디 찾기 버튼
                 HStack(spacing: 30) {
                     Button("회원가입") {
                         showSignup = true
@@ -145,6 +153,7 @@ struct LoginView: View {
     }
 }
 
+// MARK: - Preview
 #Preview {
     LoginView(showSignup: .constant(false))
 }
