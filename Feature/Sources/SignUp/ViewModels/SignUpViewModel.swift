@@ -12,7 +12,7 @@ import Core
 
 @Observable
 class SignUpViewModel {
-    // 입력 데이터
+    // MARK: - 입력 데이터
     var userId: String = ""
     var password: String = ""
     var email: String = ""
@@ -23,7 +23,7 @@ class SignUpViewModel {
     var selectedClub: Club?
     var selectedRole: String = ""
     
-    // UI 상태
+    // MARK: - UI 상태
     var isAgreeAll: Bool = false
     var isLoading: Bool = false
     var showAlert: Bool = false
@@ -34,19 +34,19 @@ class SignUpViewModel {
     var isUserIdAvailable: Bool = false
     var isSignUpCompleted: Bool = false
     
-    // 버튼 상태
+    // MARK: - 버튼 상태
     var isSendingEmail: Bool = false
     var isVerifyingEmail: Bool = false
     var isVerifyingClub: Bool = false
     var isSigningUp: Bool = false
     
-    // 데이터
+    // MARK: - 데이터
     var colleges: [College] = []
     
     private let networkingManager = AlamofireNetworkingManager.shared
     private var cancellables = Set<AnyCancellable>()
     
-    // 아이디 중복 체크
+    // MARK: - 아이디 중복 체크
     func checkUserId() {
         isLoading = true
         networkingManager.run(SignUpEndpoint.checkUserId(userId), type: UserIdCheckResponse.self)
@@ -71,7 +71,7 @@ class SignUpViewModel {
             .store(in: &cancellables)
     }
     
-    // 이메일 인증코드 발송
+    // MARK: - 이메일 인증코드 발송
     func sendVerificationEmail() {
         guard !isSendingEmail else { return }
         isSendingEmail = true
@@ -94,7 +94,7 @@ class SignUpViewModel {
             .store(in: &cancellables)
     }
     
-    // 이메일 인증코드 확인
+    // MARK: - 이메일 인증코드 확인
     func verifyEmailCode() {
         guard !isVerifyingEmail else { return }
         isVerifyingEmail = true
@@ -116,7 +116,7 @@ class SignUpViewModel {
                 self.isEmailVerified = response.data
                 if response.data {
                     self.showAlert(title: "알림", message: "이메일이 인증되었습니다.")
-                    self.verificationCode = ""
+//                    self.verificationCode = ""
                 } else {
                     self.showAlert(title: "알림", message: "인증코드가 일치하지 않습니다.")
                 }
@@ -124,7 +124,7 @@ class SignUpViewModel {
             .store(in: &cancellables)
     }
     
-    // 단과대학 및 소속 정보 가져오기
+    // MARK: - 단과대학 및 소속 정보 가져오기
     func fetchColleges() {
         networkingManager.run(SignUpEndpoint.getColleges, type: CollegesAndClubsResponse.self)
             .sink { [weak self] completion in
@@ -143,7 +143,7 @@ class SignUpViewModel {
             .store(in: &cancellables)
     }
     
-    // 소속 인증
+    // MARK: - 소속 인증
     func verifyClub() {
         guard !isVerifyingClub else { return }
         guard let cludId = selectedClub?.studentClubId else { return }
@@ -172,7 +172,7 @@ class SignUpViewModel {
             .store(in: &cancellables)
     }
     
-    // 회원가입
+    // MARK: - 회원가입
     func signUp(completion: @escaping (Bool) -> Void) {
         guard !isSigningUp else { return }
         guard isEmailVerified && isClubVerified else { return }
@@ -213,6 +213,7 @@ class SignUpViewModel {
             .store(in: &cancellables)
     }
     
+    // MARK: - 알림 함수
     private func showAlert(title: String, message: String) {
         alertTitle = title
         alertMessage = message

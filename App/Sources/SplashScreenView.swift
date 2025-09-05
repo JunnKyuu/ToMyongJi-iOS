@@ -13,7 +13,6 @@ struct SplashScreenView: View {
     
     var body: some View {
         if isActive {
-//            IntroView()
             ContentView()
         } else {
             VStack {
@@ -52,6 +51,7 @@ struct SplashScreenView: View {
     }
 }
 
+// MARK: - Preview
 #Preview {
     SplashScreenView()
 }

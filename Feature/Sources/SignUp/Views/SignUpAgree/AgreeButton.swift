@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-// 수정된 AgreeButton
 struct AgreeButton: View {
     var title: String
     var subtitle: String
@@ -22,18 +21,18 @@ struct AgreeButton: View {
                 HStack {
                     Image(systemName: isAgree ? "checkmark.square.fill" : "checkmark.square")
                         .font(.title2)
-                        .foregroundStyle(isAgree ? Color.darkNavy : Color.gray.opacity(0.5))
+                        .foregroundStyle(isAgree ? Color("primary") : Color("primary").opacity(0.3))
                     
                     VStack(alignment: .leading) {
                         Text(title)
-                            .font(.custom("GmarketSansMedium", size: 16))
+                            .font(.custom("GmarketSansMedium", size: 18))
                         if !subtitle.isEmpty {
                             Text(subtitle)
-                                .font(.custom("GmarketSansLight", size: 12))
+                                .font(.custom("GmarketSansLight", size: 14))
                                 .foregroundStyle(.gray)
                         }
                     }
-                    .foregroundStyle(isAgree ? Color.darkNavy : Color.gray.opacity(0.5))
+                    .foregroundStyle(isAgree ? Color.black : Color.black.opacity(0.3))
                 }
             }
             
