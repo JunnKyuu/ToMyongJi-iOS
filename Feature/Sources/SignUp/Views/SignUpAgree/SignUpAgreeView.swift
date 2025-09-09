@@ -107,6 +107,7 @@ struct SignUpAgreeView: View {
             .disabled(!isAgreeService || !isAgreePrivacy || !isAgreeClub)
         }
         .padding()
+        .background(Color("signup-bg"))
         .sheet(item: $selectedAgreement) { type in
             AgreementDetailView(type: type)
         }
