@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UI
 
 struct ReceiptListView: View {
     @Environment(\.colorScheme) private var scheme
@@ -27,7 +28,7 @@ struct ReceiptListView: View {
                 VStack(spacing: 20) {
                     Text(club.studentClubName)
                         .font(.custom("GmarketSansBold", size: 22))
-                        .foregroundStyle(Color.darkNavy)
+                        .foregroundStyle(Color.black)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
                     HStack {
@@ -39,8 +40,8 @@ struct ReceiptListView: View {
                                     .aspectRatio(contentMode: .fit)
                                     .frame(width: 80)
                                 Text("인증")
-                                    .font(.custom("GmarketSansBold", size: 12))
-                                    .foregroundStyle(Color.darkNavy)
+                                    .font(.custom("GmarketSansMedium", size: 12))
+                                    .foregroundStyle(Color.black)
                             }
                             .padding(.horizontal, 6)
                             .padding(.vertical, 3)
@@ -49,35 +50,26 @@ struct ReceiptListView: View {
                         }
                         
                         // 조회 버튼
-                        Menu {
-                            Button {
-                                viewModel.updateFilter(isFiltered: false)
-                            } label: {
-                                HStack {
-                                    Text("전체 조회")
-                                    if !viewModel.isFiltered {
-                                        Image(systemName: "checkmark")
-                                    }
-                                }
-                            }
-                            
-                            Button {
-                                showingMonthPicker = true
-                            } label: {
-                                HStack {
-                                    Text("월 선택")
-                                    if viewModel.isFiltered {
-                                        Image(systemName: "checkmark")
-                                    }
-                                }
-                            }
+//                        Menu {
+//                            Button {
+//                                showingMonthPicker = true
+//                            } label: {
+//                                HStack {
+//                                    Text("월별 선택")
+//                                    if viewModel.isFiltered {
+//                                        Image(systemName: "checkmark")
+//                                    }
+//                                }
+//                            }
+                        Button {
+                            showingMonthPicker = true
                         } label: {
                             HStack(spacing: 4) {
-                                Text(viewModel.formattedYearMonth)
+                                Text("월별 선택")
                                 Image(systemName: "chevron.down")
                             }
-                            .font(.custom("GmarketSansLight", size: 12))
-                            .foregroundStyle(.gray)
+                            .font(.custom("GmarketSansMedium", size: 12))
+                            .foregroundStyle(Color("gray_70"))
                         }
                         .frame(maxWidth: .infinity, alignment: .trailing)
                         .padding(.horizontal, 15)
@@ -89,7 +81,6 @@ struct ReceiptListView: View {
                 .padding(.horizontal, 15)
             }
             .padding(.vertical, 10)
-            .background(scheme == .dark ? .black : .white)
             
             // 스크롤 영역
             ScrollView(.vertical) {
@@ -101,20 +92,15 @@ struct ReceiptListView: View {
                 .padding(.horizontal, 15)
                 .padding(.top, 10)
             }
+            .background(Color("signup-bg"))
             .scrollDisabled(false)
             .scrollIndicators(.hidden)
         }
+        .background(Color("signup-bg"))
         .navigationBarBackButtonHidden()
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
-                Button {
-                    dismiss()
-                } label: {
-                    Image(systemName: "chevron.left")
-                        .font(.title3.bold())
-                        .foregroundStyle(Color.gray)
-                        .contentShape(.rect)
-                }
+                DismissButton()
             }
         }
         .overlay {
@@ -124,17 +110,24 @@ struct ReceiptListView: View {
         }
         .sheet(isPresented: $showingMonthPicker) {
             MonthPickerView(
-                selectedMonth: viewModel.selectedMonth
-            ) { month in
-                viewModel.updateFilter(isFiltered: true, month: month)
+                initialMonth: viewModel.selectedMonth
+            ) { selectedMonth in
+                if selectedMonth == 13 { // "전체"가 13번째 항목
+                    viewModel.updateFilter(isFiltered: false)
+                } else {
+                    viewModel.updateFilter(isFiltered: true, month: selectedMonth)
+                }
                 showingMonthPicker = false
             }
-            .presentationDetents([.height(250)])
+            .presentationDetents([.height(400)])
             .presentationCornerRadius(30)
+            .presentationDragIndicator(.visible)
         }
+
         .onAppear {
             viewModel.getReceipts(studentClubId: club.studentClubId)
         }
+        .id(club.studentClubId) // 뷰의 ID를 고정하여 불필요한 재생성을 방지
     }
     
     
@@ -175,12 +168,12 @@ struct ReceiptListView: View {
         .padding(.horizontal, 15)
         .padding(.vertical, 6)
     }
-    
-    #Preview {
-        ReceiptListView(club: Club(
-            studentClubId: 1,
-            studentClubName: "융합소프트웨어학부 학생회",
-            verification: true
-        ))
-    }
+}
+
+#Preview {
+    ReceiptListView(club: Club(
+        studentClubId: 1,
+        studentClubName: "융합소프트웨어학부 학생회",
+        verification: true
+    ))
 }

@@ -214,7 +214,7 @@ struct CreateReceiptView: View {
         }
         .sheet(isPresented: $showingMonthPicker) {
             MonthPickerView(
-                selectedMonth: viewModel.selectedMonth
+                initialMonth: viewModel.selectedMonth
             ) { month in
                 viewModel.updateFilter(isFiltered: true, month: month)
                 showingMonthPicker = false

@@ -15,7 +15,7 @@ struct CollegesAndClubsView: View {
             ScrollView {
                 VStack(spacing: 30) {
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("영수증 조회🫧")
+                        Text("영수증 조회")
                             .font(.custom("GmarketSansBold", size: 26))
                             .foregroundStyle(Color.black)
                         
