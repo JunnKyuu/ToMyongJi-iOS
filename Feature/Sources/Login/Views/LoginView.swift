@@ -44,6 +44,7 @@ struct LoginView: View {
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 300)
                     .padding(.vertical, 50)
+                    .padding(.horizontal, 15)
                 
                 // MARK: - 입력 필드들을 감싸는 카드 뷰
                 VStack(spacing: 10) {
@@ -87,6 +88,8 @@ struct LoginView: View {
                         }
                         .animation(.easeInOut(duration: 0.2), value: isFocusedPW)
                 }
+                .padding(.horizontal, 15)
+
                 
                 // MARK: - 로그인 버튼
                 Button(action: {
@@ -105,6 +108,7 @@ struct LoginView: View {
                 }
                 .disabled(viewModel.userId.isEmpty || viewModel.password.isEmpty || viewModel.isLoading)
                 .padding(.top, 20)
+                .padding(.horizontal, 15)
                 
                 // MARK: - 회원가입 및 아이디 찾기 버튼
                 HStack(spacing: 30) {
@@ -123,7 +127,7 @@ struct LoginView: View {
                 Spacer()
                     .frame(height: 50)
             }
-            .padding(.horizontal, 25)
+            .padding(.horizontal, 15)
             .padding(.vertical, 15)
         }
         .scrollDismissesKeyboard(.immediately)
