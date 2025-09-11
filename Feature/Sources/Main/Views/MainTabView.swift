@@ -26,7 +26,7 @@ public struct MainTabView: View {
             AdminTabView()
         } else {
             ZStack(alignment: .bottom) {
-                // Main Content
+                // MARK: - Main Content
                 VStack {
                     switch selectedTab {
                     case 1:
@@ -43,7 +43,6 @@ public struct MainTabView: View {
                 }
                 .padding(.bottom, tabBarHeight)
                 
-                // Custom Tab Bar
                 customTabBar
             }
             .edgesIgnoringSafeArea(.bottom)

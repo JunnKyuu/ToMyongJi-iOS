@@ -30,7 +30,7 @@ struct MonthPickerView: View {
                 .padding()
             
             VStack(spacing: 20) {
-                // 월 선택
+                // MARK: - 월 선택
                 VStack(alignment: .leading, spacing: 10) {
                     LazyVGrid(columns: [
                         GridItem(.flexible()),
@@ -57,6 +57,7 @@ struct MonthPickerView: View {
                 
                 Spacer()
                 
+                // MARK: - 확인 버튼
                 Button {
                     onConfirm(localSelectedMonth)
                 } label: {
@@ -75,6 +76,7 @@ struct MonthPickerView: View {
     }
 }
 
+// MARK: - Preview
 #Preview {
     MonthPickerView(initialMonth: 3) { month in
         print("Confirmed month: \(month)")
