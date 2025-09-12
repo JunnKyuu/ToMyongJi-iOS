@@ -98,36 +98,44 @@ struct ProfileView: View {
 
                         // MARK: - 소속부원 목록
                         VStack {
-                            ForEach(Array(viewModel.clubMembers.enumerated()), id: \.element.id) { index, member in
-                                HStack(spacing: 5) {
-                                    Text("\(index + 1)")
-                                        .frame(width: 30, alignment: .leading)
-                                        .font(.custom("GmarketSansMedium", size: 16))
-                                        .foregroundStyle(Color("primary"))
-
+                            if !viewModel.clubMembers.isEmpty {
+                                ForEach(Array(viewModel.clubMembers.enumerated()), id: \.element.id) { index, member in
                                     HStack(spacing: 5) {
-                                        Text("\(member.studentNum)")
-                                            .frame(width: 100, alignment: .leading)
+                                        Text("\(index + 1)")
+                                            .frame(width: 30, alignment: .leading)
+                                            .font(.custom("GmarketSansMedium", size: 16))
+                                            .foregroundStyle(Color("primary"))
 
-                                        Text("\(member.name)")
-                                            .frame(width: 90, alignment: .leading)
+                                        HStack(spacing: 5) {
+                                            Text("\(member.studentNum)")
+                                                .frame(width: 100, alignment: .leading)
+
+                                            Text("\(member.name)")
+                                                .frame(width: 90, alignment: .leading)
+                                        }
+                                        
+                                        Spacer()
+                                        
+                                        // 삭제 버튼
+                                        Button {
+                                            viewModel.deleteMember(studentNum: member.studentNum)
+                                        } label: {
+                                            Image(systemName: "xmark")
+                                                .font(.system(size: 18, weight: .medium))
+                                                .foregroundStyle(Color("error"))
+                                        }
+                                        .buttonStyle(.plain)
                                     }
-                                    
-                                    Spacer()
-                                    
-                                    // 삭제 버튼
-                                    Button {
-                                        viewModel.deleteMember(studentNum: member.studentNum)
-                                    } label: {
-                                        Image(systemName: "xmark")
-                                            .font(.system(size: 18, weight: .medium))
-                                            .foregroundStyle(Color("error"))
-                                    }
-                                    .buttonStyle(.plain)
+                                    .padding(.vertical, 8)
+                                    .font(.custom("GmarketSansLight", size: 16))
+                                    .foregroundStyle(Color("gray_90"))
                                 }
-                                .padding(.vertical, 8)
-                                .font(.custom("GmarketSansLight", size: 16))
-                                .foregroundStyle(Color("gray_90"))
+                            } else {
+                                Text("등록된 소속부원이 없습니다.")
+                                    .font(.custom("GmarketSansLight", size: 14))
+                                    .foregroundColor(.gray)
+                                    .frame(maxWidth: .infinity, alignment: .center)
+                                    .padding()
                             }
                         }
                         .padding(.top, 15)
