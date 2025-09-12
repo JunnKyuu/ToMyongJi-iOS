@@ -135,6 +135,7 @@ struct SignUpView: View {
     }
 }
 
+// MARK: - Preview
 #Preview {
     SignUpView(showSignup: .constant(true))
 }

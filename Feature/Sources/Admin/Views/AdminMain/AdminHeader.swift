@@ -11,22 +11,23 @@ struct AdminHeader: View {
     @Environment(AdminViewModel.self) var viewModel
     
     var body: some View {
-        Text("관리자 페이지")
-            .font(.custom("GmarketSansBold", size: 28))
-            .foregroundStyle(Color.darkNavy)
-            .padding(.bottom, 20)
-        
-        VStack(alignment: .leading, spacing: 15) {
-            Text("회장 관리")
-                .font(.custom("GmarketSansMedium", size: 20))
-                .foregroundStyle(Color.darkNavy)
-            Text("현재 회장 정보를 확인하고 변경할 수 있습니다.")
-                .font(.custom("GmarketSansLight", size: 13))
-                .foregroundStyle(.gray)
-                .padding(.top, -5)
+        VStack(alignment: .leading, spacing: 20) {
+            Text("학생회 관리🫧")
+                .font(.custom("GmarketSansBold", size: 26))
+                .foregroundStyle(Color.black)
+                .padding(.bottom, 20)
             
+            VStack(alignment: .leading, spacing: 5) {
+                Text("회장 관리")
+                    .font(.custom("GmarketSansMedium", size: 18))
+                    .foregroundStyle(Color.black)
+                Text("현재 회장 정보를 확인하고 변경할 수 있습니다.")
+                    .font(.custom("GmarketSansMedium", size: 14))
+                    .foregroundStyle(Color("gray_70"))
+            }
             // 단과 대학 및 학생회 선택
             SelectCollegesAndClubsView(viewModel: viewModel)
         }
+        
     }
 }
