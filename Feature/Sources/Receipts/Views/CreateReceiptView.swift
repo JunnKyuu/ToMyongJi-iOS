@@ -99,35 +99,35 @@ struct CreateReceiptView: View {
                 .padding(.bottom, 15)
                 
                 // MARK: - 영수증 리스트
-                ScrollView {
-                    LazyVStack(spacing: 0) {
-                        ForEach(viewModel.filteredReceipts) { receipt in
-                            ClubReceiptView(receipt: receipt, viewModel: viewModel, club: club)
-                                .padding()
-                                .contentShape(Rectangle())
-                                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                                    // 스와이프 - 삭제
-                                    Button(role: .destructive) {
-                                        viewModel.deleteReceipt(receiptId: receipt.receiptId, userId: authManager.userId ?? 0)
-                                    } label: {
-                                        Label("삭제", systemImage: "trash")
-                                    }
-                                    .tint(Color("error"))
-                                    // 스와이프 - 수정
-                                    Button {
-                                        viewModel.setReceiptForUpdate(receipt)
-                                        showEditForm = true
-                                    } label: {
-                                        Label("수정", systemImage: "pencil")
-                                    }
-                                    .tint(Color("primary"))
+                List {
+                    ForEach(viewModel.filteredReceipts) { receipt in
+                        ClubReceiptView(receipt: receipt, viewModel: viewModel, club: club)
+                            .padding()
+                            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                // 스와이프 - 삭제
+                                Button(role: .destructive) {
+                                    viewModel.deleteReceipt(receiptId: receipt.receiptId, userId: authManager.userId ?? 0)
+                                } label: {
+                                    Label("삭제", systemImage: "trash")
                                 }
-                        }
+                                .tint(Color("error"))
+                                // 스와이프 - 수정
+                                Button {
+                                    viewModel.setReceiptForUpdate(receipt)
+                                    showEditForm = true
+                                } label: {
+                                    Label("수정", systemImage: "pencil")
+                                }
+                                .tint(Color("primary"))
+                            }
+                            .listRowInsets(EdgeInsets())
+                            .listRowSeparator(.hidden)
                     }
-                    .background(Color.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                    .padding(.horizontal, 15)
                 }
+                .listStyle(.plain)
+                .scrollContentBackground(.hidden) // List 배경을 투명하게 만들어 커스텀 배경을 적용할 수 있게 함
+                .clipShape(RoundedRectangle(cornerRadius: 10)) // List 뷰 자체를 둥글게 잘라냄
+                .padding(.horizontal, 15)
             }
             .padding(.top, 20)
         }
