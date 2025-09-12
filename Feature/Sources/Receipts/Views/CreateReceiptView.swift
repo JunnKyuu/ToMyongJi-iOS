@@ -155,8 +155,9 @@ struct CreateReceiptView: View {
                 withdrawal: $viewModel.withdrawal,
                 onSave: createReceipt
             )
-            .presentationDetents([.height(450)])
+            .presentationDetents([.height(550)])
             .presentationCornerRadius(30)
+            .presentationDragIndicator(.visible)
         }
         // MARK: - 토스 거래내역서 시트
         .sheet(isPresented: $showTossVerifyForm) {
@@ -166,6 +167,7 @@ struct CreateReceiptView: View {
             })
             .presentationDetents([.height(700)])
             .presentationCornerRadius(30)
+            .presentationDragIndicator(.visible)
         }
         // MARK: - 영수증 수정 시트
         .sheet(isPresented: $showEditForm) {
@@ -175,13 +177,16 @@ struct CreateReceiptView: View {
             )
             .presentationDetents([.height(400)])
             .presentationCornerRadius(30)
+            .presentationDragIndicator(.visible)
         }
         // MARK: - OCR 시트
         .sheet(isPresented: $showOCRForm) {
             OCRReceiptFormView()
                 .presentationDetents([.height(450)])
                 .presentationCornerRadius(30)
+                .presentationDragIndicator(.visible)
         }
+
         .onChange(of: showOCRForm) { _, isPresented in
             // OCR 폼이 닫힐 때 새로고침
             if !isPresented {

@@ -133,7 +133,7 @@ struct OCRReceiptFormView: View {
         }
         .padding(.vertical, 15)
         .padding(.horizontal, 25)
-        .interactiveDismissDisabled()
+        
         .confirmationDialog("영수증 사진", isPresented: $showingActionSheet, titleVisibility: .visible) {
             Button("카메라로 촬영") {
                 showingCamera = true
