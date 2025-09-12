@@ -77,8 +77,6 @@ struct CreateReceiptView: View {
             }
             .padding(.bottom, 10)
             
-            
-            
             VStack(spacing: 0) {
                 HStack {
                     Spacer()
@@ -125,8 +123,8 @@ struct CreateReceiptView: View {
                     }
                 }
                 .listStyle(.plain)
-                .scrollContentBackground(.hidden) // List 배경을 투명하게 만들어 커스텀 배경을 적용할 수 있게 함
-                .clipShape(RoundedRectangle(cornerRadius: 10)) // List 뷰 자체를 둥글게 잘라냄
+                .scrollContentBackground(.hidden)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
                 .padding(.horizontal, 15)
             }
             .padding(.top, 20)
@@ -182,7 +180,7 @@ struct CreateReceiptView: View {
         // MARK: - OCR 시트
         .sheet(isPresented: $showOCRForm) {
             OCRReceiptFormView()
-                .presentationDetents([.height(450)])
+                .presentationDetents([.height(500)])
                 .presentationCornerRadius(30)
                 .presentationDragIndicator(.visible)
         }
