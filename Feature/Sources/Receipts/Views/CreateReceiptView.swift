@@ -170,10 +170,9 @@ struct CreateReceiptView: View {
         // MARK: - 토스 거래내역서 시트
         .sheet(isPresented: $showTossVerifyForm) {
             TossVerifyView(onSuccess: {
-                // 토스 인증 성공 시 영수증 목록 새로고침
                 viewModel.getStudentClubReceipts(userId: authManager.userId ?? 0)
             })
-            .presentationDetents([.height(700)])
+            .presentationDetents([.height(550)])
             .presentationCornerRadius(30)
             .presentationDragIndicator(.visible)
         }
