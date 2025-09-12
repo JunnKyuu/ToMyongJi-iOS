@@ -159,6 +159,16 @@ struct CreateReceiptView: View {
             .presentationCornerRadius(30)
             .presentationDragIndicator(.visible)
         }
+        // MARK: - 영수증 수정 시트
+        .sheet(isPresented: $showEditForm) {
+            EditReceiptFormView(
+                viewModel: viewModel,
+                onSave: updateReceipt
+            )
+            .presentationDetents([.height(550)])
+            .presentationCornerRadius(30)
+            .presentationDragIndicator(.visible)
+        }
         // MARK: - 토스 거래내역서 시트
         .sheet(isPresented: $showTossVerifyForm) {
             TossVerifyView(onSuccess: {
@@ -166,16 +176,6 @@ struct CreateReceiptView: View {
                 viewModel.getStudentClubReceipts(userId: authManager.userId ?? 0)
             })
             .presentationDetents([.height(700)])
-            .presentationCornerRadius(30)
-            .presentationDragIndicator(.visible)
-        }
-        // MARK: - 영수증 수정 시트
-        .sheet(isPresented: $showEditForm) {
-            EditReceiptFormView(
-                viewModel: viewModel,
-                onSave: updateReceipt
-            )
-            .presentationDetents([.height(400)])
             .presentationCornerRadius(30)
             .presentationDragIndicator(.visible)
         }
