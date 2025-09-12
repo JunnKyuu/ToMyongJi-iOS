@@ -73,15 +73,26 @@ struct ReceiptListView: View {
             
             // MARK: - 스크롤 영역
             ScrollView(.vertical) {
-                LazyVStack(spacing: 30) {
-                    ForEach(viewModel.filteredReceipts) { receipt in
-                        ClubReceiptView(receipt)
+                if !viewModel.filteredReceipts.isEmpty {
+                    LazyVStack(spacing: 30) {
+                        ForEach(viewModel.filteredReceipts) { receipt in
+                            ClubReceiptView(receipt)
+                        }
                     }
+                    .padding(.vertical, 20)
+                    .background(RoundedRectangle(cornerRadius: 10).fill(Color.white))
+                    .padding(.horizontal, 15)
+                    .padding(.vertical, 20)
+                } else {
+                    Text("등록된 영수증 내역이 없습니다.")
+                        .font(.custom("GmarketSansLight", size: 14))
+                        .foregroundColor(.gray)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .padding(.vertical, 50)
+                        .background(RoundedRectangle(cornerRadius: 10).fill(Color.white))
+                        .padding(.horizontal, 15)
+                        .padding(.vertical, 20)
                 }
-                .padding(.vertical, 20)
-                .background(RoundedRectangle(cornerRadius: 10).fill(Color.white))
-                .padding(.horizontal, 15)
-                .padding(.vertical, 20)
             }
             .background(Color("signup-bg"))
             .scrollDisabled(false)
