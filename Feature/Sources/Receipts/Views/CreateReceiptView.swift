@@ -14,6 +14,7 @@ struct CreateReceiptView: View {
     @Bindable private var authManager = AuthenticationManager.shared
     @State private var showingMonthPicker = false
     
+    @State private var showAddReceiptSheet: Bool = false
     @State private var showCreateForm: Bool = false
     @State private var showTossVerifyForm: Bool = false
     @State private var showEditForm: Bool = false
@@ -33,147 +34,119 @@ struct CreateReceiptView: View {
         VStack(spacing: 0) {
             VStack(alignment: .leading, spacing: 15) {
                 HStack {
-                    Text(club.studentClubName)
-                        .font(.custom("GmarketSansBold", size: 23))
-                        .foregroundStyle(Color.darkNavy)
-                    
-                    Spacer()
+                    Text("\(club.studentClubName)🫧")
+                        .font(.custom("GmarketSansBold", size: 22))
+                        .foregroundStyle(Color.black)
                 }
-                .frame(height: 45)
+                .frame(height: 30)
                 .padding(.horizontal, 15)
                 .padding(.top)
                 
-                GeometryReader { _ in
-                    ClubView(club, balance: viewModel.balance)
+                // MARK: - 잔액
+                VStack(alignment: .leading, spacing: 5) {
+                    Text("잔액")
+                        .font(.custom("GmarketSansMedium", size: 14))
+                        .foregroundStyle(Color("gray_90"))
+
+                    Text("\(viewModel.balance)원")
+                        .font(.custom("GmarketSansBold", size: 32))
+                        .foregroundStyle(Color.black)
                 }
-                .frame(height: 125)
-            }
-            .padding(.bottom, 10)
-            
-            VStack(spacing: 20) {
-                HStack(spacing: 15) {
-                    Button {
-                        showCreateForm = true
-                    } label: {
-                        HStack {
-                            Image(systemName: "plus.circle.fill")
-                            Text("영수증 작성")
-                        }
-                        .font(.custom("GmarketSansMedium", size: 16))
-                        .foregroundStyle(Color.darkNavy)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 15)
-                        .background(
-                            RoundedRectangle(cornerRadius: 12)
-                                .fill(Color.softBlue)
-                        )
-                    }
-                    Button {
-                        showTossVerifyForm = true
-                    } label: {
-                        HStack {
-                            Image("toss_logo")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 93)
-                            Text("인증")
-                        }
-                        .font(.custom("GmarketSansMedium", size: 16))
-                        .foregroundStyle(Color.darkNavy)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 15)
-                        .background(
-                            RoundedRectangle(cornerRadius: 12)
-                                .fill(Color.softBlue)
-                        )
-                    }
-                }
-                .padding(.horizontal, 20)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(15)
                 
-                // OCR 버튼 추가
+                // MARK: - 내역 추가 버튼
                 Button {
-                    showOCRForm = true
+                    showAddReceiptSheet = true
                 } label: {
                     HStack {
-                        Image(systemName: "camera.fill")
-                        Text("영수증 사진으로 자동 입력")
+                        Image(systemName: "plus")
+                        Text("내역 추가")
                     }
                     .font(.custom("GmarketSansMedium", size: 16))
-                    .foregroundStyle(Color.darkNavy)
+                    .foregroundStyle(Color.white)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 15)
                     .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(Color.deposit.opacity(0.1))
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(Color("primary"))
                     )
                 }
-                .padding(.horizontal, 20)
-                
-                Menu {
-                    Button {
-                        viewModel.updateFilter(isFiltered: false)
-                    } label: {
-                        HStack {
-                            Text("전체 조회")
-                            if !viewModel.isFiltered {
-                                Image(systemName: "checkmark")
-                            }
-                        }
-                    }
+                .padding(.horizontal, 15)
+                .padding(.top, 10)
+            }
+            .padding(.bottom, 10)
+            
+            
+            
+            VStack(spacing: 0) {
+                HStack {
+                    Spacer()
                     
+                    // MARK: - 월별 선택 버튼
                     Button {
                         showingMonthPicker = true
                     } label: {
-                        HStack {
-                            Text("월 선택")
-                            if viewModel.isFiltered {
-                                Image(systemName: "checkmark")
-                            }
+                        HStack(spacing: 4) {
+                            Text("월별 선택")
+                            Image(systemName: "chevron.down")
+                        }
+                        .font(.custom("GmarketSansMedium", size: 12))
+                        .foregroundStyle(Color("gray_70"))
+                    }
+                }
+                .padding(.horizontal, 15)
+                .padding(.bottom, 15)
+                
+                // MARK: - 영수증 리스트
+                ScrollView {
+                    LazyVStack(spacing: 0) {
+                        ForEach(viewModel.filteredReceipts) { receipt in
+                            ClubReceiptView(receipt: receipt, viewModel: viewModel, club: club)
+                                .padding()
+                                .contentShape(Rectangle())
+                                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                    // 스와이프 - 삭제
+                                    Button(role: .destructive) {
+                                        viewModel.deleteReceipt(receiptId: receipt.receiptId, userId: authManager.userId ?? 0)
+                                    } label: {
+                                        Label("삭제", systemImage: "trash")
+                                    }
+                                    .tint(Color("error"))
+                                    // 스와이프 - 수정
+                                    Button {
+                                        viewModel.setReceiptForUpdate(receipt)
+                                        showEditForm = true
+                                    } label: {
+                                        Label("수정", systemImage: "pencil")
+                                    }
+                                    .tint(Color("primary"))
+                                }
                         }
                     }
-                } label: {
-                    HStack(spacing: 4) {
-                        Text(viewModel.formattedYearMonth)
-                        Image(systemName: "chevron.down")
-                    }
-                    .font(.custom("GmarketSansLight", size: 12))
-                    .foregroundStyle(.gray)
+                    .background(Color.white)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .padding(.horizontal, 15)
                 }
-                .frame(maxWidth: .infinity, alignment: .trailing)
-                .padding(.horizontal, 15)
-                
-                List {
-                    ForEach(viewModel.filteredReceipts) { receipt in
-                        ClubReceiptView(receipt: receipt, viewModel: viewModel, club: club)
-                            .onTapGesture {
-                                showEditForm = true
-                            }
-                            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                                Button(role: .destructive) {
-                                    viewModel.deleteReceipt(receiptId: receipt.receiptId, userId: authManager.userId ?? 0)
-                                } label: {
-                                    Label("삭제", systemImage: "trash")
-                                }
-                                .tint(Color.withdrawal)
-                                
-                                Button {
-                                    viewModel.setReceiptForUpdate(receipt)
-                                    showEditForm = true
-                                } label: {
-                                    Label("수정", systemImage: "pencil")
-                                }
-                                .tint(Color.deposit)
-                            }
-                    }
-                }
-                .listStyle(.plain)
-                .scrollContentBackground(.hidden)
             }
-            .background {
-                RoundedRectangle(cornerRadius: 30, style: .continuous)
-                    .fill(scheme == .dark ? .black : .white)
-            }
+            .padding(.top, 20)
         }
+        .background(Color("signup-bg"))
+        .navigationBarBackButtonHidden(true)
+        // MARK: - 내역 추가 시트
+        .sheet(isPresented: $showAddReceiptSheet) {
+            CreateReciptSheetView(onSelectManual: {
+                showCreateForm = true
+            }, onSelectOCR: {
+                showOCRForm = true
+            }, onSelectToss: {
+                showTossVerifyForm = true
+            })
+            .presentationDetents([.height(320)])
+            .presentationCornerRadius(30)
+            .presentationDragIndicator(.visible)
+        }
+        // MARK: - 영수증 작성 시트
         .sheet(isPresented: $showCreateForm) {
             CreateReceiptFormView(
                 date: $viewModel.date,
@@ -185,6 +158,7 @@ struct CreateReceiptView: View {
             .presentationDetents([.height(450)])
             .presentationCornerRadius(30)
         }
+        // MARK: - 토스 거래내역서 시트
         .sheet(isPresented: $showTossVerifyForm) {
             TossVerifyView(onSuccess: {
                 // 토스 인증 성공 시 영수증 목록 새로고침
@@ -193,6 +167,7 @@ struct CreateReceiptView: View {
             .presentationDetents([.height(700)])
             .presentationCornerRadius(30)
         }
+        // MARK: - 영수증 수정 시트
         .sheet(isPresented: $showEditForm) {
             EditReceiptFormView(
                 viewModel: viewModel,
@@ -201,6 +176,7 @@ struct CreateReceiptView: View {
             .presentationDetents([.height(400)])
             .presentationCornerRadius(30)
         }
+        // MARK: - OCR 시트
         .sheet(isPresented: $showOCRForm) {
             OCRReceiptFormView()
                 .presentationDetents([.height(450)])
@@ -212,15 +188,21 @@ struct CreateReceiptView: View {
                 viewModel.getStudentClubReceipts(userId: authManager.userId ?? 0)
             }
         }
+        // MARK: - 월별 선택 시트
         .sheet(isPresented: $showingMonthPicker) {
             MonthPickerView(
                 initialMonth: viewModel.selectedMonth
-            ) { month in
-                viewModel.updateFilter(isFiltered: true, month: month)
+            ) { selectedMonth in
+                if selectedMonth == 13 {
+                    viewModel.updateFilter(isFiltered: false)
+                } else {
+                    viewModel.updateFilter(isFiltered: true, month: selectedMonth)
+                }
                 showingMonthPicker = false
             }
-            .presentationDetents([.height(250)])
+            .presentationDetents([.height(400)])
             .presentationCornerRadius(30)
+            .presentationDragIndicator(.visible)
         }
         .onAppear {
             viewModel.getStudentClubReceipts(userId: authManager.userId ?? 0)
@@ -242,12 +224,6 @@ struct CreateReceiptView: View {
             Text(viewModel.alertMessage)
                 .foregroundStyle(Color.darkNavy)
         }
-    }
-    
-    func backgroundLimitOffset(_ proxy: GeometryProxy) -> CGFloat {
-        let minY = proxy.frame(in: .scrollView).minY
-        
-        return minY < 100 ? -minY + 100 : 0
     }
     
     private func createReceipt() {
@@ -308,88 +284,40 @@ struct CreateReceiptView: View {
         viewModel.updateReceipt()
     }
     
+    // MARK: - 영수증 목록
     @ViewBuilder
     private func ClubReceiptView(receipt: Receipt, viewModel: ReceiptViewModel, club: Club) -> some View {
         HStack(spacing: 0) {
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: 4, content: {
                 Text(receipt.content)
-                    .font(.custom("GmarketSansBold", size: 14))
-                    .foregroundStyle(Color.darkNavy)
+                    .font(.custom("GmarketSansMedium", size: 14))
+                    .foregroundStyle(Color.black)
                 
                 Text(receipt.date)
                     .font(.custom("GmarketSansMedium", size: 12))
-                    .foregroundStyle(.gray)
-            }
+                    .foregroundStyle(Color("gray_70"))
+            })
             
             Spacer(minLength: 0)
             
             if receipt.deposit != 0 {
                 Text("+ \(receipt.deposit)")
-                    .font(.custom("GmarketSansBold", size: 14))
-                    .foregroundStyle(Color.deposit)
+                    .font(.custom("GmarketSansMedium", size: 16))
+                    .foregroundStyle(Color("primary"))
             }
             
             if receipt.withdrawal != 0 {
                 Text("- \(receipt.withdrawal)")
-                    .font(.custom("GmarketSansBold", size: 14))
-                    .foregroundStyle(Color.withdrawal)
+                    .font(.custom("GmarketSansMedium", size: 14))
+                    .foregroundStyle(Color("error"))
             }
         }
         .padding(.horizontal, 15)
-        .padding(.vertical, 6)
+        .background(Color.white)
     }
 }
 
-@ViewBuilder
-func ClubView(_ club: Club, balance: Int) -> some View {
-    GeometryReader {
-        let rect = $0.frame(in: .scrollView(axis: .vertical))
-        let minY = rect.minY
-        let topValue: CGFloat = 75.0
-        
-        let offset = min(minY - topValue, 0)
-        let progress = max(min(-offset / topValue, 1), 0)
-        let scale: CGFloat = 1 + progress
-        
-        let overlapProgress = max(min(-minY / 25, 1), 0) * 0.15
-        
-        ZStack {
-            Rectangle()
-                .fill(Color.softBlue)
-                .overlay(alignment: .leading) {
-                    Circle()
-                        .fill(Color.softBlue)
-                        .overlay {
-                            Circle()
-                                .fill(.white.opacity(0.2))
-                        }
-                        .scaleEffect(2, anchor: .topLeading)
-                        .offset(x: -50, y: -40)
-                }
-                .clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
-                .scaleEffect(scale, anchor: .init(x: 0.5, y: 1 - overlapProgress))
-            
-            VStack(alignment: .leading, spacing: 4) {
-                Spacer(minLength: 0)
-                
-                Text("현재 잔액")
-                    .font(.custom("GmarketSansMedium", size: 18))
-                    .foregroundStyle(Color.darkNavy)
-
-                Text("\(balance)")
-                    .font(.custom("GmarketSansBold", size: 20))
-                    .foregroundStyle(Color.darkNavy)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(20)
-            .offset(y: progress * -25)
-        }
-        .offset(y: -offset)
-        .offset(y: progress * -topValue)
-    }
-    .padding(.horizontal, 15)
-}
-
+// MARK: - Preview
 #Preview {
     CreateReceiptView(club: Club(studentClubId: 1, studentClubName: "융합소프트웨어학부 학생회"))
 }
