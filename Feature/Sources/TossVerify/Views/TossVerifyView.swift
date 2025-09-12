@@ -8,145 +8,139 @@
 
 import SwiftUI
 import Core
-import UniformTypeIdentifiers // UTType을 사용
+import UniformTypeIdentifiers
 
 struct TossVerifyView: View {
     @Environment(\.dismiss) var dismiss
     @Bindable private var authManager = AuthenticationManager.shared
     @State private var viewModel = TossVerifyViewModel()
     
-    // MARK: - 파일 선택 관련 State
     @State private var isFilePickerPresented = false
     @State private var selectedFileName: String?
     @State private var selectedFileSize: String?
+    @State private var isDropdownExpanded = false // 드롭다운 상태를 저장할 변수
     
-    // MARK: - 콜백
     let onSuccess: (() -> Void)?
     
     var body: some View {
         VStack(spacing: 0) {
-            // MARK: - 상단 네비게이션
-            HStack {
-                Button {
-                    dismiss()
-                } label: {
-                    Image(systemName: "chevron.left")
-                        .font(.title3.bold())
-                        .foregroundStyle(Color.gray)
-                        .contentShape(.rect)
-                }
-                Spacer()
-            }
-            .padding(.top, 40)
-            .padding(.horizontal, 20)
-            
-            // MARK: - 메인 컨텐츠
             ScrollView {
-                VStack(spacing: 30) {
-                    // MARK: - 헤더 영역
-                    VStack(spacing: 20) {
-                        Image("toss_logo")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 200)
-                        
+                VStack(alignment: .leading, spacing: 30) {
+                    // MARK: - 설명
+                    VStack(alignment: .leading, spacing: 20) {
                         Text("토스뱅크 거래내역서 추가")
-                            .font(.custom("GmarketSansBold", size: 20))
-                            .foregroundStyle(Color.darkNavy)
-                    }
-                    .padding(.top, 20)
-                    
-                    // MARK: - 기본 안내
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("토스 앱에서 발급받은 거래내역서 PDF 파일을 업로드하여 간편하게 내역을 등록하세요.")
-                            .font(.custom("GmarketSansMedium", size: 14))
-                            .foregroundStyle(.gray)
-                            .multilineTextAlignment(.leading)
+                            .font(.custom("GmarketSansBold", size: 22))
+                            .foregroundStyle(Color.black)
                         
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("• 파일 크기: 5MB 이하")
-                            Text("• 지원 형식: PDF")
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("토스 앱에서 발급받은 거래내역서 PDF 파일을 업로드하여 간편하게 내역을 등록하세요.")
+                                .font(.custom("GmarketSansMedium", size: 12))
+                                .foregroundStyle(Color("gray_90"))
+                            
+                            Text("전체 입출금 내역의 30% 이상이 토스뱅크 거래내역서로 인증되면 영수증페이지 조회 시 거래내역서 인증마크가 추가됩니다.")
+                                .font(.custom("GmarketSansMedium", size: 12))
+                                .foregroundStyle(Color("gray_70"))
                         }
-                        .font(.custom("GmarketSansMedium", size: 13))
-                        .foregroundStyle(.gray)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    
-                    // MARK: - 구분선
-                    Divider()
-                        .padding(.vertical, 10)
-                    
-                    // MARK: - 인증 마크 안내
-                    VStack(alignment: .leading, spacing: 15) {
-                        Text("거래내역서 인증 마크 안내")
-                            .font(.custom("GmarketSansBold", size: 16))
-                            .foregroundStyle(Color.darkNavy)
-                        
-                        Text("전체 입출금 내역의 30% 이상이 토스뱅크 거래내역서로 인증되면 해당 학생회의 영수증 페이지 조회 시 거래내역서 인증 마크가 추가됩니다.")
-                            .font(.custom("GmarketSansMedium", size: 13))
-                            .foregroundStyle(.gray)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    
-                    // MARK: - 발급 방법 안내
-                    VStack(alignment: .leading, spacing: 15) {
-                        Text("토스뱅크 거래내역서 발급 방법")
-                            .font(.custom("GmarketSansBold", size: 16))
-                            .foregroundStyle(Color.darkNavy)
-                        
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("1. 통장 탭 → 통장관리를 선택")
-                            Text("2. 문서관리 카테고리에서 거래내역서를 선택")
-                            Text("3. 발급방법을 'PDF로 저장하기'로 선택")
-                            Text("4. 언어 한글 선택 후 → 거래내역을 확인할 계좌 선택")
-                            Text("5. 거래내역 기간 선택 → '입출금 전체' 선택 후 발급")
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("파일 크기: 5MB 이하")
+                            Text("지원 형식: PDF")
                         }
-                        .font(.custom("GmarketSansMedium", size: 13))
-                        .foregroundStyle(.gray)
+                        .font(.custom("GmarketSansMedium", size: 12))
+                        .foregroundStyle(Color("gray_90"))
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.top, 40)
+                    
+                    // MARK: - 발급 방법 안내 (드롭다운)
+                    VStack(alignment: .leading, spacing: 10) {
+                        Button(action: {
+                            withAnimation(.spring()) {
+                                isDropdownExpanded.toggle()
+                            }
+                        }) {
+                            HStack(spacing: 5) {
+                                Image(systemName: isDropdownExpanded ? "chevron.down" : "chevron.right")
+                                    .font(.system(size: 12, weight: .medium))
+                                    .foregroundStyle(Color("primary"))
+                                
+                                Text("거래내역서 발급 방법?")
+                                    .font(.custom("GmarketSansMedium", size: 14))
+                                    .foregroundStyle(Color("primary"))
+                            }
+                            .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
+
+                        if isDropdownExpanded {
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text("1. 통장 탭 → 통장관리를 선택합니다.")
+                                Text("2. 문서관리 카테고리에서 거래내역서를 선택합니다.")
+                                Text("3. 발급방법을 'PDF로 저장하기'로 선택합니다.")
+                                Text("4. 언어 한글 선택 후 → 거래내역을 확인할 계좌를 선택합니다.")
+                                Text("5. 거래내역 기간 선택 → '입출금 전체' 선택 후 발급을 완료합니다.")
+                            }
+                            .font(.custom("GmarketSansMedium", size: 12))
+                            .foregroundStyle(Color("primary"))
+                            .padding(.leading, 10)
+                            .transition(.opacity.combined(with: .move(edge: .top)))
+                        }
+                    }
                     
                     // MARK: - 파일 선택 영역
                     VStack(spacing: 15) {
-                        Button {
-                            isFilePickerPresented = true
-                        } label: {
-                            VStack(spacing: 10) {
-                                HStack {
-                                    Image(systemName: "doc.fill")
-                                        .foregroundStyle(.blue)
-                                    Text(selectedFileName ?? "PDF 파일 선택")
-                                        .font(.custom("GmarketSansBold", size: 15))
-                                        .lineLimit(1)
-                                    Spacer()
-                                }
-                                
-                                if let fileSize = selectedFileSize {
-                                    Text(fileSize)
-                                        .font(.custom("GmarketSansMedium", size: 12))
-                                        .foregroundStyle(.gray)
-                                }
-                            }
-                            .padding(16)
-                            .frame(maxWidth: .infinity)
-                            .background(Color(.systemGray6))
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
-                        }
-                        .disabled(viewModel.isLoading)
-                        
-                        // 파일 재선택 버튼
-                        if selectedFileName != nil {
+                        if selectedFileName == nil {
+                            // 파일 선택 전 UI
                             Button {
-                                viewModel.clearFile()
-                                selectedFileName = nil
-                                selectedFileSize = nil
+                                isFilePickerPresented = true
                             } label: {
-                                Text("파일 재선택")
-                                    .font(.custom("GmarketSansMedium", size: 14))
-                                    .foregroundStyle(.blue)
+                                HStack(spacing: 10) {
+                                    Image(systemName: "plus.circle.fill")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 18, height: 18)
+                                    Text("PDF 파일 선택하기")
+                                        .font(.custom("GmarketSansMedium", size: 16))
+                                }
+                                .frame(maxWidth: .infinity)
+                                .foregroundStyle(Color("primary"))
+                                .padding(.vertical, 40)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .fill(Color("signup-bg"))
+                                )
                             }
                             .disabled(viewModel.isLoading)
+                        } else {
+                            // 파일 선택 후 UI
+                            HStack(spacing: 10) {
+                                Image(systemName: "paperclip")
+                                    .font(.system(size: 18, weight: .medium))
+                                    .foregroundStyle(Color("gray_70"))
+                                
+                                Text(selectedFileName ?? "알 수 없는 파일")
+                                    .font(.custom("GmarketSansMedium", size: 16))
+                                    .lineLimit(1)
+                                
+                                Spacer()
+                                
+                                Button {
+                                    viewModel.clearFile()
+                                    selectedFileName = nil
+                                    selectedFileSize = nil
+                                } label: {
+                                    Image(systemName: "xmark")
+                                        .font(.system(size: 18, weight: .medium))
+                                        .foregroundStyle(Color("error"))
+                                }
+                                .buttonStyle(.plain)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .foregroundStyle(Color("primary"))
+                            .padding(.horizontal, 20)
+                            .padding(.vertical, 32)
+                            .background(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .fill(Color("signup-bg"))
+                            )
                         }
                     }
                 }
@@ -155,9 +149,7 @@ struct TossVerifyView: View {
             }
             
             // MARK: - 하단 인증 버튼
-            VStack(spacing: 0) {
-                Divider()
-                
+            VStack(spacing: 0) {                
                 VStack(spacing: 15) {
                     Button {
                         // 로그인 아이디 확인
@@ -182,17 +174,15 @@ struct TossVerifyView: View {
                                     .scaleEffect(0.8)
                             }
                             Text(viewModel.isLoading ? "인증 중..." : "인증 요청하기")
-                                .font(.custom("GmarketSansBold", size: 16))
-                                .foregroundStyle(Color.white)
                         }
+                        .font(.custom("GmarketSansMedium", size: 16))
+                        .foregroundStyle(Color.white)
                         .frame(maxWidth: .infinity)
-                        .padding(.vertical, 16)
+                        .padding(.vertical, 15)
                         .background(
-                            viewModel.uploadFile == nil || viewModel.isLoading
-                            ? Color.gray
-                            : Color.blue
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(Color("primary"))
                         )
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
                     }
                     .disabled(viewModel.uploadFile == nil || viewModel.isLoading)
                 }
@@ -260,7 +250,6 @@ struct TossVerifyView: View {
         // MARK: - Alert
         .alert(viewModel.alertTitle, isPresented: $viewModel.showAlert) {
             Button("확인") {
-                // 성공 시 창 닫기
                 if viewModel.alertTitle == "인증 성공" {
                     dismiss()
                 }
@@ -271,6 +260,7 @@ struct TossVerifyView: View {
     }
 }
 
+// MARK: - Preview
 #Preview {
     TossVerifyView(onSuccess: {})
 }

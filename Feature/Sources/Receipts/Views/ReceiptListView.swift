@@ -26,7 +26,7 @@ struct ReceiptListView: View {
             // MARK: - 상단 고정 영역
             VStack(spacing: 15) {
                 VStack(spacing: 20) {
-                    Text(club.studentClubName)
+                    Text("\(club.studentClubName)🫧")
                         .font(.custom("GmarketSansBold", size: 22))
                         .foregroundStyle(Color.black)
                         .frame(maxWidth: .infinity, alignment: .leading)
