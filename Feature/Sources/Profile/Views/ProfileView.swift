@@ -10,11 +10,11 @@ import Core
 
 struct ProfileView: View {
     @Environment(\.dismiss) private var dismiss
-    @State private var viewModel = ProfileViewModel()
-    @Bindable private var authManager = AuthenticationManager.shared
-    @State private var showLogoutAlert = false
     
-    // 소속 관리 상태 변수
+    @Bindable private var authManager = AuthenticationManager.shared
+    
+    @State private var viewModel = ProfileViewModel()
+    @State private var showLogoutAlert = false
     @State private var newMemberStudentNum: String = ""
     @State private var newMemberName: String = ""
     @State private var clubMembers: [ClubMemberData] = []
@@ -22,108 +22,141 @@ struct ProfileView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
-                // 마이페이지 타이틀
-                Text("마이페이지")
-                    .font(.custom("GmarketSansBold", size: 25))
-                    .foregroundStyle(Color.darkNavy)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.top, 10)
-                    .padding(.bottom, 15)
-                
-                // 나의 정보
-                VStack(alignment: .leading, spacing: 30) {
-                    VStack(alignment: .leading, spacing: 15) {
-                        Text("나의 정보")
-                            .font(.custom("GmarketSansMedium", size: 20))
-                            .foregroundStyle(Color.darkNavy)
-                            .padding(.top, 10)
-                        Text("회원님의 정보를 확인할 수 있습니다.")
-                            .font(.custom("GmarketSansLight", size: 13))
-                            .foregroundStyle(.gray)
-                            .padding(.top, -5)
-                    }
+                // 타이틀
+                VStack(alignment: .leading, spacing: 5) {
+                    Text("내 정보🫧")
+                        .font(.custom("GmarketSansBold", size: 26))
+                        .foregroundStyle(Color.black)
                     
-                    VStack(spacing: 10) {
-                        ProfileMyInfoRow(icon: "person", title: "이름", value: viewModel.name)
-                        ProfileMyInfoRow(icon: "number", title: "학번", value: viewModel.studentNum)
-                        ProfileMyInfoRow(icon: "building.columns", title: "단과대학", value: viewModel.collegeName)
-                        ProfileMyInfoRow(icon: "person.3", title: "소속", value: viewModel.studentClub)
-                        ProfileMyInfoRow(icon: "person.badge.key", title: "권한", value: viewModel.displayRole)
-                    }
-                    .padding(.vertical, 10)
-                    .background(
-                        RoundedRectangle(cornerRadius: 15)
-                            .fill(Color.softBlue.opacity(0.3))
-                    )
+                    Text("회원님의 정보를 확인할 수 있습니다.")
+                        .font(.custom("GmarketSansMedium", size: 16))
+                        .foregroundStyle(Color("gray_80"))
                 }
-                .padding(.bottom, 15)
+                .padding(.horizontal, 20)
+                .padding(.vertical, 20)
+                .padding(.bottom, 10)
+               
+                // MARK: - 내 정보
+                VStack(alignment: .leading, spacing: 20) {
+                    ProfileInfoView(text: "이름", value: viewModel.name)
+                    ProfileInfoView(text: "학번", value: viewModel.studentNum)
+                    ProfileInfoView(text: "단과대학", value: viewModel.collegeName)
+                    ProfileInfoView(text: "소속", value: viewModel.studentClub)
+                    ProfileInfoView(text: "권한", value: viewModel.displayRole)
+                }
+                .padding(.horizontal, 20)
+                .padding(.bottom, 30)
                 
-                // 소속 관리 (PRESIDENT 권한일 때만 표시)
+//                Rectangle()
+//                    .fill(Color.white)
+//                    .frame(maxWidth: .infinity, minHeight: 15)
+                // MARK: - 소속 관리 (PRESIDENT 권한일 때만 표시)
                 if viewModel.role == "PRESIDENT" {
-                    VStack(alignment: .leading, spacing: 30) {
-                        VStack(alignment: .leading, spacing: 15) {
-                            Text("소속 관리")
-                                .font(.custom("GmarketSansMedium", size: 20))
-                                .foregroundStyle(Color.darkNavy)
-                                .padding(.top, 10)
-                            Text("소속 학생회의 구성원을 관리할 수 있습니다.")
-                                .font(.custom("GmarketSansLight", size: 13))
-                                .foregroundStyle(.gray)
-                                .padding(.top, -5)
+                    VStack(alignment: .leading, spacing: 20) {
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("소속부원 관리")
+                                .font(.custom("GmarketSansMedium", size: 18))
+                                .foregroundStyle(Color.black)
+                            Text("현재 소속부원 정보를 확인하고 변경할 수 있습니다.")
+                                .font(.custom("GmarketSansMedium", size: 14))
+                                .foregroundStyle(Color("gray_70"))
+                        }
+                        .padding(.top, 10)
+                        
+                        // MARK: - 소속부원 추가
+                        HStack(spacing: 10) {
+                            TextField("학번", text: $newMemberStudentNum)
+                                .font(.custom("GmarketSansLight", size: 14))
+                                .foregroundStyle(Color("gray_90"))
+                                .padding()
+                                .background(RoundedRectangle(cornerRadius: 10).fill(Color.white).stroke(newMemberStudentNum == "" ? Color("gray_20") : Color("primary")))
+                                .autocorrectionDisabled(true)
+                                .textInputAutocapitalization(.never)
+                            
+                            TextField("이름", text: $newMemberName)
+                                .font(.custom("GmarketSansLight", size: 14))
+                                .foregroundStyle(Color("gray_90"))
+                                .padding()
+                                .background(RoundedRectangle(cornerRadius: 10).fill(Color.white).stroke(newMemberName == "" ? Color("gray_20") : Color("primary")))
+                                .autocorrectionDisabled(true)
+                                .textInputAutocapitalization(.never)
+                            
+                            // 저장 버튼
+                            Button {
+                                viewModel.addMember(studentNum: newMemberStudentNum, name: newMemberName)
+                                newMemberStudentNum = ""
+                                newMemberName = ""
+                            } label: {
+                                Text("저장")
+                            }
+                            .font(.custom("GmarketSansMedium", size: 16))
+                            .foregroundStyle(Color.white)
+                            .padding()
+                            .background(RoundedRectangle(cornerRadius: 10).fill(Color("primary")))
                         }
                         
-                        // 구성원 추가
-                        AddClubMemberRow(
-                            studentNum: $newMemberStudentNum,
-                            name: $newMemberName
-                        ) {
-                            viewModel.addMember(studentNum: newMemberStudentNum, name: newMemberName)
-                            newMemberStudentNum = ""
-                            newMemberName = ""
-                        }
 
-                        // 구성원 목록
+                        // MARK: - 소속부원 목록
                         VStack {
-                            ForEach(viewModel.clubMembers) { member in
-                                ClubMemberInfoRow(
-                                    studentNum: member.studentNum,
-                                    name: member.name
-                                ) {
-                                    viewModel.deleteMember(studentNum: member.studentNum)
+                            ForEach(Array(viewModel.clubMembers.enumerated()), id: \.element.id) { index, member in
+                                HStack(spacing: 5) {
+                                    Text("\(index + 1)")
+                                        .frame(width: 30, alignment: .leading)
+                                        .font(.custom("GmarketSansMedium", size: 16))
+                                        .foregroundStyle(Color("primary"))
+
+                                    HStack(spacing: 5) {
+                                        Text("\(member.studentNum)")
+                                            .frame(width: 100, alignment: .leading)
+
+                                        Text("\(member.name)")
+                                            .frame(width: 90, alignment: .leading)
+                                    }
+                                    
+                                    Spacer()
+                                    
+                                    // 삭제 버튼
+                                    Button {
+                                        viewModel.deleteMember(studentNum: member.studentNum)
+                                    } label: {
+                                        Image(systemName: "xmark")
+                                            .font(.system(size: 18, weight: .medium))
+                                            .foregroundStyle(Color("error"))
+                                    }
+                                    .buttonStyle(.plain)
                                 }
+                                .padding(.vertical, 8)
+                                .font(.custom("GmarketSansLight", size: 16))
+                                .foregroundStyle(Color("gray_90"))
                             }
                         }
-                        .background(
-                            RoundedRectangle(cornerRadius: 15)
-                                .fill(Color.softBlue.opacity(0.3))
-                        )
+                        .padding(.top, 15)
                     }
+                    .padding(.horizontal, 20)
                 }
-                
-                Spacer()
-                
-                // 로그아웃 버튼
-                Button(action: {
+                                                
+                // MARK: - 로그아웃 버튼
+                Button {
                     showLogoutAlert = true
-                }) {
+                } label: {
                     HStack {
                         Text("로그아웃")
-                            .font(.custom("GmarketSansMedium", size: 14))
-                            .foregroundColor(.white)
                     }
+                    .font(.custom("GmarketSansMedium", size: 16))
+                    .foregroundStyle(Color.white)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 15)
                     .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(Color.withdrawal)
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(Color("error"))
                     )
                 }
-                .padding(.horizontal, 10)
-                .padding(.top, 20)
-                .padding(.bottom, 10)
+                .padding(.horizontal, 20)
+                .padding(.top, 30)
+                .padding(.bottom, 40)
             }
-            .padding(.horizontal, 15)
         }
+        .background(Color("signup-bg"))
         .onAppear {
             viewModel.fetchUserProfile()
             viewModel.fetchClubMembers()
@@ -146,6 +179,20 @@ struct ProfileView: View {
     }
 }
 
-//#Preview {
-//    ProfileView()
-//}
+// MARK: - 내 정보 viewBuilder
+@ViewBuilder
+func ProfileInfoView(text: String ,value: String) -> some View {
+    VStack(alignment: .leading, spacing: 5) {
+        Text("\(text)")
+            .font(.custom("GmarketSansMedium", size: 14))
+            .foregroundStyle(Color("gray_70"))
+        Text("\(value)")
+            .font(.custom("GmarketSansMedium", size: 16))
+            .foregroundStyle(Color.black)
+    }
+}
+
+// MARK: - Preview
+#Preview {
+    ProfileView()
+}
