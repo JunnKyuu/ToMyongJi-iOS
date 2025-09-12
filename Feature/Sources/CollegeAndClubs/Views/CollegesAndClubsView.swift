@@ -13,16 +13,21 @@ struct CollegesAndClubsView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack {
-                    Text("학생회를 선택해주세요.")
-                        .font(.custom("GmarketSansBold", size: 28))
-                        .foregroundStyle(Color.darkNavy)
-                        .frame(height: 45)
-                        .multilineTextAlignment(.leading)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal, 15)
-                        .padding(.bottom, 15)
-                    
+                VStack(spacing: 30) {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("영수증 조회🫧")
+                            .font(.custom("GmarketSansBold", size: 26))
+                            .foregroundStyle(Color.black)
+                        
+                        Text("각 학생회별로 등록된 영수증을 조회합니다.")
+                            .font(.custom("GmarketSansMedium", size: 16))
+                            .foregroundStyle(Color("gray_80"))
+                            .padding(.horizontal, 3)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, 15)
+                    .padding(.top, 20)
+
                     LazyVStack(spacing: 20) {
                         ForEach(viewModel.colleges) { college in
                             CollegeCard(college: college)
@@ -31,6 +36,7 @@ struct CollegesAndClubsView: View {
                     .padding(.horizontal, 15)
                 }
             }
+            .background(Color("signup-bg"))
             .scrollIndicators(.hidden)
             .overlay(Group {
                 if viewModel.isLoading {
@@ -60,15 +66,15 @@ struct CollegeCard: View {
             HStack {
                 VStack(alignment: .leading, spacing: 5) {
                     Text(college.collegeName)
-                        .font(.custom("GmarketSansBold", size: 18))
-                        .foregroundStyle(Color.darkNavy)
+                        .font(.custom("GmarketSansMedium", size: 18))
+                        .foregroundStyle(Color.black)
                     Text("\(college.clubs.count)개의 학생회")
                         .font(.custom("GmarketSansMedium", size: 14))
-                        .foregroundStyle(.gray)
+                        .foregroundStyle(Color("gray_70"))
                 }
                 Spacer()
                 Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
-                    .foregroundColor(.darkNavy)
+                    .foregroundColor(Color("gray_20"))
                     .font(.title3.bold())
             }
             .contentShape(Rectangle())
@@ -79,6 +85,9 @@ struct CollegeCard: View {
             }
             
             if isExpanded {
+                Divider()
+                    .foregroundStyle(Color("gray_10"))
+                    .padding(.vertical, 10)
                 ForEach(college.clubs) { club in
                     ClubRow(club: club)
                 }
@@ -86,20 +95,10 @@ struct CollegeCard: View {
         }
         .padding()
         .background {
-            RoundedRectangle(cornerRadius: 25, style: .continuous)
-                .fill(Color.softBlue)
-                .overlay(alignment: .leading) {
-                    Circle()
-                        .fill(Color.softBlue)
-                        .overlay {
-                            Circle()
-                                .fill(.white.opacity(0.2))
-                        }
-                        .scaleEffect(2, anchor: .topLeading)
-                        .offset(x: -50, y: -40)
-                }
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .fill(Color.white)
         }
-        .clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
     }
 }
 
@@ -112,11 +111,11 @@ struct ClubRow: View {
         } label: {
             HStack {
                 Text(club.studentClubName)
-                    .font(.custom("GmarketSansLight", size: 15))
-                    .foregroundStyle(Color.darkNavy)
+                    .font(.custom("GmarketSansMedium", size: 14))
+                    .foregroundStyle(Color("gray_90"))
                 Spacer()
                 Image(systemName: "chevron.right")
-                    .foregroundColor(.gray)
+                    .foregroundColor(Color("gray_90"))
             }
             .padding(.vertical, 5)
         }

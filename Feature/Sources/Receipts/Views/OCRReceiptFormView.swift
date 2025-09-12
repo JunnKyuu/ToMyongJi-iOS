@@ -27,29 +27,49 @@ struct OCRReceiptFormView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
-            // 헤더
-            VStack(alignment: .leading, spacing: 15) {
-                Button {
-                    dismiss()
-                } label: {
-                    Image(systemName: "chevron.left")
-                        .font(.title3.bold())
-                        .foregroundStyle(Color.gray)
-                        .contentShape(.rect)
+            // MARK: - 설명
+            VStack(alignment: .leading, spacing: 30) {
+                VStack(alignment: .leading, spacing: 5) {
+                    Text("OCR 업로드")
+                        .font(.custom("GmarketSansBold", size: 22))
+                        .foregroundStyle(Color.black)
+                    
+                    Text("영수증을 촬영하거나 갤러리에서 선택해 주세요.")
+                        .font(.custom("GmarketSansMedium", size: 12))
+                        .foregroundStyle(Color("gray_90"))
                 }
-                .padding(.top, 10)
                 
-                Text("영수증 사진 인식")
-                    .font(.custom("GmarketSansBold", size: 25))
-                    .padding(.top, 5)
                 
-                Text("영수증 사진을 촬영하거나 업로드하여 자동으로 내용을 인식할 수 있습니다.")
-                    .font(.custom("GmarketSansLight", size: 12))
-                    .foregroundStyle(.gray)
-                    .padding(.top, -5)
+                VStack(alignment: .leading, spacing: 5) {
+                    Text("사진 촬영")
+                        .font(.custom("GmarketSansMedium", size: 12))
+                        .foregroundStyle(Color("gray_90"))
+                    Text("실물 영수증을 휴대폰 카메라로 바로 찍어 업로드할 수 있어요.")
+                        .font(.custom("GmarketSansMedium", size: 12))
+                        .foregroundStyle(Color("gray_70"))
+                }
+                
+                VStack(alignment: .leading, spacing: 5) {
+                    Text("갤러리에서 선택")
+                        .font(.custom("GmarketSansMedium", size: 12))
+                        .foregroundStyle(Color("gray_90"))
+                    Text("이미 저장된 영수증 이미지를 선택해 업로드할 수 있어요.")
+                        .font(.custom("GmarketSansMedium", size: 12))
+                        .foregroundStyle(Color("gray_70"))
+                }
+                
+                VStack(alignment: .leading, spacing: 5) {
+                    Text("파일 크기: 10MB 이하")
+                        .font(.custom("GmarketSansMedium", size: 12))
+                        .foregroundStyle(Color("gray_90"))
+                    Text("지원 형식: JPG, JPEG, PNG, PDE")
+                        .font(.custom("GmarketSansMedium", size: 12))
+                        .foregroundStyle(Color("gray_90"))
+                }
             }
+            .padding(.top, 30)
             
-            // 사진 업로드 영역
+            // MARK: - 사진 업로드 영역
             VStack(spacing: 20) {
                 if let image = selectedImage {
                     // 선택된 이미지 표시
@@ -58,9 +78,9 @@ struct OCRReceiptFormView: View {
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(maxHeight: 300)
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
                             .overlay(
-                                RoundedRectangle(cornerRadius: 12)
+                                RoundedRectangle(cornerRadius: 10)
                                     .stroke(Color.gray.opacity(0.3), lineWidth: 1)
                             )
                         
@@ -71,18 +91,16 @@ struct OCRReceiptFormView: View {
                                 if isUploadingImage {
                                     ProgressView()
                                         .scaleEffect(0.8)
-                                } else {
-                                    Image(systemName: "doc.text.magnifyingglass")
                                 }
-                                Text(isUploadingImage ? "인식 중..." : "OCR로 인식하기")
+                                Text(isUploadingImage ? "인식 중..." : "인증 요청하기")
                             }
                             .font(.custom("GmarketSansMedium", size: 16))
                             .foregroundStyle(Color.white)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 15)
                             .background(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .fill(isUploadingImage ? Color.gray : Color.deposit)
+                                RoundedRectangle(cornerRadius: 10)
+                                    .fill(Color("primary"))
                             )
                         }
                         .disabled(isUploadingImage)
@@ -91,8 +109,8 @@ struct OCRReceiptFormView: View {
                             selectedImage = nil
                         } label: {
                             Text("다른 사진 선택")
-                                .font(.custom("GmarketSansMedium", size: 14))
-                                .foregroundStyle(Color.gray)
+                                .font(.custom("GmarketSansMedium", size: 16))
+                                .foregroundStyle(Color("gray_90"))
                         }
                     }
                 } else {
@@ -100,30 +118,24 @@ struct OCRReceiptFormView: View {
                     Button {
                         showingActionSheet = true
                     } label: {
-                        VStack(spacing: 15) {
-                            Image(systemName: "camera.fill")
-                                .font(.system(size: 50))
-                                .foregroundStyle(Color.gray)
-                            
-                            Text("영수증 사진 촬영/업로드")
-                                .font(.custom("GmarketSansMedium", size: 16))
-                                .foregroundStyle(Color.darkNavy)
-                            
-                            Text("카메라로 촬영하거나 갤러리에서 선택하세요")
-                                .font(.custom("GmarketSansLight", size: 12))
-                                .foregroundStyle(.gray)
-                                .multilineTextAlignment(.center)
+                        HStack(spacing: 15) {
+                            HStack {
+                                Image(systemName: "plus.circle.fill")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 18, height: 18)
+                                Text("영수증 이미지 업로드")
+                            }
+                            .font(.custom("GmarketSansMedium", size: 16))
+                            .foregroundStyle(Color("primary"))
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 40)
+                            .background(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .fill(Color("signup-bg"))
+                            )
                         }
                         .frame(maxWidth: .infinity)
-                        .padding(.vertical, 40)
-                        .background(
-                            RoundedRectangle(cornerRadius: 12)
-                                .fill(Color.softBlue.opacity(0.3))
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .stroke(Color.gray.opacity(0.3), style: StrokeStyle(lineWidth: 2, dash: [5]))
-                                )
-                        )
                     }
                 }
             }
@@ -133,7 +145,7 @@ struct OCRReceiptFormView: View {
         }
         .padding(.vertical, 15)
         .padding(.horizontal, 25)
-        .interactiveDismissDisabled()
+        
         .confirmationDialog("영수증 사진", isPresented: $showingActionSheet, titleVisibility: .visible) {
             Button("카메라로 촬영") {
                 showingCamera = true
@@ -213,12 +225,9 @@ struct OCRReceiptFormView: View {
         
         return newImage ?? image
     }
-    
-
 }
 
-
-//MARK: - UIImagePickerController를 SwiftUI에서 사용하기 위한 래퍼
+//MARK: - UIImagePickerController
 struct CameraPicker: UIViewControllerRepresentable {
     @Binding var selectedImage: UIImage?
     @Environment(\.dismiss) private var dismiss

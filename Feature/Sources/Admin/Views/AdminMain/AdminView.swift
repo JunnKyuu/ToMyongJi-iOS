@@ -18,43 +18,48 @@ struct AdminView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 VStack(alignment: .leading, spacing: 30) {
-                    // admin header
+                    // MARK: - 헤더
                     AdminHeader()
                     
-                    // 소속 회장 관리
+                    // MARK: - 소속 회장 관리
                     AdminPresidentView(viewModel: viewModel)
                 }
-                .padding(.bottom, 30)
+                .padding(.horizontal, 20)
+                .padding(.bottom, 20)
                 .environment(viewModel)
-
-                Divider()
                 
-                // 소속부원 관리
+                Rectangle()
+                    .fill(Color.white)
+                    .frame(maxWidth: .infinity, minHeight: 12)
+                
+                // MARK: - 소속부원 관리
                 AdminMemberView(viewModel: viewModel)
+                    .padding(.horizontal, 20)
                     .environment(viewModel)
 
-                // 로그아웃 버튼
-                Button(action: {
+                // MARK: - 로그아웃 버튼
+                Button {
                     showLogoutAlert = true
-                }) {
+                } label: {
                     HStack {
                         Text("로그아웃")
-                            .font(.custom("GmarketSansMedium", size: 14))
-                            .foregroundColor(.white)
                     }
+                    .font(.custom("GmarketSansMedium", size: 16))
+                    .foregroundStyle(Color.white)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 15)
                     .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(Color.withdrawal)
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(Color("error"))
                     )
                 }
-                .padding(.horizontal, 10)
-                .padding(.top, 20)
-                .padding(.bottom, 10)
+                .padding(.horizontal, 20)
+                .padding(.top, 30)
+                .padding(.bottom, 40)
             }
-            .padding(20)
+            .padding(.vertical, 20)
         }
+        .background(Color("signup-bg"))
         .alert("로그아웃", isPresented: $showLogoutAlert) {
             Button("취소", role: .cancel) { }
             Button("로그아웃", role: .destructive) {
@@ -73,6 +78,7 @@ struct AdminView: View {
     }
 }
 
+// MARK: - Preview
 #Preview {
     AdminView()
 }

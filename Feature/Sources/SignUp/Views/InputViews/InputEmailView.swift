@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UI
 
 struct InputEmailView: View {
     @Binding var email: String
@@ -20,7 +21,7 @@ struct InputEmailView: View {
     @State private var showAlert: Bool = false
     @State private var alertMessage: String = ""
     
-    // 이메일 형식 검증 함수
+    // MARK: - 이메일 형식 검증 함수
     private func isValidEmail(_ email: String) -> Bool {
         let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
         let emailPredicate = NSPredicate(format:"SELF MATCHES %@", emailRegex)
@@ -28,52 +29,56 @@ struct InputEmailView: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            Button {
-                onBack()
-            } label: {
-                Image(systemName: "chevron.left")
-                    .font(.title3.bold())
-                    .foregroundStyle(Color.darkNavy)
-                    .contentShape(.rect)
-            }
+        VStack(alignment: .leading, spacing: 10) {
+            DismissButton()
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.bottom, 30)
+            .padding(.bottom, 20)
             
             VStack(alignment: .leading, spacing: 10) {
                 Text("회원가입을 위한")
                 Text("이메일을 입력해주세요.")
             }
-            .font(.custom("GmarketSansBold", size: 28))
-            .foregroundStyle(Color.darkNavy)
+            .font(.custom("GmarketSansBold", size: 24))
+            .foregroundStyle(Color.black)
             .padding(.bottom, 40)
             
-            Group {
+            VStack(alignment: .leading) {
                 Text("이메일")
-                    .font(.custom("GmarketSansLight", size: 15))
-                    .foregroundStyle(Color.darkNavy)
+                    .font(.custom("GmarketSansMedium", size: 14))
+                    .foregroundStyle(Color("gray_70"))
                 
-                HStack(spacing: 10) {
-                    SignUpTextField(hint: "tomyongji@gmail.com", value: $email)
-                        .textInputAutocapitalization(.never)
-                        .autocorrectionDisabled()
-                        .keyboardType(.emailAddress)
-                    
+                HStack(alignment: .top, spacing: 10) {
+                    VStack(alignment: .leading) {
+                        SignUpTextFieldBottomStroke(hint: "tomyongji@gmail.com", value: $email)
+                            .textInputAutocapitalization(.never)
+                            .autocorrectionDisabled()
+                            .keyboardType(.emailAddress)
+                        
+                        if !email.isEmpty && !isValidEmail(email) {
+                            Text("올바른 이메일 형식이 아닙니다.")
+                                .font(.custom("GmarketSansMedium", size: 12))
+                                .foregroundStyle(Color("error"))
+                                .padding(.top, 5)
+                        }
+                    }
+
+
                     Button {
                         if isValidEmail(email) {
                             onSendCode()
                             isVerificationSent = true
-                        } else {
-                            alertMessage = "올바른 이메일 형식이 아닙니다."
-                            showAlert = true
                         }
+//                        else {
+//                            alertMessage = "올바른 이메일 형식이 아닙니다."
+//                            showAlert = true
+//                        }
                     } label: {
                         Text("인증코드 발송")
-                            .font(.custom("GmarketSansMedium", size: 13))
+                            .font(.custom("GmarketSansMedium", size: 14))
                             .foregroundStyle(.white)
                             .padding(.horizontal, 15)
                             .padding(.vertical, 15)
-                            .background(email.isEmpty || !isValidEmail(email) || viewModel.isSendingEmail || isVerificationSent ? Color.gray.opacity(0.3) : Color.darkNavy)
+                            .background(email.isEmpty || !isValidEmail(email) || viewModel.isSendingEmail || isVerificationSent ? Color("primary").opacity(0.3) : Color("primary"))
                             .clipShape(RoundedRectangle(cornerRadius: 10))
                     }
                     .disabled(email.isEmpty || !isValidEmail(email) || viewModel.isSendingEmail || isVerificationSent)
@@ -83,22 +88,22 @@ struct InputEmailView: View {
             if isVerificationSent {
                 Group {
                     Text("인증코드")
-                        .font(.custom("GmarketSansLight", size: 15))
-                        .foregroundStyle(Color.darkNavy)
+                        .font(.custom("GmarketSansMedium", size: 14))
+                        .foregroundStyle(Color("gray_70"))
                     
                     HStack(spacing: 10) {
-                        SignUpTextField(hint: "인증코드 8자리 입력", value: $verificationCode)
+                        SignUpTextFieldBottomStroke(hint: "인증코드 8자리 입력", value: $verificationCode)
                         
                         Button {
                             onVerifyCode()
                             isVerified = true
                         } label: {
                             Text("인증하기")
-                                .font(.custom("GmarketSansMedium", size: 13))
+                                .font(.custom("GmarketSansMedium", size: 14))
                                 .foregroundStyle(.white)
                                 .padding(.horizontal, 15)
                                 .padding(.vertical, 15)
-                                .background(verificationCode.count != 8 || viewModel.isVerifyingEmail ? Color.gray.opacity(0.3) : Color.darkNavy)
+                                .background(verificationCode.count != 8 || viewModel.isVerifyingEmail ? Color("primary").opacity(0.3) : Color("primary"))
                                 .clipShape(RoundedRectangle(cornerRadius: 10))
                         }
                         .disabled(verificationCode.count != 8 || viewModel.isVerifyingEmail)
@@ -112,12 +117,12 @@ struct InputEmailView: View {
                 onNext()
             } label: {
                 Text("다음")
-                    .font(.custom("GmarketSansMedium", size: 15))
+                    .font(.custom("GmarketSansMedium", size: 16))
                     .foregroundStyle(.white)
             }
             .frame(maxWidth: .infinity, alignment: .center)
             .padding(.vertical, 15)
-            .background(!isVerified ? Color.gray.opacity(0.3) : Color.darkNavy)
+            .background(!isVerified ? Color("primary").opacity(0.3) : Color("primary"))
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .disabled(!isVerified)
         }
@@ -130,6 +135,7 @@ struct InputEmailView: View {
     }
 }
 
+// MARK: - Preview
 #Preview {
     InputEmailView(
         email: .constant(""),

@@ -9,55 +9,76 @@
 import SwiftUI
 
 struct MonthPickerView: View {
-    let selectedMonth: Int
-    let onSelect: (Int) -> Void
+    @State private var localSelectedMonth: Int
+    let onConfirm: (Int) -> Void
     
     private let months = [
         "1월", "2월", "3월", "4월", "5월", "6월",
-        "7월", "8월", "9월", "10월", "11월", "12월"
+        "7월", "8월", "9월", "10월", "11월", "12월", "전체"
     ]
     
-    init(selectedMonth: Int, onSelect: @escaping (Int) -> Void) {
-        self.selectedMonth = selectedMonth
-        self.onSelect = onSelect
+    init(initialMonth: Int, onConfirm: @escaping (Int) -> Void) {
+        self._localSelectedMonth = State(initialValue: initialMonth)
+        self.onConfirm = onConfirm
     }
     
     var body: some View {
-        VStack(spacing: 20) {
+        VStack(alignment: .leading) {
             Text("월 선택")
                 .font(.custom("GmarketSansBold", size: 20))
-                .foregroundStyle(Color.darkNavy)
+                .foregroundStyle(Color.black)
+                .padding()
             
-            ScrollView {
-                VStack(spacing: 20) {
-                    // 월 선택
-                    VStack(alignment: .leading, spacing: 10) {
-                        LazyVGrid(columns: [
-                            GridItem(.flexible()),
-                            GridItem(.flexible()),
-                            GridItem(.flexible())
-                        ], spacing: 10) {
-                            ForEach(months.indices, id: \.self) { index in
-                                Button {
-                                    onSelect(index + 1)
-                                } label: {
-                                    Text(months[index])
-                                        .font(.custom("GmarketSansMedium", size: 16))
-                                        .foregroundStyle(selectedMonth == index + 1 ? .white : Color.darkNavy)
-                                        .frame(maxWidth: .infinity)
-                                        .padding(.vertical, 8)
-                                        .background(
-                                            RoundedRectangle(cornerRadius: 8)
-                                                .fill(selectedMonth == index + 1 ? Color.softBlue : Color.clear)
-                                        )
-                                }
+            VStack(spacing: 20) {
+                // MARK: - 월 선택
+                VStack(alignment: .leading, spacing: 10) {
+                    LazyVGrid(columns: [
+                        GridItem(.flexible()),
+                        GridItem(.flexible()),
+                        GridItem(.flexible())
+                    ], spacing: 10) {
+                        ForEach(months.indices, id: \.self) { index in
+                            Button {
+                                self.localSelectedMonth = index + 1
+                            } label: {
+                                Text(months[index])
+                                    .font(.custom("GmarketSansMedium", size: 16))
+                                    .foregroundStyle(localSelectedMonth == index + 1 ? Color("primary") : Color("gray_70"))
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, 8)
+                                    .background(
+                                        Rectangle()
+                                            .fill(localSelectedMonth == index + 1 ? Color("signup-bg") : Color.clear)
+                                    )
                             }
                         }
                     }
                 }
-                .padding()
+                
+                Spacer()
+                
+                // MARK: - 확인 버튼
+                Button {
+                    onConfirm(localSelectedMonth)
+                } label: {
+                    Text("확인")
+                        .font(.custom("GmarketSansMedium", size: 16))
+                        .foregroundStyle(.white)
+                }
+                .frame(maxWidth: .infinity, alignment: .center)
+                .padding(.vertical, 15)
+                .background(Color("primary"))
+                .clipShape(RoundedRectangle(cornerRadius: 10))
             }
+            .padding()
         }
         .padding()
+    }
+}
+
+// MARK: - Preview
+#Preview {
+    MonthPickerView(initialMonth: 3) { month in
+        print("Confirmed month: \(month)")
     }
 }
