@@ -97,7 +97,6 @@
 		B1A81BC8B44860D29B1EFC4B /* GradientButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9496419038EE7CD9CF6E9F4 /* GradientButton.swift */; };
 		B23C9BF8301723D980424E83 /* ProfileViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CECA24A68B0ADDB963522FA /* ProfileViewModelTests.swift */; };
 		B6D2189864C9172D31536E66 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 9EA400C9487153F5D15F0843 /* Alamofire */; };
-		B90A7255CC05B1147500AA73 /* ProfileMyInfoRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABE866F14C89078EF98DBE63 /* ProfileMyInfoRow.swift */; };
 		BD8BA11EB5264A0B8CC05BB3 /* AdminViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFF5437721D76161D8B0CEF /* AdminViewModelTests.swift */; };
 		BFA320E678B0CB02C556B15D /* AgreementDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91F90D7DF4BAC24F0FE20E25 /* AgreementDetailView.swift */; };
 		C1936260BEF8953FB42AC6AD /* ClubMemberInfoRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB7EF258DEC112A8B4311E06 /* ClubMemberInfoRow.swift */; };
@@ -358,7 +357,6 @@
 		A8E04B0F3168EF17B2642BF2 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		AA699193EF1F0BCCCA767D78 /* TossVerifyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TossVerifyViewModel.swift; sourceTree = "<group>"; };
 		AB7EF258DEC112A8B4311E06 /* ClubMemberInfoRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubMemberInfoRow.swift; sourceTree = "<group>"; };
-		ABE866F14C89078EF98DBE63 /* ProfileMyInfoRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileMyInfoRow.swift; sourceTree = "<group>"; };
 		ADA71563932CA9E6352A4ADA /* Member.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Member.swift; sourceTree = "<group>"; };
 		B942DFCDEF3AA88E2818E77E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		B9DAB92D455965C46DA9BFF3 /* EditReceiptFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditReceiptFormView.swift; sourceTree = "<group>"; };
@@ -705,7 +703,6 @@
 			children = (
 				32D2E0AB107A9C0689AA58B0 /* AddClubMemberRow.swift */,
 				AB7EF258DEC112A8B4311E06 /* ClubMemberInfoRow.swift */,
-				ABE866F14C89078EF98DBE63 /* ProfileMyInfoRow.swift */,
 				E1FA747C07CE18E92DB1383C /* ProfileView.swift */,
 			);
 			path = Views;
@@ -1626,7 +1623,6 @@
 				3D0CCD9D5E3EE45E11478376 /* AddClubMemberRow.swift in Sources */,
 				C1936260BEF8953FB42AC6AD /* ClubMemberInfoRow.swift in Sources */,
 				0CE52E8E2E6A67B70011CD43 /* SignUpTextFieldBottomStroke.swift in Sources */,
-				B90A7255CC05B1147500AA73 /* ProfileMyInfoRow.swift in Sources */,
 				84134D8C0DA9D1ACDAAD0FF4 /* ProfileView.swift in Sources */,
 				126E493559D72CC2C15F357A /* Receipt.swift in Sources */,
 				969F43E035DFEC3A3394D35B /* ReceiptEndpoint.swift in Sources */,
