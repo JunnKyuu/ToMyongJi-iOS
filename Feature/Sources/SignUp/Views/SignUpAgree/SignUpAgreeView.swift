@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UI
 
 struct SignUpAgreeView: View {
     @Binding var isAgreeAll: Bool
@@ -19,19 +20,12 @@ struct SignUpAgreeView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
-            Button {
-                onBack()
-            } label: {
-                Image(systemName: "chevron.left")
-                    .font(.title3.bold())
-                    .foregroundStyle(Color.darkNavy)
-                    .contentShape(.rect)
-            }
+            DismissButton()
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.bottom, 30)
+            .padding(.bottom, 20)
             Text("약관 동의")
-                .font(.custom("GmarketSansBold", size: 28))
-                .foregroundStyle(Color.darkNavy)
+                .font(.custom("GmarketSansBold", size: 24))
+                .foregroundStyle(Color.black)
                 .padding(.bottom, 20)
             
             // 전체 동의
@@ -41,6 +35,7 @@ struct SignUpAgreeView: View {
                 isAgree: isAgreeAll
             ) {
                 isAgreeAll.toggle()
+                print(isAgreeAll)
                 isAgreeService = isAgreeAll
                 isAgreePrivacy = isAgreeAll
                 isAgreeClub = isAgreeAll
@@ -98,20 +93,21 @@ struct SignUpAgreeView: View {
                 }
             } label: {
                 Text("다음")
-                    .font(.custom("GmarketSansMedium", size: 15))
-                    .foregroundStyle(.white)
+                    .font(.custom("GmarketSansMedium", size: 16))
+                    .foregroundStyle(Color.white)
             }
             .frame(maxWidth: .infinity, alignment: .center)
             .padding(.vertical, 15)
             .background(
                 (!isAgreeService || !isAgreePrivacy || !isAgreeClub)
-                ? Color.gray.opacity(0.3)
-                : Color.darkNavy
+                ? Color("primary").opacity(0.3)
+                : Color("primary")
             )
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .disabled(!isAgreeService || !isAgreePrivacy || !isAgreeClub)
         }
         .padding()
+        .background(Color("signup-bg"))
         .sheet(item: $selectedAgreement) { type in
             AgreementDetailView(type: type)
         }

@@ -13,25 +13,27 @@ struct SplashScreenView: View {
     
     var body: some View {
         if isActive {
-//            IntroView()
             ContentView()
         } else {
             VStack {
-                Spacer()
-                Image("logo")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 350)
-                    .padding(.bottom, 5)
-                Spacer()
+                VStack {
+                    Image("logo")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 350)
+                    Text("학생회비 통합 관리 서비스")
+                        .font(.custom("GmarketSansLight", size: 20))
+                        .foregroundStyle(Color("darkNavy"))
+                }
+                .padding(.vertical, 230)
                 Spacer()
                 Text("To MyongJi - 명지대 학생들에게")
-                    .font(.custom("GmarketSansLight", size: 15))
-                    .foregroundStyle(Color.secondary)
+                    .font(.custom("GmarketSansLight", size: 14))
+                    .foregroundStyle(Color("darkNavy"))
                     .padding(.bottom, 30)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color.white)
+            .background(Color("bg"))
             .opacity(opacity)
             .onAppear {
                 withAnimation(.easeIn(duration: 1.5)) {
@@ -49,8 +51,7 @@ struct SplashScreenView: View {
     }
 }
 
+// MARK: - Preview
 #Preview {
     SplashScreenView()
 }
-
-// End of file. No additional code.

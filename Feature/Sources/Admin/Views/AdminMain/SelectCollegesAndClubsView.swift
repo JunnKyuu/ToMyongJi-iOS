@@ -23,14 +23,13 @@ struct SelectCollegesAndClubsView: View {
             } label: {
                 HStack {
                     Text(viewModel.selectedCollege?.collegeName ?? "단과대학 선택")
-                        .font(.custom("GmarketSansLight", size: 15))
+                        .font(.custom("GmarketSansLight", size: 14))
                     Spacer()
                     Image(systemName: "chevron.down")
                 }
-                .foregroundStyle(Color.darkNavy)
+                .foregroundStyle(Color.black)
                 .padding()
-                .background(Color.gray.opacity(0.1))
-                .clipShape(RoundedRectangle(cornerRadius: 10))
+                .background(RoundedRectangle(cornerRadius: 10).fill(Color.white).stroke(viewModel.selectedCollege != nil ? Color("primary") : Color("gray_20")))
             }
             
             // 소속 선택
@@ -45,14 +44,13 @@ struct SelectCollegesAndClubsView: View {
                 } label: {
                     HStack {
                         Text(viewModel.selectedClub?.studentClubName ?? "소속 선택")
-                            .font(.custom("GmarketSansLight", size: 15))
+                            .font(.custom("GmarketSansLight", size: 14))
                         Spacer()
                         Image(systemName: "chevron.down")
                     }
-                    .foregroundStyle(Color.darkNavy)
+                    .foregroundStyle(Color.black)
                     .padding()
-                    .background(Color.gray.opacity(0.1))
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .background(RoundedRectangle(cornerRadius: 10).fill(Color.white).stroke(viewModel.selectedClub != nil ? Color("primary") : Color("gray_20")))
                 }
             }
         }

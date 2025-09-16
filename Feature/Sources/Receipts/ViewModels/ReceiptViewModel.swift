@@ -281,7 +281,7 @@ class ReceiptViewModel {
             
             // OCR 성공 시 영수증 목록 새로고침
             self.getStudentClubReceipts(userId: self.authManager.userId ?? 0)
-            self.showAlert(title: "성공", message: "영수증이 자동으로 등록되었습니다.")
+            self.showAlert(title: "성공", message: "영수증 인식에 성공했습니다.")
         }
         .store(in: &cancellables)
     }

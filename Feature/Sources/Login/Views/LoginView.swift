@@ -7,15 +7,22 @@
 
 import SwiftUI
 import Core
+import UI
 
 struct LoginView: View {
     @Environment(\.dismiss) private var dismiss
+    
     @Bindable private var viewModel = LoginViewModel()
     @Bindable private var authManager = AuthenticationManager.shared
     @Binding var showSignup: Bool
+    
     @State private var showFindIdView: Bool = false
     @State private var keyboardHeight: CGFloat = 0
+    
     @FocusState private var focusField: Field?
+    @FocusState private var isFocusedID: Bool
+    @FocusState private var isFocusedPW: Bool
+    
     
     enum Field {
         case id
@@ -25,35 +32,35 @@ struct LoginView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
-                Button(action: {
-                    dismiss()
-                    if UserDefaults.standard.value(forKey: "selectedTab") as? Int != nil {
-                        UserDefaults.standard.set(1, forKey: "selectedTab")
-                    }
-                }) {
-                    Image(systemName: "chevron.left")
-                        .font(.title3.bold())
-                        .foregroundStyle(Color.darkNavy)
-                        .contentShape(.rect)
-                }
+                DismissButton()
                 .frame(maxWidth: .infinity, alignment: .leading)
                 
                 Spacer()
-                    .frame(height: 50)
+                    .frame(height: 10)
                 
-                // 로고 이미지 - 크기 유지
+                // MARK: - 로고 이미지 - 크기 유지
                 Image("logo")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 300)
                     .padding(.vertical, 50)
+                    .padding(.horizontal, 15)
                 
-                // 입력 필드들을 감싸는 카드 뷰
-                VStack(spacing: 0) {
+                // MARK: - 입력 필드들을 감싸는 카드 뷰
+                VStack(spacing: 10) {
                     // 아이디 입력
                     TextField("아이디", text: $viewModel.userId)
-                        .font(.custom("GmarketSansLight", size: 15))
+                        .font(.custom("GmarketSansLight", size: 14))
                         .padding()
+                        .background(Color.white)
+                        .clipShape(
+                            RoundedRectangle(cornerRadius: 10)
+                        )
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke((isFocusedID ? Color("primary") :  Color("gray_20")), lineWidth: 1)
+                        )
+                        .focused($isFocusedID)
                         .focused($focusField, equals: .id)
                         .autocorrectionDisabled(true)
                         .textInputAutocapitalization(.never)
@@ -61,43 +68,50 @@ struct LoginView: View {
                         .onSubmit {
                             focusField = .password
                         }
-                    
-                    Divider()
-                        .background(Color.gray.opacity(0.2))
-                    
+                        .animation(.easeInOut(duration: 0.2), value: isFocusedID)
+                        
                     // 비밀번호 입력
                     SecureField("비밀번호", text: $viewModel.password)
-                        .font(.custom("GmarketSansLight", size: 15))
+                        .font(.custom("GmarketSansLight", size: 14))
                         .padding()
+                        .background(Color.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke((isFocusedPW ? Color("primary"): Color("gray_20")), lineWidth: 1)
+                        )
+                        .focused($isFocusedPW)
                         .focused($focusField, equals: .password)
                         .submitLabel(.done)
                         .onSubmit {
                             viewModel.login()
                         }
+                        .animation(.easeInOut(duration: 0.2), value: isFocusedPW)
                 }
-                .background(Color.gray.opacity(0.1))
-                .clipShape(RoundedRectangle(cornerRadius: 10))
+                .padding(.horizontal, 15)
+
                 
-                // 로그인 버튼
+                // MARK: - 로그인 버튼
                 Button(action: {
                     viewModel.login()
                 }) {
-                    Text("로그인")
+                    Text("다음")
                         .font(.custom("GmarketSansMedium", size: 16))
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 15)
                         .background(
                             RoundedRectangle(cornerRadius: 10)
-                                .fill(Color.darkNavy)
+                                .fill(Color("primary"))
                                 .opacity(viewModel.userId.isEmpty || viewModel.password.isEmpty ? 0.1 : 1)
                         )
                 }
                 .disabled(viewModel.userId.isEmpty || viewModel.password.isEmpty || viewModel.isLoading)
                 .padding(.top, 20)
+                .padding(.horizontal, 15)
                 
-                // 회원가입 및 아이디 찾기 버튼
-                HStack(spacing: 12) {
+                // MARK: - 회원가입 및 아이디 찾기 버튼
+                HStack(spacing: 30) {
                     Button("회원가입") {
                         showSignup = true
                     }
@@ -106,18 +120,19 @@ struct LoginView: View {
                         showFindIdView = true
                     }
                 }
-                .font(.custom("GmarketSansMedium", size: 13))
-                .tint(.gray)
+                .font(.custom("GmarketSansLight", size: 12))
+                .tint(Color("darkNavy"))
                 .padding(.top, 15)
                 
                 Spacer()
                     .frame(height: 50)
             }
-            .padding(.horizontal, 25)
+            .padding(.horizontal, 15)
             .padding(.vertical, 15)
         }
         .scrollDismissesKeyboard(.immediately)
         .ignoresSafeArea(.keyboard)
+        .background(Color("bg"))
         .sheet(isPresented: $showFindIdView, content: {
             FindIDView()
                 .presentationDetents([.height(300)])
@@ -142,6 +157,7 @@ struct LoginView: View {
     }
 }
 
+// MARK: - Preview
 #Preview {
     LoginView(showSignup: .constant(false))
 }
