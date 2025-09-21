@@ -15,6 +15,7 @@ struct ProfileView: View {
     
     @State private var viewModel = ProfileViewModel()
     @State private var showLogoutAlert = false
+    @State private var showDeleteUserAlert = false
     @State private var newMemberStudentNum: String = ""
     @State private var newMemberName: String = ""
     @State private var clubMembers: [ClubMemberData] = []
@@ -161,6 +162,24 @@ struct ProfileView: View {
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, 30)
+                
+                // MARK: - 회원탈퇴 버튼
+                Button {
+                    showDeleteUserAlert = true
+                } label: {
+                    HStack {
+                        Text("회원탈퇴")
+                    }
+                    .font(.custom("GmarketSansMedium", size: 16))
+                    .foregroundStyle(Color("error"))
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 15)
+                    .background(
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(Color("signup-bg"))
+                    )
+                }
+                .padding(.horizontal, 20)
                 .padding(.bottom, 40)
             }
         }
@@ -170,14 +189,24 @@ struct ProfileView: View {
             viewModel.fetchClubMembers()
         }
         .alert("로그아웃", isPresented: $showLogoutAlert) {
-            Button("취소", role: .cancel) { }
-            Button("로그아웃", role: .destructive) {
+            Button("아니오", role: .cancel) { }
+            Button("예", role: .destructive) {
                 withAnimation {
                     authManager.clearAuthentication()
                 }
             }
         } message: {
-            Text("정말 로그아웃 하시겠습니까?")
+            Text("정말 로그아웃 하시겠어요?")
+        }
+        .alert("정말 탈퇴하시겠어요?", isPresented: $showDeleteUserAlert) {
+            Button("아니오", role: .cancel) { }
+            Button("예", role: .destructive) {
+                withAnimation {
+                    viewModel.deleteUser()
+                }
+            }
+        } message: {
+            Text("작성하신 장부 내역은 보존되며\n모든 회원 정보가 삭제됩니다.")
         }
         .alert(viewModel.alertTitle, isPresented: $viewModel.showAlert) {
             Button("확인", role: .cancel) { }

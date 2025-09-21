@@ -180,6 +180,32 @@ public class ProfileViewModel {
         .store(in: &cancellables)
     }
     
+    // MARK: - 회원탈퇴
+    public func deleteUser() {
+        isLoading = true
+        networkingManager.run(
+            ProfileEndpoint.deleteUser,
+            type: DeleteUserResponse.self
+        )
+        .sink { [weak self] completion in
+            guard let self = self else { return }
+            self.isLoading = false
+            switch completion {
+            case .failure:
+                self.showAlert(title: "실패", message: "회원 탈퇴에 실패했습니다.")
+            case .finished:
+                break
+            }
+        } receiveValue: { [weak self] response in
+            guard let self = self else { return }
+            if response.statusCode == 200 {
+                self.showAlert(title: "성공", message: "그동안 이용해주셔서 감사합니다.")
+                authManager.clearAuthentication()
+            }
+        }
+        .store(in: &cancellables)
+    }
+    
     // MARK: - 알림창 함수
     private func showAlert(title: String, message: String) {
         alertTitle = title
