@@ -29,4 +29,12 @@ struct ClubResponse: Codable {
 struct ClubData: Codable {
     let studentClubId: Int
     let studentClubName: String
-} 
+}
+
+struct DeleteUserResponse: Codable {
+    let statusCode: Int
+    let statusMessage: String
+    let data: EmptyData?
+}
+
+struct EmptyData: Codable {}

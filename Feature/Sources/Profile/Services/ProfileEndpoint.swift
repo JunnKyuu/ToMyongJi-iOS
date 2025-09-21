@@ -15,6 +15,7 @@ public enum ProfileEndpoint {
     case addMember(studentNum: String, name: String)
     case getMembers(id: Int)
     case deleteMember(studentNum: String)
+    case deleteUser
 }
 
 extension ProfileEndpoint: Endpoint {
@@ -30,6 +31,8 @@ extension ProfileEndpoint: Endpoint {
             return "/api/my/members/\(id)"
         case .deleteMember(let studentNum):
             return "/api/my/members/\(studentNum)"
+        case .deleteUser:
+            return "/api/users/delete"
         }
     }
     
@@ -68,7 +71,7 @@ extension ProfileEndpoint: Endpoint {
         switch self {
         case .addMember:
             return .post
-        case .deleteMember:
+        case .deleteMember, .deleteUser:
             return .delete
         default:
             return .get
