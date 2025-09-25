@@ -20,8 +20,10 @@ final class ProfileViewModelTests: XCTestCase {
         
         // 로그인 처리
         let loginExpectation = XCTestExpectation(description: "로그인 완료")
-        loginSut.userId = "tomyongji"
-        loginSut.password = "Tomyongji123!"
+//        loginSut.userId = "tomyongji"
+//        loginSut.password = "Tomyongji123!"
+        loginSut.userId = "test123"
+        loginSut.password = "Test123!"
         loginSut.login()
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self] in
@@ -126,6 +128,27 @@ final class ProfileViewModelTests: XCTestCase {
             // 삭제된 소속 부원 정보 확인
             XCTAssertNotEqual(self.profileSut.clubMembers.last?.studentNum, "10101010")
             XCTAssertNotEqual(self.profileSut.clubMembers.last?.name, "이강인")
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 5.0)
+    }
+    
+    // MARK: - 회원탈퇴 테스트
+    func test_WhenDeleteUserSuccess_ThenClearAuthentication() {
+        let expectation = XCTestExpectation(description: "회원탈퇴 완료")
+        
+        // when
+        profileSut.deleteUser()
+        
+        // then
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            // 로딩 상태 확인
+            XCTAssertFalse(self.profileSut.isLoading)
+            
+            // 회원탈퇴 성공시 로그아웃
+            XCTAssertFalse(self.profileSut.authManager.isAuthenticated)
+            
             expectation.fulfill()
         }
         
