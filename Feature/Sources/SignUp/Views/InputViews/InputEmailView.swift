@@ -127,6 +127,9 @@ struct InputEmailView: View {
             .disabled(!isVerified)
         }
         .padding()
+        .onTapGesture {
+            hideKeyboard()
+        }
         .alert("알림", isPresented: $showAlert) {
             Button("확인", role: .cancel) { }
         } message: {
