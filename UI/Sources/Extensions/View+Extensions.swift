@@ -26,4 +26,10 @@ extension View {
             .disabled(condition)
             .opacity(condition ? 0.5 : 1)
     }
+    
+    // MARK: - 키보드 숨기기
+    public func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
 }
+
