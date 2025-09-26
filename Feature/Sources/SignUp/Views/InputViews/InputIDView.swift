@@ -92,6 +92,9 @@ struct InputIDView: View {
             .disabled(!isValid || !isUserIdAvailable)
         }
         .padding()
+        .onTapGesture {
+            hideKeyboard()
+        }
         .background(Color("signup-bg"))
     }
 }

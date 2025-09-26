@@ -48,7 +48,7 @@ struct InputClubAuthenticationView: View {
                     Text("학번")
                         .font(.custom("GmarketSansMedium", size: 16))
                         .foregroundStyle(Color("gray_90"))
-                    SignUpTextField(hint: "60221234", value: $studentNum)
+                    SignUpNumberPad(hint: "60221234", value: $studentNum)
                 }
                 .padding(.bottom, 20)
                 
@@ -162,6 +162,9 @@ struct InputClubAuthenticationView: View {
         }
         .padding()
         .background(Color("signup-bg"))
+        .onTapGesture {
+            hideKeyboard()
+        }
         .onAppear {
             viewModel.fetchColleges()
         }
