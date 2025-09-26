@@ -162,6 +162,9 @@ struct InputClubAuthenticationView: View {
         }
         .padding()
         .background(Color("signup-bg"))
+        .onTapGesture {
+            hideKeyboard()
+        }
         .onAppear {
             viewModel.fetchColleges()
         }

@@ -106,6 +106,9 @@ struct InputPasswordView: View {
             .disabled(!isPasswordValid)
         }
         .padding()
+        .onTapGesture {
+            hideKeyboard()
+        }
         .background(Color("signup-bg"))
     }
 }
