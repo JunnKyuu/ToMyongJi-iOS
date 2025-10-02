@@ -45,7 +45,7 @@ struct MaintenanceView: View {
                     Text("점검 일시")
                         .font(.custom("GmarketSansMedium", size: 16))
                         .foregroundStyle(Color.darkNavy)
-                    Text("3월 21일 17:00 ~ 3월 22일 09:00")
+                    Text("9월 27일 00:00 ~ 9월 27일 15:00")
                         .font(.custom("GmarketSansBold", size: 16))
                         .foregroundStyle(Color.darkNavy)
                 }
@@ -54,7 +54,7 @@ struct MaintenanceView: View {
                     Text("점검 내용")
                         .font(.custom("GmarketSansMedium", size: 16))
                         .foregroundStyle(Color.darkNavy)
-                    VStack(alignment: .leading, spacing: 5) {
+                    VStack(alignment: .leading) {
                         Text("• 서버 성능 개선 및 안정화")
                     }
                     .font(.custom("GmarketSansLight", size: 14))
@@ -66,7 +66,6 @@ struct MaintenanceView: View {
                     .foregroundStyle(Color.darkNavy)
                     .multilineTextAlignment(.center)
                     .frame(maxWidth: .infinity)
-                    .padding(.top, 10)
             }
             .padding(25)
             .background(
