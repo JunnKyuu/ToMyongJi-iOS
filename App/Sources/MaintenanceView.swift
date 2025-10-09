@@ -10,85 +10,61 @@ import SwiftUI
 
 struct MaintenanceView: View {
     var body: some View {
-        VStack(spacing: 30) {
+        VStack(spacing: 20) {
+            Spacer()
+                .frame(height: 100)
             // 상단 아이콘
-            ZStack {
-                Circle()
-                    .fill(Color.darkNavy)
-                    .overlay {
-                        Circle()
-                            .fill(.white.opacity(0.2))
-                    }
-                    .frame(width: 120, height: 120)
-                
-                Image(systemName: "wrench.and.screwdriver.fill")
-                    .font(.system(size: 50))
-                    .foregroundStyle(.white)
-            }
-            .padding(.top, 50)
+            Image(systemName: "exclamationmark.circle")
+                .font(.system(size: 66))
+                .foregroundStyle(Color("error"))
             
             // 제목
-            VStack(alignment: .leading, spacing: 10) {
+            VStack(alignment: .center, spacing: 10) {
                 Text("서버 점검 안내")
-                    .font(.custom("GmarketSansBold", size: 28))
-                    .foregroundStyle(Color.darkNavy)
+                    .font(.custom("GmarketSansBold", size: 24))
                 Text("더 나은 서비스로 곧 돌아오겠습니다.")
-                    .font(.custom("GmarketSansLight", size: 14))
-                    .foregroundStyle(Color.darkNavy)
+                    .font(.custom("GmarketSansMedium", size: 16))
             }
-            Spacer()
-                .frame(height: 10)
+            .foregroundStyle(.black)
+            .padding(.bottom, 15)
             
             // 점검 정보 카드
             VStack(alignment: .leading, spacing: 30) {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("점검 일시")
                         .font(.custom("GmarketSansMedium", size: 16))
-                        .foregroundStyle(Color.darkNavy)
+                        .foregroundStyle(.black)
                     Text("9월 27일 00:00 ~ 9월 27일 15:00")
-                        .font(.custom("GmarketSansBold", size: 16))
-                        .foregroundStyle(Color.darkNavy)
+                        .font(.custom("GmarketSansMedium", size: 14))
+                        .foregroundStyle(Color("gray_80"))
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
                 
                 VStack(alignment: .leading, spacing: 8) {
                     Text("점검 내용")
                         .font(.custom("GmarketSansMedium", size: 16))
-                        .foregroundStyle(Color.darkNavy)
+                        .foregroundStyle(.black)
                     VStack(alignment: .leading) {
-                        Text("• 서버 성능 개선 및 안정화")
+                        Text("서버 성능 개선 및 안정화")
                     }
-                    .font(.custom("GmarketSansLight", size: 14))
-                    .foregroundStyle(Color.darkNavy)
+                    .font(.custom("GmarketSansMedium", size: 14))
+                    .foregroundStyle(Color("gray_80"))
+                    .padding(.bottom, 10)
+                    
+                    Text("* 점검 중에는 서비스 이용이 일시 중단됩니다.")
+                        .font(.custom("GmarketSansMedium", size: 14))
+                        .foregroundStyle(Color("error"))
                 }
-                
-                Text("점검 중에는 서비스 이용이 일시 중단됩니다.")
-                    .font(.custom("GmarketSansLight", size: 14))
-                    .foregroundStyle(Color.darkNavy)
-                    .multilineTextAlignment(.center)
-                    .frame(maxWidth: .infinity)
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .padding(25)
-            .background(
-                RoundedRectangle(cornerRadius: 25, style: .continuous)
-                    .fill(Color.softBlue)
-                    .overlay(alignment: .leading) {
-                        Circle()
-                            .fill(Color.softBlue)
-                            .overlay {
-                                Circle()
-                                    .fill(.white.opacity(0.2))
-                            }
-                            .scaleEffect(2, anchor: .topLeading)
-                            .offset(x: -50, y: -40)
-                    }
-            )
-            .clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
+            .frame(maxWidth: .infinity, minHeight: 180)
             .padding(.horizontal, 20)
-            
+            .background(.white)
+            .clipShape(RoundedRectangle(cornerRadius: 10))
             Spacer()
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(uiColor: .systemGroupedBackground))
+        .padding(20)
+        .background(Color("signup-bg").ignoresSafeArea())
     }
 }
 
