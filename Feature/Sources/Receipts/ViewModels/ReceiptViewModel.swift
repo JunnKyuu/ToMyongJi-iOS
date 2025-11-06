@@ -291,13 +291,13 @@ class ReceiptViewModel {
     
     // MARK: - 영수증 검색
     func searchReceipt(keyword: String) {
-        // 검색어가 비어 있으면, 전체 목록을 다시 불러와서 현재 필터 상태를 적용합니다.
+        // 검색어가 비어 있으면, 전체 목록을 다시 불러와 적용
         if keyword.isEmpty {
             getStudentClubReceipts(userId: authManager.userId ?? 0)
             return
         }
         
-        // 검색어가 2글자 미만이면 검색하지 않습니다.
+        // 검색어가 2글자 미만이면 검색X
         if keyword.count < 2 {
             return
         }
@@ -317,7 +317,7 @@ class ReceiptViewModel {
             } receiveValue: { [weak self] response in
                 guard let self = self else { return }
                 
-                // 검색 결과를 filteredReceipts에 할당합니다.
+                // 검색 결과를 filteredReceipts에 할당
                 self.filteredReceipts = response.data.map { searchData in
                     Receipt(receiptId: searchData.receiptId,
                             date: searchData.date,

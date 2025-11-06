@@ -65,17 +65,17 @@ struct CreateReceiptView: View {
                             .focused($isFocused)
                             .autocorrectionDisabled()
                             .textInputAutocapitalization(.never)
-                        if viewModel.searchKeyword.isEmpty {
-                            Image(systemName: "magnifyingglass")
-                                .foregroundStyle(Color("gray_40"))
-                        } else {
-                            Button {
-                                viewModel.searchKeyword = ""
-                            } label: {
-                                Image(systemName: "xmark.circle.fill")
-                                    .foregroundStyle(Color("gray_40"))
-                            }
-                        }
+//                        if viewModel.searchKeyword.isEmpty {
+//                            Image(systemName: "magnifyingglass")
+//                                .foregroundStyle(Color("gray_40"))
+//                        } else {
+//                            Button {
+//                                viewModel.searchKeyword = ""
+//                            } label: {
+//                                Image(systemName: "xmark.circle.fill")
+//                                    .foregroundStyle(Color("gray_40"))
+//                            }
+//                        }
                     }
                     .padding(.horizontal, 15)
                     .padding(.vertical, 15)
