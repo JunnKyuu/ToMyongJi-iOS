@@ -54,7 +54,8 @@ platform :ios do
 
     latest_build = latest_testflight_build_number(
       app_identifier: "com.tomyongji.ios",
-      version: app_version
+      version: app_version,
+      initial_build_number: 0
     )
 
     new_build_number = latest_build + 1
@@ -95,7 +96,8 @@ platform :ios do
     latest_build = app_store_build_number(
       app_identifier: "com.tomyongji.ios",
       version: app_version,
-      live: false
+      live: false,
+      initial_build_number: 0
     )
     
     new_build_number = latest_build + 1
