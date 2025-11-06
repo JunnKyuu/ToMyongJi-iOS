@@ -26,6 +26,9 @@ class ReceiptViewModel {
     // 영수증 수정 데이터
     var receiptId: Int = 0
     
+    // 영수증 검색 키워드
+    var searchKeyword: String = ""
+    
     // UI 상태
     var errorMessage: String? = nil
     var isLoading = false
@@ -49,7 +52,7 @@ class ReceiptViewModel {
     private var networkingManager: AlamofireNetworkingManager = AlamofireNetworkingManager.shared
     private var cancellables = Set<AnyCancellable>()
     
-    // 영수증 조회
+    // MARK: - 영수증 조회
     func getReceipts(studentClubId: Int) {
         isLoading = true
         
@@ -76,7 +79,7 @@ class ReceiptViewModel {
         .store(in: &cancellables)
     }
     
-    // 학생회를 위한 영수증 조회
+    // MARK: - 학생회를 위한 영수증 조회
     func getStudentClubReceipts(userId: Int) {
         isLoading = true
         
@@ -100,7 +103,7 @@ class ReceiptViewModel {
             .store(in: &cancellables)
     }
     
-    // 필터링
+    // MARK: - 필터링
     func filterReceipts() {
         if isFiltered {
             filterReceiptsByMonth()
@@ -109,7 +112,7 @@ class ReceiptViewModel {
         }
     }
     
-    // 월별 필터링
+    // MARK: - 월별 필터링
     func filterReceiptsByMonth() {
         let calendar = Calendar.current
         
@@ -124,7 +127,7 @@ class ReceiptViewModel {
         }
     }
     
-    // 필터링 상태 업데이트
+    // MARK: - 필터링 상태 업데이트
     func updateFilter(isFiltered: Bool, month: Int? = nil) {
         self.isFiltered = isFiltered
         if let month = month {
@@ -133,7 +136,7 @@ class ReceiptViewModel {
         filterReceipts()
     }
     
-    // 영수증 생성
+    // MARK: - 영수증 생성
     func createReceipt() {
         isLoading = true
         
@@ -173,7 +176,7 @@ class ReceiptViewModel {
             .store(in: &cancellables)
     }
     
-    // 영수증 삭제
+    // MARK: - 영수증 삭제
     func deleteReceipt(receiptId: Int, userId: Int) {
         isLoading = true
         
@@ -202,7 +205,7 @@ class ReceiptViewModel {
         .store(in: &cancellables)
     }
     
-    // 영수증 수정
+    // MARK: - 영수증 수정
     func updateReceipt() {
         isLoading = true
         
@@ -243,7 +246,7 @@ class ReceiptViewModel {
             .store(in: &cancellables)
     }
     
-    // 영수증 수정을 위한 데이터 설정
+    // MARK: - 영수증 수정을 위한 데이터 설정
     func setReceiptForUpdate(_ receipt: Receipt) {
         self.receiptId = receipt.receiptId
         self.date = receipt.date
@@ -252,7 +255,7 @@ class ReceiptViewModel {
         self.withdrawal = receipt.withdrawal
     }
     
-    // OCR 영수증 인식
+    // MARK: - OCR 영수증 인식
     func uploadReceiptImage(imageData: Data) {
         isLoading = true
         
@@ -286,6 +289,47 @@ class ReceiptViewModel {
         .store(in: &cancellables)
     }
     
+    // MARK: - 영수증 검색
+    func searchReceipt(keyword: String) {
+        // 검색어가 비어 있으면, 전체 목록을 다시 불러와 적용
+        if keyword.isEmpty {
+            getStudentClubReceipts(userId: authManager.userId ?? 0)
+            return
+        }
+        
+        // 검색어가 2글자 미만이면 검색X
+        if keyword.count < 2 {
+            return
+        }
+        
+        isLoading = true
+        
+        networkingManager.run(ReceiptEndpoint.searchReceipt(keyword: keyword), type: ReceiptSearchResponse.self)
+            .sink { [weak self] completion in
+                guard let self = self else { return }
+                self.isLoading = false
+                switch completion {
+                case .failure:
+                    self.showAlert(title: "실패", message: "영수증 검색에 실패했습니다.")
+                case .finished:
+                    break
+                }
+            } receiveValue: { [weak self] response in
+                guard let self = self else { return }
+                
+                // 검색 결과를 filteredReceipts에 할당
+                self.filteredReceipts = response.data.map { searchData in
+                    Receipt(receiptId: searchData.receiptId,
+                            date: searchData.date,
+                            content: searchData.content,
+                            deposit: searchData.deposit,
+                            withdrawal: searchData.withdrawal)
+                }.sorted { $0.date > $1.date }
+            }
+            .store(in: &cancellables)
+    }
+    
+    // MARK: - 알림
     private func showAlert(title: String, message: String) {
         alertTitle = title
         alertMessage = message

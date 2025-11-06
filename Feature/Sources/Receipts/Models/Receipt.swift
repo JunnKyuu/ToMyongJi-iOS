@@ -193,3 +193,33 @@ public struct OCRData: Codable {
         self.withdrawal = withdrawal
     }
 }
+
+// MARK: - 영수증 검색
+
+public struct ReceiptSearchResponse: Codable {
+    let statusCode: Int
+    let statusMessage: String
+    let data: [ReceiptSearchData]
+    
+    public init(statusCode: Int, statusMessage: String, data: [ReceiptSearchData]) {
+        self.statusCode = statusCode
+        self.statusMessage = statusMessage
+        self.data = data
+    }
+}
+
+public struct ReceiptSearchData: Codable {
+    let receiptId: Int
+    let date: String
+    let content: String
+    let deposit: Int
+    let withdrawal: Int
+    
+    public init(receiptId: Int, date: String, content: String, deposit: Int, withdrawal: Int) {
+        self.receiptId = receiptId
+        self.date = date
+        self.content = content
+        self.deposit = deposit
+        self.withdrawal = withdrawal
+    }
+}
