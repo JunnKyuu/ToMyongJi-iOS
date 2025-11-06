@@ -17,6 +17,7 @@ public enum ReceiptEndpoint {
     case deleteReceipt(receiptId: Int)
     case updateReceipt(UpdateReceiptRequest)
     case ocrUpload(userLoginId: String, imageData: Data)
+    case searchReceipt(keyword: String)
 }
 
 extension ReceiptEndpoint: Endpoint {
@@ -34,6 +35,8 @@ extension ReceiptEndpoint: Endpoint {
             return "/api/receipt"
         case .ocrUpload(let userLoginId, _):
             return "/api/ocr/upload/\(userLoginId)"
+        case .searchReceipt:
+            return "/api/receipt/keyword"
         }
     }
     
@@ -83,12 +86,17 @@ extension ReceiptEndpoint: Endpoint {
     }
     
     public var query: [String : String] {
-        [:]
+        switch self {
+        case .searchReceipt(let keyword):
+            return ["keyword": keyword]
+        default:
+            return [:]
+        }
     }
     
     public var method: HTTPMethod {
         switch self {
-        case .receipt, .receiptForStudentClub:
+        case .receipt, .receiptForStudentClub, .searchReceipt:
             return .get
         case .createReceipt, .ocrUpload:
             return .post
@@ -101,7 +109,7 @@ extension ReceiptEndpoint: Endpoint {
     
     public var encoding: ParameterEncoding {
         switch self {
-        case .receipt, .receiptForStudentClub, .deleteReceipt:
+        case .receipt, .receiptForStudentClub, .deleteReceipt, .searchReceipt:
             return URLEncoding.default
         case .createReceipt, .updateReceipt:
             return JSONEncoding.default
