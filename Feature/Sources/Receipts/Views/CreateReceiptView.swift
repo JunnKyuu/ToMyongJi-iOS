@@ -64,12 +64,24 @@ struct CreateReceiptView: View {
                         TextField(hint, text: $searchValue)
                             .font(.custom("GmarketSansLight", size: 14))
                             .focused($isFocused)
-                        Button {
-                            print("\(searchValue) 검색")
-                        } label: {
-                            Image(systemName: "magnifyingglass")
-                                .foregroundStyle(Color("gray_70"))
+                            .autocorrectionDisabled()
+                            .textInputAutocapitalization(.never)
+                        if searchValue == "" {
+                            Button {
+                                print("\(searchValue) 검색")
+                            } label: {
+                                Image(systemName: "magnifyingglass")
+                                    .foregroundStyle(Color("gray_70"))
+                            }
+                        } else {
+                            Button {
+                                searchValue = ""
+                            } label: {
+                                Image(systemName: "x.circle.fill")
+                                    .foregroundStyle(Color("gray_70"))
+                            }
                         }
+                        
                     }
                     .padding(.horizontal, 15)
                     .padding(.vertical, 15)
