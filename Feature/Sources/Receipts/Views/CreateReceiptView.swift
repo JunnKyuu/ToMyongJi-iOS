@@ -21,7 +21,6 @@ struct CreateReceiptView: View {
     @State private var showEditForm: Bool = false
     @State private var showOCRForm: Bool = false
     @State private var hint: String = "검색어를 2글자 이상 입력하세요"
-    @State private var searchValue: String = ""
     @State private var viewModel = ReceiptViewModel()
     
     // 영수증
@@ -61,14 +60,21 @@ struct CreateReceiptView: View {
                 // MARK: - 영수증 검색 텍스트 필드
                 VStack {
                     HStack(spacing: 12) {
-                        TextField(hint, text: $searchValue)
+                        TextField(hint, text: $viewModel.searchKeyword)
                             .font(.custom("GmarketSansLight", size: 14))
                             .focused($isFocused)
-                        Button {
-                            print("\(searchValue) 검색")
-                        } label: {
+                            .autocorrectionDisabled()
+                            .textInputAutocapitalization(.never)
+                        if viewModel.searchKeyword.isEmpty {
                             Image(systemName: "magnifyingglass")
-                                .foregroundStyle(Color("gray_70"))
+                                .foregroundStyle(Color("gray_40"))
+                        } else {
+                            Button {
+                                viewModel.searchKeyword = ""
+                            } label: {
+                                Image(systemName: "xmark.circle.fill")
+                                    .foregroundStyle(Color("gray_40"))
+                            }
                         }
                     }
                     .padding(.horizontal, 15)
@@ -76,14 +82,17 @@ struct CreateReceiptView: View {
                     .background(
                         RoundedRectangle(cornerRadius: 8)
                             .fill(.white)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(isFocused != false ? Color("primary") : Color("gray_20"), lineWidth: 1)
+                            )
+                            .animation(.easeInOut(duration: 0.2), value: isFocused)
                     )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(isFocused != false ? Color("primary") : Color("gray_20"), lineWidth: 1)
-                    )
-                    .animation(.easeInOut(duration: 0.2), value: isFocused)
                 }
                 .padding(.horizontal, 15)
+                .onChange(of: viewModel.searchKeyword) { _, newValue in
+                    viewModel.searchReceipt(keyword: newValue)
+                }
                 // MARK: - 내역 추가 버튼
                 Button {
                     showAddReceiptSheet = true
