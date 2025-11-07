@@ -457,4 +457,37 @@ final class ReceiptViewModelTests: XCTestCase {
         
         wait(for: [expectation], timeout: 5.0)
     }
+    
+    // MARK: - 영수증 검색 테스트
+    
+    func test_WhenReceiptSearchSuccess_ThenFilterReceipts() {
+        // given
+        let expectation = XCTestExpectation(description: "영수증 검색에 성공했습니다.")
+        let mockKeyword = "회식"
+        
+        // 로그인 상태 확인
+        guard loginSut.authManager.userLoginId != nil else {
+            XCTFail("userLoginId가 nil입니다. 로그인이 필요합니다.")
+            return
+        }
+        
+        // when
+        receiptSut.searchReceipt(keyword: mockKeyword)
+        
+        // then
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self] in
+            guard let self = self else { return }
+            
+            // 1. 로딩 상태 확인
+            XCTAssertFalse(self.receiptSut.isLoading)
+            
+            // 2. mock 키워드로 요청이 성공적인지 확인
+            XCTAssertEqual(self.receiptSut.filteredReceipts[0].content, "회식")
+            
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 3.0)
+    }
 }
