@@ -316,7 +316,7 @@ class ReceiptViewModel {
                 }
             } receiveValue: { [weak self] response in
                 guard let self = self else { return }
-                
+                                
                 // 검색 결과를 filteredReceipts에 할당
                 self.filteredReceipts = response.data.map { searchData in
                     Receipt(receiptId: searchData.receiptId,
