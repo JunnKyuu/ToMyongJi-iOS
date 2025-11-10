@@ -49,7 +49,7 @@ struct CreateReceiptView: View {
                     Text("잔액")
                         .font(.custom("GmarketSansMedium", size: 14))
                         .foregroundStyle(Color("gray_90"))
-
+                    
                     Text("\(viewModel.balance)원")
                         .font(.custom("GmarketSansBold", size: 32))
                         .foregroundStyle(Color.black)
@@ -57,42 +57,7 @@ struct CreateReceiptView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(15)
                 
-                // MARK: - 영수증 검색 텍스트 필드
-                VStack {
-                    HStack(spacing: 12) {
-                        TextField(hint, text: $viewModel.searchKeyword)
-                            .font(.custom("GmarketSansLight", size: 14))
-                            .focused($isFocused)
-                            .autocorrectionDisabled()
-                            .textInputAutocapitalization(.never)
-//                        if viewModel.searchKeyword.isEmpty {
-//                            Image(systemName: "magnifyingglass")
-//                                .foregroundStyle(Color("gray_40"))
-//                        } else {
-//                            Button {
-//                                viewModel.searchKeyword = ""
-//                            } label: {
-//                                Image(systemName: "xmark.circle.fill")
-//                                    .foregroundStyle(Color("gray_40"))
-//                            }
-//                        }
-                    }
-                    .padding(.horizontal, 15)
-                    .padding(.vertical, 15)
-                    .background(
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(.white)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(isFocused != false ? Color("primary") : Color("gray_20"), lineWidth: 1)
-                            )
-                            .animation(.easeInOut(duration: 0.2), value: isFocused)
-                    )
-                }
-                .padding(.horizontal, 15)
-                .onChange(of: viewModel.searchKeyword) { _, newValue in
-                    viewModel.searchReceipt(keyword: newValue)
-                }
+                
                 // MARK: - 내역 추가 버튼
                 Button {
                     showAddReceiptSheet = true
@@ -113,8 +78,46 @@ struct CreateReceiptView: View {
                 .padding(.horizontal, 15)
                 .padding(.top, 10)
             }
-            .padding(.bottom, 10)
-            
+            .padding(.bottom, 20)
+            // MARK: - 영수증 검색 텍스트 필드
+            VStack {
+                HStack(spacing: 12) {
+                    TextField(hint, text: $viewModel.searchKeyword)
+                        .font(.custom("GmarketSansLight", size: 14))
+                        .focused($isFocused)
+                        .autocorrectionDisabled()
+                        .textInputAutocapitalization(.never)
+                    
+                    if viewModel.searchKeyword.isEmpty {
+                        Image(systemName: "magnifyingglass")
+                            .frame(width: 25, height: 25)
+                            .foregroundStyle(Color("gray_70"))
+                    } else {
+                        Button {
+                            viewModel.searchKeyword = ""
+                        } label: {
+                            Image(systemName: "xmark.circle.fill")
+                                .foregroundStyle(Color("gray_70"))
+                        }
+                    }
+                }
+                .frame(maxWidth: .infinity, minHeight: 25)
+                .padding(.horizontal, 15)
+                .padding(.vertical, 10)
+                .background(
+                    RoundedRectangle(cornerRadius: 30)
+                        .fill(.white)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 30)
+                                .stroke(isFocused != false ? Color("primary") : Color("gray_20"), lineWidth: 1)
+                        )
+                        .animation(.easeInOut(duration: 0.2), value: isFocused)
+                )
+            }
+            .padding(.horizontal, 15)
+            .onChange(of: viewModel.searchKeyword) { _, newValue in
+                viewModel.searchReceipt(keyword: newValue)
+            }
             VStack(spacing: 0) {
                 HStack {
                     Spacer()
@@ -221,7 +224,7 @@ struct CreateReceiptView: View {
                 .presentationCornerRadius(30)
                 .presentationDragIndicator(.visible)
         }
-
+        
         .onChange(of: showOCRForm) { _, isPresented in
             // OCR 폼이 닫힐 때 새로고침
             if !isPresented {
