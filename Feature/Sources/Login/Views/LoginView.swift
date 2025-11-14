@@ -33,7 +33,7 @@ struct LoginView: View {
         ScrollView {
             VStack(spacing: 20) {
                 DismissButton()
-                .frame(maxWidth: .infinity, alignment: .leading)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 
                 Spacer()
                     .frame(height: 10)
@@ -51,7 +51,9 @@ struct LoginView: View {
                     // 아이디 입력
                     TextField("아이디", text: $viewModel.userId)
                         .font(.custom("GmarketSansLight", size: 14))
-                        .padding()
+                        .frame(maxWidth: .infinity, minHeight: 25)
+                        .padding(.horizontal, 15)
+                        .padding(.vertical, 10)
                         .background(Color.white)
                         .clipShape(
                             RoundedRectangle(cornerRadius: 10)
@@ -69,11 +71,13 @@ struct LoginView: View {
                             focusField = .password
                         }
                         .animation(.easeInOut(duration: 0.2), value: isFocusedID)
-                        
+                    
                     // 비밀번호 입력
                     SecureField("비밀번호", text: $viewModel.password)
                         .font(.custom("GmarketSansLight", size: 14))
-                        .padding()
+                        .frame(maxWidth: .infinity, minHeight: 25)
+                        .padding(.horizontal, 15)
+                        .padding(.vertical, 10)
                         .background(Color.white)
                         .clipShape(RoundedRectangle(cornerRadius: 10))
                         .overlay(
@@ -89,7 +93,7 @@ struct LoginView: View {
                         .animation(.easeInOut(duration: 0.2), value: isFocusedPW)
                 }
                 .padding(.horizontal, 15)
-
+                
                 
                 // MARK: - 로그인 버튼
                 Button(action: {
