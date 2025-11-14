@@ -172,6 +172,7 @@ class ReceiptViewModel {
                 self.content = ""
                 self.deposit = 0
                 self.withdrawal = 0
+                print(response.data.receiptId)
             }
             .store(in: &cancellables)
     }
