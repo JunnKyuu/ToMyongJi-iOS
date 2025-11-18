@@ -16,6 +16,7 @@ class TossVerifyViewModel {
     // MARK: - 토스 거래내역서 인증 관련 데이터
     var uploadFile: Data? = nil
     var userLoginId: String = ""
+    var keyword: String = ""
     
     // UI 상태
     var errorMessage: String? = nil
@@ -63,7 +64,7 @@ class TossVerifyViewModel {
         }
         
         // 4. 요청 객체 생성
-        let request = TossVerifyRequest(file: fileData, userId: userLoginId)
+        let request = TossVerifyRequest(file: fileData, userId: userLoginId, keyword: keyword)
         
         // 5. 요청 객체를 서버로 전송 (multipart 요청)
         networkingManager.runMultipart(TossVerifyEndpoint.tossVerify(request), type: TossVerifyResponse.self)

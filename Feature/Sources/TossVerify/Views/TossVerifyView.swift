@@ -18,7 +18,10 @@ struct TossVerifyView: View {
     @State private var isFilePickerPresented = false
     @State private var selectedFileName: String?
     @State private var selectedFileSize: String?
-    @State private var isDropdownExpanded = false // 드롭다운 상태를 저장할 변수
+    @State private var isPDFDropdownExpanded = false // 거래내역서 드롭다운 상태를 저장할 변수
+    @State private var isKeywordDropdownExpanded = false // 거래내역서 드롭다운 상태를 저장할 변수
+    @FocusState private var isFocused: Bool
+
     
     let onSuccess: (() -> Void)?
     
@@ -54,11 +57,11 @@ struct TossVerifyView: View {
                     VStack(alignment: .leading, spacing: 10) {
                         Button(action: {
                             withAnimation(.spring()) {
-                                isDropdownExpanded.toggle()
+                                isPDFDropdownExpanded.toggle()
                             }
                         }) {
                             HStack(spacing: 5) {
-                                Image(systemName: isDropdownExpanded ? "chevron.down" : "chevron.right")
+                                Image(systemName: isPDFDropdownExpanded ? "chevron.down" : "chevron.right")
                                     .font(.system(size: 12, weight: .medium))
                                     .foregroundStyle(Color("primary"))
                                 
@@ -70,13 +73,45 @@ struct TossVerifyView: View {
                         }
                         .buttonStyle(.plain)
 
-                        if isDropdownExpanded {
+                        if isPDFDropdownExpanded {
                             VStack(alignment: .leading, spacing: 8) {
                                 Text("1. 통장 탭 → 통장관리를 선택합니다.")
                                 Text("2. 문서관리 카테고리에서 거래내역서를 선택합니다.")
                                 Text("3. 발급방법을 'PDF로 저장하기'로 선택합니다.")
                                 Text("4. 언어 한글 선택 후 → 거래내역을 확인할 계좌를 선택합니다.")
                                 Text("5. 거래내역 기간 선택 → '입출금 전체' 선택 후 발급을 완료합니다.")
+                            }
+                            .font(.custom("GmarketSansMedium", size: 12))
+                            .foregroundStyle(Color("primary"))
+                            .padding(.leading, 10)
+                            .transition(.opacity.combined(with: .move(edge: .top)))
+                        }
+                    }
+                    
+                    // MARK: - 키워드 안내 (드롭다운)
+                    VStack(alignment: .leading, spacing: 10) {
+                        Button(action: {
+                            withAnimation(.spring()) {
+                                isKeywordDropdownExpanded.toggle()
+                            }
+                        }) {
+                            HStack(spacing: 5) {
+                                Image(systemName: isKeywordDropdownExpanded ? "chevron.down" : "chevron.right")
+                                    .font(.system(size: 12, weight: .medium))
+                                    .foregroundStyle(Color("primary"))
+                                
+                                Text("키워드 입력이란 무엇인가요?")
+                                    .font(.custom("GmarketSansMedium", size: 14))
+                                    .foregroundStyle(Color("primary"))
+                            }
+                            .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
+
+                        if isKeywordDropdownExpanded {
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text("1. 키워드는 PDF에서 이름 대신 원하는 단어로 항목을 불러올 때 사용합니다.")
+                                Text("2. 키워드를 비워두면 PDF에 적힌 이름 그대로 불러옵니다.")
                             }
                             .font(.custom("GmarketSansMedium", size: 12))
                             .foregroundStyle(Color("primary"))
@@ -143,6 +178,32 @@ struct TossVerifyView: View {
                             )
                         }
                     }
+                    
+                    // MARK: - 키워드 입력
+                    if selectedFileName != nil {
+                        VStack {
+                            TextField("내역에 등록할 키워드를 입력해주세요.", text: $viewModel.keyword)
+                                .font(.custom("GmarketSansLight", size: 14))
+                                .foregroundStyle(Color("gray_70"))
+                                .focused($isFocused)
+                                .autocorrectionDisabled()
+                                .textInputAutocapitalization(.never)
+                        }
+                        .frame(maxWidth: .infinity, minHeight: 25)
+                        .padding(.horizontal, 15)
+                        .padding(.vertical, 10)
+                        .background(
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(.white)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(isFocused != false ? Color("primary") : Color("gray_20"), lineWidth: 1)
+                                )
+                                .animation(.easeInOut(duration: 0.2), value: isFocused)
+                        )
+                        
+
+                    }
                 }
                 .padding(.horizontal, 20)
                 .padding(.bottom, 30)
@@ -188,7 +249,7 @@ struct TossVerifyView: View {
                 }
                 .padding(.horizontal, 20)
                 .padding(.vertical, 20)
-                .background(Color(.systemBackground))
+                .background(Color("signup-bg"))
             }
         }
         // MARK: - 파일 선택

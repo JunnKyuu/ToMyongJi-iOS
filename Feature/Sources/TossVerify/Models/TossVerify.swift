@@ -13,10 +13,12 @@ import Foundation
 public struct TossVerifyRequest: Codable {
     let file: Data // 실제 PDF 파일 데이터
     let userId: String // 사용자 로그인 아이디
+    let keyword: String // 키워드
     
-    public init(file: Data, userId: String) {
+    public init(file: Data, userId: String, keyword: String) {
         self.file = file
         self.userId = userId
+        self.keyword = keyword
     }
 }
 
