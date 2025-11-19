@@ -21,13 +21,14 @@ struct TossVerifyView: View {
     @State private var isPDFDropdownExpanded = false // 거래내역서 드롭다운 상태를 저장할 변수
     @State private var isKeywordDropdownExpanded = false // 거래내역서 드롭다운 상태를 저장할 변수
     @FocusState private var isFocused: Bool
-
+    @State private var keyboardHeight: CGFloat = 0
     
     let onSuccess: (() -> Void)?
     
     var body: some View {
         VStack(spacing: 0) {
-            ScrollView {
+            ScrollViewReader { proxy in
+                ScrollView {
                 VStack(alignment: .leading, spacing: 30) {
                     // MARK: - 설명
                     VStack(alignment: .leading, spacing: 20) {
@@ -111,7 +112,7 @@ struct TossVerifyView: View {
                         if isKeywordDropdownExpanded {
                             VStack(alignment: .leading, spacing: 8) {
                                 Text("1. 키워드는 PDF에서 이름 대신 원하는 단어로 항목을 불러올 때 사용합니다.")
-                                Text("2. 키워드를 비워두면 PDF에 적힌 이름 그대로 불러옵니다.")
+                                Text("2. 키워드를 비워두면 [토스뱅크] 키워드로 불러옵니다.")
                             }
                             .font(.custom("GmarketSansMedium", size: 12))
                             .foregroundStyle(Color("primary"))
@@ -197,19 +198,25 @@ struct TossVerifyView: View {
                                 .fill(.white)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 10)
-                                        .stroke(isFocused != false ? Color("primary") : Color("gray_20"), lineWidth: 1)
+                                        .stroke(isFocused ? Color("primary") : Color("gray_20"), lineWidth: 1)
                                 )
                                 .animation(.easeInOut(duration: 0.2), value: isFocused)
                         )
-                        
-
+                        .id("keywordTextField") // 스크롤을 위한 ID 추가
                     }
                 }
                 .padding(.horizontal, 20)
                 .padding(.bottom, 30)
             }
-            
-            // MARK: - 하단 인증 버튼
+            .onChange(of: isFocused) { _, newValue in
+                if newValue {
+                    // 키보드가 나타날 때 텍스트 필드로 스크롤
+                    withAnimation(.easeOut(duration: 0.3)) {
+                        proxy.scrollTo("keywordTextField", anchor: .center)
+                    }
+                }
+            }
+        }            // MARK: - 하단 인증 버튼
             VStack(spacing: 0) {                
                 VStack(spacing: 15) {
                     Button {
