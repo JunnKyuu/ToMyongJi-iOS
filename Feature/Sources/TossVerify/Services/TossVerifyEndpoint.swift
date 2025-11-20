@@ -42,7 +42,8 @@ extension TossVerifyEndpoint: Endpoint {
             )
             return [
                 "file": pdfFile,
-                "userId": request.userId
+                "userId": request.userId,
+                "keyword": request.keyword
             ]
         }
     }

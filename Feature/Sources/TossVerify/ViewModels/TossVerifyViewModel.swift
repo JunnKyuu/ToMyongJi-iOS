@@ -16,6 +16,7 @@ class TossVerifyViewModel {
     // MARK: - 토스 거래내역서 인증 관련 데이터
     var uploadFile: Data? = nil
     var userLoginId: String = ""
+    var keyword: String = ""
     
     // UI 상태
     var errorMessage: String? = nil
@@ -62,8 +63,11 @@ class TossVerifyViewModel {
             print("토스 인증 요청 - 파일 크기: \(String(format: "%.0f KB", fileSizeInKB))")
         }
         
-        // 4. 요청 객체 생성
-        let request = TossVerifyRequest(file: fileData, userId: userLoginId)
+        // 4. 요청 객체 생성 (키워드가 비어있으면 토스뱅크 명시적 전송)
+        if keyword == "" { keyword = "토스뱅크"}
+        let finalKeyword = keyword.trimmingCharacters(in: .whitespaces)
+        let request = TossVerifyRequest(file: fileData, userId: userLoginId, keyword: finalKeyword)
+        print("토스 인증 요청 - userId: \(userLoginId), keyword: '\(finalKeyword)'")
         
         // 5. 요청 객체를 서버로 전송 (multipart 요청)
         networkingManager.runMultipart(TossVerifyEndpoint.tossVerify(request), type: TossVerifyResponse.self)

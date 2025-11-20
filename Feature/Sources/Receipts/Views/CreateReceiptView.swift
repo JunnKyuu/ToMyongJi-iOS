@@ -121,7 +121,6 @@ struct CreateReceiptView: View {
             VStack(spacing: 0) {
                 HStack {
                     Spacer()
-                    
                     // MARK: - 월별 선택 버튼
                     Button {
                         showingMonthPicker = true
@@ -161,6 +160,7 @@ struct CreateReceiptView: View {
                             }
                             .listRowInsets(EdgeInsets())
                             .listRowSeparator(.hidden)
+                            .listRowBackground(Color.white)
                     }
                 }
                 .listStyle(.plain)
@@ -356,7 +356,11 @@ struct CreateReceiptView: View {
             }
         }
         .padding(.horizontal, 15)
-        .background(Color.white)
+        .padding(.vertical, 5)
+        .background(
+            RoundedRectangle(cornerRadius: 10)
+                .fill(Color.white)
+        )
     }
 }
 
